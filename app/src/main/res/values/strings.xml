@@ -1,0 +1,9 @@
+<resources>
+
+    <string name="app_name">AppsF.LastFm</string>
+
+    <string name="LAST_FM_API_KEY">ea925ddd5cc742fea4488fc786d21731</string>
+
+    <string name="search_hint">Search Artist</string>
+
+</resources>

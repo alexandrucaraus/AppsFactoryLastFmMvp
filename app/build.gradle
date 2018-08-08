@@ -1,0 +1,156 @@
+apply plugin: 'com.android.application'
+
+apply plugin: 'kotlin-android'
+
+apply plugin: 'kotlin-android-extensions'
+
+apply plugin: 'kotlin-kapt'
+
+android {
+
+    compileSdkVersion 27
+
+    defaultConfig {
+
+        applicationId "eu.caraus.appsflastfm"
+        minSdkVersion 21
+        targetSdkVersion 27
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        vectorDrawables.useSupportLibrary = true
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                includeCompileClasspath true
+            }
+        }
+
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
+    }
+
+}
+
+ext {
+
+    /* compile */
+
+    supportLibraryVersion = "27.1.1"
+    constrainLayoutVersion = "1.1.2"
+    rx2Version = "2.1.2"
+    rxAndroidVersion = "2.0.2"
+    dagger2Version = "2.15"
+    retrofit2Version = "2.1.0"
+    icePickVersion = "3.2.0-SNAPSHOT"
+    parcelerVersion = "1.1.6"
+    butterKnifeVersion = "8.5.1"
+    easyPermissionVersion = "1.0.1"
+    bottomSheetBuilderVersion = "1.6.0"
+    rxLocationVersion = "1.0.4"
+    googlePlayVersion = "15.0.0"
+    glideVersion = "3.5.2"
+    firebaseVersion = "3.1.1"
+    androidArch = "1.1.1"
+    facebookVersion = "4.31.0"
+    imageCropVersion = "2.7.0"
+    weekViewVersion = "1.2.6"
+    durationPickerVersion = "1.1.3"
+    numberPickerVersion = "2.4.4"
+    swipeLayoutVersion = "1.0.14"
+    circleImageViewVersion = "2.2.0"
+    slideViewVersion = "1.3"
+    canaryLeakVersion = "1.5.4"
+    mpChartVersion = "v3.0.3"
+
+    /* test instrumented */
+
+    supportRunnerVersion = "1.0.1"
+    hamcrestVersion = "1.3"
+    uiAutomatorVersion = "2.1.3"
+    espressoVersion = "3.0.1"
+
+    /* test unit */
+
+    junitVersion = "4.12"
+    mockitoVersion = "2.7.22"
+
+}
+
+dependencies {
+
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    /* Kotlin */
+    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+
+    /* Android support */
+    implementation "com.android.support:appcompat-v7:$supportLibraryVersion"
+    implementation "com.android.support:design:$supportLibraryVersion"
+    implementation "com.android.support:cardview-v7:$supportLibraryVersion"
+    implementation "com.android.support.constraint:constraint-layout:$constrainLayoutVersion"
+
+    /* Dagger 2 */
+    implementation "com.google.dagger:dagger:$dagger2Version"
+    implementation "com.google.dagger:dagger-android:$dagger2Version"
+    implementation "com.google.dagger:dagger-android-support:$dagger2Version"
+    implementation 'com.google.guava:guava:22.0'
+    kapt "com.google.dagger:dagger-compiler:$dagger2Version"
+    kapt "com.google.dagger:dagger-android-processor:$dagger2Version"
+
+    /* Java Rx 2 */
+    implementation "io.reactivex.rxjava2:rxjava:$rx2Version"
+    implementation 'io.reactivex:rxjava-math:0.21.0'
+    implementation "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"
+
+    /* Retrofit 2 */
+    implementation "com.squareup.retrofit2:retrofit:$retrofit2Version"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit2Version"
+    implementation "com.squareup.okhttp3:logging-interceptor:3.9.1"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit2Version"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:2.4.0"
+
+    /* Picasso */
+    implementation 'com.squareup.picasso:picasso:2.5.2'
+
+    /* Room */
+    implementation "android.arch.persistence.room:runtime:1.1.1"
+    implementation "android.arch.persistence.room:rxjava2:1.1.1"
+    kapt "android.arch.persistence.room:compiler:1.1.1"
+
+    /* Integration tests*/
+    androidTestImplementation ('com.android.support.test.espresso:espresso-core:3.0.2'){
+        exclude group: 'com.google.code.findbugs'
+    }
+    androidTestImplementation ('com.android.support.test.espresso:espresso-contrib:2.0') {
+        exclude group: 'com.google.code.findbugs'
+        exclude group: 'com.android.support', module: 'appcompat'
+        exclude group: 'com.android.support', module: 'support-v4'
+        exclude module: 'recyclerview-v7'
+    }
+    androidTestImplementation "com.android.support:support-annotations:$supportLibraryVersion"
+    androidTestImplementation "com.android.support.test:runner:$supportRunnerVersion"
+    androidTestImplementation "com.android.support.test:rules:$supportRunnerVersion"
+
+    androidTestImplementation "org.hamcrest:hamcrest-library:$hamcrestVersion"
+    androidTestImplementation "org.hamcrest:hamcrest-integration:$hamcrestVersion"
+
+    androidTestImplementation "org.mockito:mockito-android:$mockitoVersion"
+
+    /* Unit tests*/
+    testImplementation 'junit:junit:4.12'
+    testImplementation "io.mockk:mockk:1.8.5"
+
+}

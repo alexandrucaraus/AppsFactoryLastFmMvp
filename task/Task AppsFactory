@@ -1,0 +1,27 @@
+Task AppsFactory
+
+
+Develop a music management app for android based on the LastFM API.
+
+With help of the app the user should be able to search for artists and pick one of the top albums which can be locally saved.
+
+The app should contain the following screens:
+
+1) Main Screen: 
+		All locally stored albums are shown here. A tap on one of these albums opens a detail-page. 
+		With help of an entry in the menu it’s possible to go to the search screen.
+
+2) Search Page: 
+	On this page it should be possible to search for an artist on the LastFM Api. Furthermore there should be a button next to a text field which starts the search. The results of the search should be shown in a list. 
+	A selection of one list-item opens the albums-overview screen.
+
+3)	Top-Alben: The best albums of an artist are shown here. It should be possible to store (and delete stored) albums locally. 
+			   Tap on an album opens the detail-page. 
+			   At least the following informations should be stored:
+
+Name
+Artist
+Image (doesn’t matter in which size)
+Tracks
+
+4) Detail page: Tap on an album opens the detail-page.

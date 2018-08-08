@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="normal_margin">8dp</dimen>
+    <dimen name="short_margin">4dp</dimen>
+
+    <dimen name="grid_item_height">150dp</dimen>
+    <dimen name="list_item_height">120dp</dimen>
+
+    <dimen name="buttons_height">48dp</dimen>
+    <dimen name="like_dis_like_size">42dp</dimen>
+    <dimen name="like_start_size">50dp</dimen>
+
+</resources>

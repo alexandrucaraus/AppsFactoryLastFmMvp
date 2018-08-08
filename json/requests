@@ -1,0 +1,6 @@
+
+// search artist
+http://ws.audioscrobbler.com/2.0/?method=artist.search&artist=cher&api_key=ea925ddd5cc742fea4488fc786d21731&format=json
+
+// get artist albums
+http://ws.audioscrobbler.com/2.0/?method=artist.gettopalbums&artist=cher&api_key=ea925ddd5cc742fea4488fc786d21731&format=json
