@@ -74,8 +74,8 @@ class MainActivityModule {
 
     @Provides
     @MainActivityScope
-    internal fun provideAlbumDetailsInteractor( service: LastFmApi, scheduler: SchedulerProvider)
-            : AlbumDetailsContract.Interactor = AlbumDetailsInteractor( service, scheduler )
+    internal fun provideAlbumDetailsInteractor( database: Database , scheduler: SchedulerProvider)
+            : AlbumDetailsContract.Interactor = AlbumDetailsInteractor( database, scheduler )
 
     @Provides
     @MainActivityScope

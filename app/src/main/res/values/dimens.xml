@@ -3,12 +3,36 @@
 
     <dimen name="normal_margin">8dp</dimen>
     <dimen name="short_margin">4dp</dimen>
-
+    
     <dimen name="grid_item_height">150dp</dimen>
     <dimen name="list_item_height">120dp</dimen>
 
     <dimen name="buttons_height">48dp</dimen>
     <dimen name="like_dis_like_size">42dp</dimen>
     <dimen name="like_start_size">50dp</dimen>
+
+    <!-- GENERAL -->
+    
+    <dimen name="card_outer_space">8dp</dimen>
+    <dimen name="card_inner_space">4dp</dimen>
+    <dimen name="card_resting_elevation">1dp</dimen>
+    <dimen name="card_focused_elevation">4dp</dimen>
+
+    <dimen name="outer_space">8dp</dimen>
+    <dimen name="inner_space">4dp</dimen>
+
+    <!-- CARD -->
+    
+    <dimen name="card_album_content_height">180dp</dimen>
+    <dimen name="card_artist_content_height">120dp</dimen>
+
+    <!-- DETAILS -->
+
+    <dimen name="details_image_height">200dp</dimen>
+    <dimen name="play_size">32dp</dimen>
+
+    <!-- RECYCLE VIEW -->
+
+    <dimen name="item_spacing">2dp</dimen>
 
 </resources>

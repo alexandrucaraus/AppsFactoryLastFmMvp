@@ -6,6 +6,7 @@ import eu.caraus.appsflastfm.common.extensions.subOnIoObsOnUi
 import eu.caraus.appsflastfm.common.retrofit.Outcome
 import eu.caraus.appsflastfm.common.schedulers.SchedulerProvider
 import eu.caraus.appsflastfm.data.domain.lastFm.albuminfo.Album
+import eu.caraus.appsflastfm.data.domain.lastFm.albuminfo.TrackItem
 import io.reactivex.disposables.Disposable
 
 class AlbumDetailsPresenter( private val interactor: AlbumDetailsContract.Interactor,
@@ -29,22 +30,6 @@ class AlbumDetailsPresenter( private val interactor: AlbumDetailsContract.Intera
         }
     }
 
-    private fun showAlbumInfo( album : Album?) {
-        view?.showAlbumInfo( album )
-    }
-
-    private fun hideLoading() {
-
-    }
-
-    private fun showLoading() {
-
-    }
-
-    private fun showError(error: Throwable) {
-
-    }
-
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun onResume(){
 
@@ -55,9 +40,28 @@ class AlbumDetailsPresenter( private val interactor: AlbumDetailsContract.Intera
         disposable?.dispose()
     }
 
+    override fun playTrack( track: TrackItem) {
+        track.url
+    }
 
-    override fun getAlbumInfo(artistName: String, albumName: String) {
-        interactor.getAlbumInfo( artistName, albumName)
+    override fun getAlbumInfo( mbid: String ) {
+        interactor.getAlbumInfo( mbid )
+    }
+
+    private fun showAlbumInfo( album : Album?) {
+        view?.showAlbumInfo( album )
+    }
+
+    private fun hideLoading() {
+        view?.hideLoading()
+    }
+
+    private fun showLoading() {
+        view?.showLoading()
+    }
+
+    private fun showError( error: Throwable) {
+        view?.showError(error)
     }
 
     override fun goBack(): Boolean {

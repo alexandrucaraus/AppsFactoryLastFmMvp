@@ -20,7 +20,7 @@ class AlbumsInteractor( private val database  : Database         ,
 
         albumsFetchResult.loading(true)
 
-        database.albumsDao().selectAll().subOnIoObsOnUi( scheduler).subscribe(
+        database.albumsDao().selectAllFlowable().subscribeOn( scheduler.io()).subscribe(
                 {
                     albumsFetchResult.success(it)
                 },{

@@ -2,7 +2,10 @@
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="@dimen/outer_space"
+    android:clipChildren="false"
+    android:clipToPadding="false">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvArtists"

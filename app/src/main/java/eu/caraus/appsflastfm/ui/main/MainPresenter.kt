@@ -19,6 +19,11 @@ class MainPresenter( val navigator  : MainContract.Navigator   ) : MainContract.
         navigator.showSavedAlbumsScreen()
     }
 
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+    fun onResume() {
+        navigator.showSavedAlbumsScreen()
+    }
+
     override fun goBack(): Boolean {
         return navigator.goBack()
     }

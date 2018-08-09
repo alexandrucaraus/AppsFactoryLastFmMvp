@@ -11,7 +11,7 @@ import android.widget.TextView
 import com.squareup.picasso.Picasso
 import eu.caraus.appsflastfm.R
 import eu.caraus.appsflastfm.data.domain.lastFm.albuminfo.Album
-import kotlinx.android.synthetic.main.album_list_item.view.*
+import kotlinx.android.synthetic.main.album_list_item_save.view.*
 
 class AlbumsAdapter(var albums    : List<Album?>,
                     val presenter : AlbumsContract.Presenter )
@@ -28,23 +28,27 @@ class AlbumsAdapter(var albums    : List<Album?>,
         albums[ position ]?.let {
 
             holder.albumName?.text = it.name
-            holder.albumArtist?.text = it.artist
-            holder.albumPlayCount?.text = it.playcount.toString()
+            holder.albumArtist?.text = format( holder, R.string.album_by_artist, it.artist)
+            holder.albumPlayCount?.text = format( holder, R.string.album_play_count, it.playcount )
 
             Picasso.with( holder.itemView.context )
                      .load( Uri.parse( it.image?.get(2)?.text))
-                     //.error( R.drawable.image_broken)
+                     .error( R.mipmap.ic_last )
                      .fit()
                      .centerCrop()
                      .into( holder.albumImage )
 
             holder.rootView?.setOnClickListener { _->
-                    //presenter.showAlbumDetails( it.artist?.name!! , it.name.toString()  )
+                    presenter.showAlbumDetails( it.mbid  )
                 }
 
          }
 
     }
+
+    private fun format( holder : ViewHolder?, resId : Int , text : String?) : String?
+            = holder?.itemView?.resources?.getString( resId, text)
+
 
     class ViewHolder( view: View) : RecyclerView.ViewHolder(view) {
         var rootView       : RelativeLayout? = view.rlAlbum

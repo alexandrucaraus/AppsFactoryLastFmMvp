@@ -4,7 +4,6 @@ import android.arch.persistence.room.*
 import com.google.gson.annotations.SerializedName
 import eu.caraus.appsflastfm.data.local.lastFm.converters.ImageListTypeConverter
 
-
 @Entity(
 
 		tableName   = "albums_table",

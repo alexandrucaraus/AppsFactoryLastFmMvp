@@ -6,4 +6,19 @@
 
     <string name="search_hint">Search Artist</string>
 
+    <string name="card_save">save</string>
+    <string name="card_delete">delete</string>
+
+    <string name="album_name_placeholder">Album Name Placeholder</string>
+    <string name="album_by_artist_placeholder">by Album Artist</string>
+    <string name="album_by_artist">by %1$s</string>
+    <string name="album_play_count">played %1$s times</string>
+    <string name="album_play_count_placeholder">played 123 times</string>
+    <string name="artist_listeners">Listened by %1$s people</string>
+
+    <string name="to_details_transition">toDetailsTransition</string>
+    <string name="track_name_placeholder">This is track name placeholder</string>
+    <string name="track_duration_placeholder">3:45</string>
+    <string name="search">Search</string>
+
 </resources>

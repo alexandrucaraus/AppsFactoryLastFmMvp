@@ -12,9 +12,25 @@
         <item name="android:windowContentTransitions">true</item>
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
+        <item name="searchViewStyle">@style/AppTheme.SearchViewStyle</item>
+        <item name="homeAsUpIndicator">@drawable/back_arrow</item>
     </style>
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="AppTheme.ToolbarStyle" parent="@style/ThemeOverlay.AppCompat.ActionBar">
+        <item name="colorControlNormal">@color/colorTextWhite</item>
+        <item name="searchViewStyle">@style/AppTheme.SearchViewStyle</item>
+        <item name="android:editTextColor">@color/colorTextWhite</item>
+        <item name="android:textColorHint">@color/colorTextWhiteTransparent</item>
+    </style>
+
+    <style name="AppTheme.SearchViewStyle" parent="Widget.AppCompat.SearchView">
+        <item name="commitIcon">@drawable/search_black</item>
+        <item name="closeIcon">@drawable/close</item>
+        <item name="goIcon">@drawable/search_black</item>
+        <item name="submitBackground">@color/colorTextWhite</item>
+        <item name="queryBackground">@color/colorPrimary</item>
+        <item name="queryHint">@string/search_hint</item>
+    </style>
 
     <style name="AppTheme.ToolbarTextStyle" parent="@android:style/TextAppearance">
         <item name="android:textColor">@color/colorTextWhite</item>
@@ -23,19 +39,31 @@
     <style name="AppTheme.CardHeadLineTextStyle" parent="@android:style/TextAppearance">
         <item name="android:textColor">@color/colorText</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textSize">15sp</item>
+        <item name="android:textSize">18sp</item>
     </style>
 
     <style name="AppTheme.CardBodyTextStyle" parent="@android:style/TextAppearance">
         <item name="android:textColor">@color/colorText</item>
         <item name="android:textStyle">normal</item>
-        <item name="android:textSize">13sp</item>
+        <item name="android:textSize">15sp</item>
     </style>
 
     <style name="AppTheme.CardMetaTextStyle" parent="@android:style/TextAppearance">
         <item name="android:textColor">@color/colorText</item>
         <item name="android:textStyle">normal</item>
-        <item name="android:textSize">10sp</item>
+        <item name="android:textSize">12sp</item>
     </style>
+
+    <style name="AppTheme.CardButton" parent="@android:style/Widget.Material.Button.Borderless">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/colorAccent</item>
+    </style>
+
+    <style name="AppTheme.PlayerItemText" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/colorText</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">13sp</item>
+    </style>
+
 
 </resources>

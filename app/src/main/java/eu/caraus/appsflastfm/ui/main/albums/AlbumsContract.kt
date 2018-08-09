@@ -11,7 +11,7 @@ interface AlbumsContract : BaseContract {
 
     interface Presenter : BaseContract.BasePresenter<View>, LifecycleObserver {
 
-        fun showAlbumDetails( artistName: String, albumName: String )
+        fun showAlbumDetails( mbid : String )
         fun goBack() : Boolean
 
     }
@@ -33,7 +33,7 @@ interface AlbumsContract : BaseContract {
     }
 
     interface Navigator {
-        fun showAlbumDetails( artistName : String, albumName : String)
+        fun showAlbumDetails( mbid : String )
         fun goBack() : Boolean
     }
 

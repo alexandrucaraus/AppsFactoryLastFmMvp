@@ -28,13 +28,23 @@ class MainActivity : BaseActivity(), MainContract.View, SearchView.OnQueryTextLi
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
 
-        menuInflater.inflate(R.menu.main_menu, menu)
+        menuInflater.inflate( R.menu.main_menu, menu )
 
         (menu?.findItem(R.id.search)?.actionView as SearchView).apply {
             setOnQueryTextListener(this@MainActivity)
-        }
+            maxWidth = Int.MAX_VALUE
 
+        }
+        
         return true
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+
+        (menu?.findItem(R.id.search)?.actionView as SearchView).apply {
+            isIconified = true
+        }
+        return super.onPrepareOptionsMenu(menu)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,6 +76,8 @@ class MainActivity : BaseActivity(), MainContract.View, SearchView.OnQueryTextLi
     override fun onQueryTextSubmit( searchTerm : String? ): Boolean {
 
         navigator.showSearchResultScreen( searchTerm!! )
+
+        invalidateOptionsMenu()
 
         return true
     }

@@ -8,7 +8,9 @@ import android.view.ViewGroup
 import eu.caraus.appsflastfm.R
 import eu.caraus.appsflastfm.data.domain.lastFm.albums.AlbumItem
 import eu.caraus.appsflastfm.ui.base.BaseFragment
-import kotlinx.android.synthetic.main.fragment_top_albums.*
+import eu.caraus.appsflastfm.ui.util.metrics.dpToPx
+import eu.caraus.appsflastfm.ui.util.recyclerview.VerticalSpaceItemDecoration
+import kotlinx.android.synthetic.main.fragment_albums.*
 import javax.inject.Inject
 
 class AlbumsFragment : BaseFragment(), AlbumsContract.View {
@@ -59,11 +61,12 @@ class AlbumsFragment : BaseFragment(), AlbumsContract.View {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
-            = inflater.inflate(R.layout.fragment_top_albums, container, false)
+            = inflater.inflate(R.layout.fragment_albums, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated( view, savedInstanceState)
         rvAlbums.layoutManager = LinearLayoutManager( context )
+        rvAlbums.addItemDecoration( VerticalSpaceItemDecoration( resources.dpToPx( R.dimen.item_spacing)))
     }
 
     override fun showFoundAlbums( albums : List<AlbumItem?>) {

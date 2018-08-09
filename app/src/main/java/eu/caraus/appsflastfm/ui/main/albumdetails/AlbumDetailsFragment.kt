@@ -2,6 +2,7 @@ package eu.caraus.appsflastfm.ui.main.albumdetails
 
 import android.net.Uri
 import android.os.Bundle
+import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,21 +19,22 @@ class AlbumDetailsFragment : BaseFragment(), AlbumDetailsContract.View {
 
         val TAG = AlbumDetailsFragment::class.java.simpleName!!
 
-        private const val ARTIST_NAME = "ARTIST_NAME"
-        private const val  ALBUM_NAME = "ALBUM_NAME"
+        private const val  ALBUM_ID = "ALBUM_NAME"
 
-        fun newInstance( artistName : String, albumName : String ) : AlbumDetailsFragment {
+        fun newInstance( albumId : String ) : AlbumDetailsFragment {
             val fragment = AlbumDetailsFragment()
             val bundle = Bundle()
-            bundle.putString( ARTIST_NAME, artistName)
-            bundle.putString( ALBUM_NAME , albumName )
+            bundle.putString( ALBUM_ID , albumId )
             fragment.arguments = bundle
             return fragment
         }
+
     }
 
     @Inject
     lateinit var presenter : AlbumDetailsContract.Presenter
+
+    private var adapter : AlbumDetailsAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,11 +42,11 @@ class AlbumDetailsFragment : BaseFragment(), AlbumDetailsContract.View {
         lifecycle.addObserver(presenter)
 
         arguments?.let {
-            if( it.containsKey( ALBUM_NAME ) && it.containsKey(ARTIST_NAME)){
-                presenter.getAlbumInfo( it.getString(ALBUM_NAME) ,
-                                        it.getString(ARTIST_NAME))
+            if( it.containsKey( ALBUM_ID )){
+                presenter.getAlbumInfo( it.getString(ALBUM_ID))
             }
         }
+
     }
 
     override fun onResume() {
@@ -65,6 +67,12 @@ class AlbumDetailsFragment : BaseFragment(), AlbumDetailsContract.View {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
             = inflater.inflate(R.layout.fragment_album_details, container, false)
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        rvTrackList.layoutManager = LinearLayoutManager(context)
+    }
+
+
     override fun showAlbumInfo( album: Album? ) {
 
         album?.let {
@@ -76,7 +84,15 @@ class AlbumDetailsFragment : BaseFragment(), AlbumDetailsContract.View {
                     .into(ivAlbumImage)
 
             tvAlbumName.text  = it.name
-            tvArtistName.text = it.artist
+            tvArtistName.text = format( R.string.album_by_artist, it.artist )
+
+            it.tracks?.track?.let { trackList ->
+
+                adapter = AlbumDetailsAdapter( trackList, presenter )
+                rvTrackList.adapter = adapter
+                rvTrackList.adapter.notifyDataSetChanged()
+
+            }
 
         }
 
@@ -93,5 +109,8 @@ class AlbumDetailsFragment : BaseFragment(), AlbumDetailsContract.View {
     override fun showError(error: Throwable) {
 
     }
+
+    private fun format(resId : Int, text : String?) : String?
+                    = context?.resources?.getString( resId, text)
 
 }

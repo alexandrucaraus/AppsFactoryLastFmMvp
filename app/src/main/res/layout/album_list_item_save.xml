@@ -77,7 +77,7 @@
                     android:id="@+id/btSaveArtists"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/card_delete"
+                    android:text="@string/card_save"
                     android:gravity="center"
                     style="@style/AppTheme.CardButton"/>
 

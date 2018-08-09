@@ -11,6 +11,7 @@ import android.widget.TextView
 import com.squareup.picasso.Picasso
 import eu.caraus.appsflastfm.R
 import eu.caraus.appsflastfm.data.domain.lastFm.artists.ArtistItem
+import eu.caraus.appsflastfm.ui.main.albumdetails.AlbumDetailsAdapter
 import kotlinx.android.synthetic.main.artist_list_item.view.*
 
 class ArtistsAdapter( var artists   : List<ArtistItem?>,
@@ -28,7 +29,7 @@ class ArtistsAdapter( var artists   : List<ArtistItem?>,
          artists[ position ]?.let {
 
             holder.artistName?.text = it.name
-            holder.artistInfo?.text = it.listeners
+            holder.artistInfo?.text = format( holder, R.string.artist_listeners, it.listeners)
 
             Picasso.with( holder.itemView.context )
                      .load( Uri.parse( it.image?.get(1)?.text))
@@ -44,6 +45,9 @@ class ArtistsAdapter( var artists   : List<ArtistItem?>,
          }
 
     }
+
+    private fun format(holder : ViewHolder?, resId : Int, text : String?) : String?
+            = holder?.itemView?.resources?.getString( resId, text)
 
     class ViewHolder( view: View) : RecyclerView.ViewHolder(view) {
         var rootView    : RelativeLayout? = view.rlArtist

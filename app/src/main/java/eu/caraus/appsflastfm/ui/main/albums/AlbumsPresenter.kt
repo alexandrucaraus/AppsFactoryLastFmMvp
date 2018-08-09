@@ -45,8 +45,8 @@ class AlbumsPresenter( private val interactor : AlbumsContract.Interactor  ,
         disposable?.dispose()
     }
 
-    override fun showAlbumDetails( artistName: String, albumName : String ) {
-        navigator.showAlbumDetails( artistName,  albumName )
+    override fun showAlbumDetails( mbid: String ) {
+        navigator.showAlbumDetails( mbid )
     }
 
     private fun showFoundAlbums( data : List<Album?> ) {

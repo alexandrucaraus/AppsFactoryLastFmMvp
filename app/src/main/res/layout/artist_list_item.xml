@@ -5,7 +5,6 @@
     android:layout_height="@dimen/list_item_height"
     android:minHeight="@dimen/list_item_height"
     android:elevation="1dp"
-    android:layout_margin="@dimen/normal_margin"
     android:foreground="?android:attr/selectableItemBackground">
 
     <RelativeLayout
@@ -13,11 +12,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:focusable="true"
-        android:clickable="true">
+        android:clickable="true"
+        android:background="?android:attr/selectableItemBackground">
 
         <ImageView
             android:id="@+id/ivArtistImage"
-            android:layout_width="@dimen/grid_item_height"
+            android:layout_width="@dimen/card_artist_content_height"
             android:layout_height="match_parent"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true" />
@@ -27,25 +27,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_marginBottom="@dimen/short_margin"
-            android:layout_marginEnd="@dimen/normal_margin"
-            android:layout_marginStart="@dimen/normal_margin"
-            android:layout_marginTop="@dimen/short_margin"
+            android:layout_marginTop="@dimen/card_inner_space"
+            android:layout_marginStart="@dimen/card_outer_space"
+            android:layout_marginEnd="@dimen/card_outer_space"
+            android:layout_marginBottom="@dimen/card_outer_space"
             android:layout_toEndOf="@+id/ivArtistImage"
-            android:text="Name"
+            android:text="This is the artist name"
             style="@style/AppTheme.CardHeadLineTextStyle"/>
 
         <TextView
             android:id="@+id/tvArtistInfo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tvArtistName"
-            android:layout_marginBottom="@dimen/short_margin"
-            android:layout_marginEnd="@dimen/normal_margin"
-            android:layout_marginStart="@dimen/normal_margin"
-            android:layout_toEndOf="@+id/ivArtistImage"
-            android:text="Info"
-            style="@style/AppTheme.CardBodyTextStyle"/>
+            android:layout_alignParentBottom="true"
+            android:layout_alignStart="@+id/tvArtistName"
+            android:layout_marginBottom="@dimen/card_inner_space"
+            android:text="Listened by 312313 people"
+            style="@style/AppTheme.CardMetaTextStyle" />
 
     </RelativeLayout>
 

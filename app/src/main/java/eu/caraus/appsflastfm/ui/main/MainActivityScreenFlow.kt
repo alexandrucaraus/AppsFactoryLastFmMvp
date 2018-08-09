@@ -7,6 +7,7 @@ import android.support.annotation.IdRes
 import android.support.v4.app.FragmentManager
 import eu.caraus.appsflastfm.ui.base.BaseActivity
 import eu.caraus.appsflastfm.ui.base.BaseFragment
+import eu.caraus.appsflastfm.ui.main.albumdetails.AlbumDetailsFragment
 import eu.caraus.appsflastfm.ui.main.albums.AlbumsFragment
 import eu.caraus.appsflastfm.ui.search.SearchActivity
 
@@ -46,11 +47,11 @@ class MainActivityScreenFlow(activity: BaseActivity, @param:IdRes @field:IdRes p
     }
 
     fun navigateToSavedAlbums(){
-        loadFragment( AlbumsFragment.newInstance() )
+        loadFragment( AlbumsFragment.newInstance())
     }
 
-    fun navigateToAlbumDetails( artistName: String, albumName : String ){
-        //loadFragment()
+    fun navigateToAlbumDetails( mbid : String ){
+        loadFragment( AlbumDetailsFragment.newInstance( mbid ))
     }
 
     private fun loadFragment( fragment: BaseFragment ) {
@@ -68,7 +69,5 @@ class MainActivityScreenFlow(activity: BaseActivity, @param:IdRes @field:IdRes p
         transaction.commit()
 
     }
-
-
 
 }

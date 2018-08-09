@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import eu.caraus.appsflastfm.R
 import eu.caraus.appsflastfm.data.domain.lastFm.artists.ArtistItem
 import eu.caraus.appsflastfm.ui.base.BaseFragment
+import eu.caraus.appsflastfm.ui.util.metrics.dpToPx
+import eu.caraus.appsflastfm.ui.util.recyclerview.VerticalSpaceItemDecoration
 import kotlinx.android.synthetic.main.fragment_artists.*
 import javax.inject.Inject
 
@@ -66,6 +68,7 @@ class ArtistsFragment : BaseFragment(), ArtistsContract.View {
         super.onViewCreated( view, savedInstanceState)
 
         rvArtists.layoutManager = LinearLayoutManager( context )
+        rvArtists.addItemDecoration( VerticalSpaceItemDecoration( resources.dpToPx( R.dimen.item_spacing)))
 
     }
 

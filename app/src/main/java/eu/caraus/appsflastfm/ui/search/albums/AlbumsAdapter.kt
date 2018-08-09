@@ -12,7 +12,7 @@ import android.widget.TextView
 import com.squareup.picasso.Picasso
 import eu.caraus.appsflastfm.R
 import eu.caraus.appsflastfm.data.domain.lastFm.albums.AlbumItem
-import kotlinx.android.synthetic.main.album_list_item.view.*
+import kotlinx.android.synthetic.main.album_list_item_save.view.*
 
 class AlbumsAdapter(var albums    : List<AlbumItem?>,
                     val presenter : AlbumsContract.Presenter )
@@ -20,7 +20,7 @@ class AlbumsAdapter(var albums    : List<AlbumItem?>,
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
             ViewHolder( LayoutInflater.from( parent.context)
-                    .inflate( R.layout.album_list_item, parent, false))
+                    .inflate( R.layout.album_list_item_save, parent, false))
 
     override fun getItemCount() = albums.size
 
@@ -29,8 +29,8 @@ class AlbumsAdapter(var albums    : List<AlbumItem?>,
         albums[ position ]?.let {
 
             holder.albumName?.text = it.name
-            holder.albumArtist?.text = it.artist?.name
-            holder.albumPlayCount?.text = it.playcount.toString()
+            holder.albumArtist?.text = format( holder, R.string.album_by_artist, it.artist?.name)
+            holder.albumPlayCount?.text = format( holder, R.string.album_play_count, it.playcount.toString() )
 
             Picasso.with( holder.itemView.context )
                      .load( Uri.parse( it.image?.get(2)?.text))
@@ -50,6 +50,9 @@ class AlbumsAdapter(var albums    : List<AlbumItem?>,
          }
 
     }
+
+    private fun format(holder : ViewHolder?, resId : Int, text : String?) : String?
+            = holder?.itemView?.resources?.getString( resId, text)
 
     class ViewHolder( view: View) : RecyclerView.ViewHolder(view) {
         var rootView       : RelativeLayout? = view.rlAlbum

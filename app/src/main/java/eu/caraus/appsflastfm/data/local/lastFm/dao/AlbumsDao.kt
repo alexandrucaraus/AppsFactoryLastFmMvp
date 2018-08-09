@@ -4,7 +4,12 @@ import android.arch.persistence.room.*
 import eu.caraus.appsflastfm.data.domain.lastFm.albuminfo.Album
 import eu.caraus.appsflastfm.data.domain.lastFm.albuminfo.Artist
 import eu.caraus.appsflastfm.data.domain.lastFm.albuminfo.TrackItem
+import eu.caraus.appsflastfm.data.domain.lastFm.albuminfo.Tracks
+import eu.caraus.appsflastfm.data.domain.lastFmExtended.AlbumWithStuff
+import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
+import io.reactivex.Observable
+import java.util.concurrent.Callable
 
 @Dao
 abstract class AlbumsDao {
@@ -51,8 +56,47 @@ abstract class AlbumsDao {
 
     // Selects
 
+    @Query( "SELECT * FROM albums_table WHERE mbid=:mbid")
+    abstract fun select(mbid : String ) : Album
+
     @Query("SELECT * FROM albums_table")
-    abstract fun selectAll() : Flowable<List<Album>>
+    abstract fun selectAll() : List<Album>
+
+    @Query( "SELECT * FROM albums_table WHERE mbid=:mbid")
+    abstract fun selectFlowable(mbid : String ) : Flowable<Album>
+
+    @Query("SELECT * FROM albums_table")
+    abstract fun selectAllFlowable() : Flowable<List<Album>>
+
+    @Transaction
+    @Query( "SELECT * FROM albums_table WHERE mbid=:mbid")
+    abstract fun selectAlbumWithStuff( mbid: String)  : AlbumWithStuff
+
+    @Transaction
+    @Query( "SELECT * FROM albums_table ")
+    abstract fun selectAllAlbumsWithStuff()  : List<AlbumWithStuff>
+
+    fun selectAlbumWithTracks( mbid: String ) : Flowable<Album> {
+        return Observable.fromCallable( Callable {
+
+            val stuff = selectAlbumWithStuff(mbid)
+            val tracks = Tracks().apply {
+                track = stuff.tracks
+            }
+            stuff.album.tracks = tracks
+            return@Callable stuff.album
+        }).toFlowable( BackpressureStrategy.LATEST )
+    }
+
+    fun selectAlbumsWithTracks() : Flowable<List<Album>> {
+        return Observable.fromIterable( selectAllAlbumsWithStuff()).map {
+            val tracks = Tracks().apply {
+                track = it.tracks
+            }
+            it.album.tracks = tracks
+            return@map it.album
+        }.toList().toFlowable()
+    }
 
     // Deletes
 
