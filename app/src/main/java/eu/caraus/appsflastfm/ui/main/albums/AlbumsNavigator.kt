@@ -1,9 +1,9 @@
 package eu.caraus.appsflastfm.ui.main.albums
 
-import eu.caraus.appsflastfm.ui.main.MainActivityScreenFlow
+import eu.caraus.appsflastfm.ui.main.MainActivityScreenLoader
 
 
-class AlbumsNavigator( private val navigation: MainActivityScreenFlow ) : AlbumsContract.Navigator {
+class AlbumsNavigator( private val navigation: MainActivityScreenLoader ) : AlbumsContract.Navigator {
 
 
     override fun showAlbumDetails( mbid: String) {

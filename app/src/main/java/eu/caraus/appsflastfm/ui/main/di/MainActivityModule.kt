@@ -6,12 +6,11 @@ import dagger.Provides
 import eu.caraus.appsflastfm.R
 import eu.caraus.appsflastfm.common.schedulers.SchedulerProvider
 import eu.caraus.appsflastfm.data.local.Database
-import eu.caraus.appsflastfm.data.remote.lastFm.LastFmApi
 import eu.caraus.appsflastfm.ui.main.MainActivity
 import eu.caraus.appsflastfm.ui.main.MainContract
 import eu.caraus.appsflastfm.ui.main.MainNavigator
 import eu.caraus.appsflastfm.ui.main.MainPresenter
-import eu.caraus.appsflastfm.ui.main.MainActivityScreenFlow
+import eu.caraus.appsflastfm.ui.main.MainActivityScreenLoader
 import eu.caraus.appsflastfm.ui.main.albumdetails.AlbumDetailsContract
 import eu.caraus.appsflastfm.ui.main.albumdetails.AlbumDetailsInteractor
 import eu.caraus.appsflastfm.ui.main.albumdetails.AlbumDetailsNavigator
@@ -30,7 +29,7 @@ class MainActivityModule {
     @Provides
     @MainActivityScope
     internal fun provideMainNavigation(activityView: MainActivity)
-            : MainActivityScreenFlow = MainActivityScreenFlow(activityView, R.id.main_fragment_container )
+            : MainActivityScreenLoader = MainActivityScreenLoader(activityView, R.id.main_fragment_container )
 
     // Main
 
@@ -41,7 +40,7 @@ class MainActivityModule {
 
     @Provides
     @MainActivityScope
-    internal fun provideMainNavigator( navigation: MainActivityScreenFlow)
+    internal fun provideMainNavigator( navigation: MainActivityScreenLoader)
             : MainContract.Navigator = MainNavigator(navigation)
 
     // Top Albums
@@ -60,7 +59,7 @@ class MainActivityModule {
 
     @Provides
     @MainActivityScope
-    internal fun provideAlbumsNavigator( navigation: MainActivityScreenFlow)
+    internal fun provideAlbumsNavigator( navigation: MainActivityScreenLoader)
             : AlbumsContract.Navigator = AlbumsNavigator( navigation )
 
     // Album Details
@@ -79,7 +78,7 @@ class MainActivityModule {
 
     @Provides
     @MainActivityScope
-    internal fun provideAlbumDetailsNavigator( navigation: MainActivityScreenFlow)
+    internal fun provideAlbumDetailsNavigator( navigation: MainActivityScreenLoader)
             : AlbumDetailsContract.Navigator = AlbumDetailsNavigator( navigation )
 
 

@@ -5,7 +5,7 @@ import eu.caraus.appsflastfm.data.domain.lastFm.albuminfo.Album
 import eu.caraus.appsflastfm.data.domain.lastFm.albuminfo.Artist
 import eu.caraus.appsflastfm.data.domain.lastFm.albuminfo.TrackItem
 import eu.caraus.appsflastfm.data.domain.lastFm.albuminfo.Tracks
-import eu.caraus.appsflastfm.data.domain.lastFmExtended.AlbumWithStuff
+import eu.caraus.appsflastfm.data.domain.extensions.lastFm.AlbumWithStuff
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.Observable
@@ -105,6 +105,6 @@ abstract class AlbumsDao {
 
     @Transaction
     @Delete
-    abstract fun delete( person: Album )
+    abstract fun delete( person: Album ) : Int
 
 }

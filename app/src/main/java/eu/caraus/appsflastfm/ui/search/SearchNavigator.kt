@@ -1,6 +1,6 @@
 package eu.caraus.appsflastfm.ui.search
 
-class SearchNavigator( val navigation: SearchActivityScreenFlow ) : SearchContract.Navigator {
+class SearchNavigator( val navigation: SearchActivityScreenLoader ) : SearchContract.Navigator {
 
     override fun showArtists( string : String ) {
         navigation.navigateToArtists( string )

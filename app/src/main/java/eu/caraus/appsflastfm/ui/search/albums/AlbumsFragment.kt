@@ -2,14 +2,13 @@ package eu.caraus.appsflastfm.ui.search.albums
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import eu.caraus.appsflastfm.R
 import eu.caraus.appsflastfm.data.domain.lastFm.albums.AlbumItem
+import eu.caraus.appsflastfm.ui.base.BaseActivity
 import eu.caraus.appsflastfm.ui.base.BaseFragment
-import eu.caraus.appsflastfm.ui.util.metrics.dpToPx
-import eu.caraus.appsflastfm.ui.util.recyclerview.VerticalSpaceItemDecoration
+import eu.caraus.appsflastfm.ui.base.util.metrics.dpToPx
+import eu.caraus.appsflastfm.ui.base.util.recyclerview.VerticalSpaceItemDecoration
 import kotlinx.android.synthetic.main.fragment_albums.*
 import javax.inject.Inject
 
@@ -37,6 +36,12 @@ class AlbumsFragment : BaseFragment(), AlbumsContract.View {
 
         lifecycle.addObserver(presenter)
 
+        setHasOptionsMenu(true)
+
+        ( activity as BaseActivity).apply{
+            supportActionBar?.title = resources.getString(R.string.title_search_artist)
+        }
+
         arguments?.let {
             if( it.containsKey( AlbumsFragment.SEARCH_TERM )){
                 presenter.getAlbums( it.getString(AlbumsFragment.SEARCH_TERM) )
@@ -58,6 +63,23 @@ class AlbumsFragment : BaseFragment(), AlbumsContract.View {
     override fun onDestroy() {
         lifecycle.removeObserver(presenter)
         super.onDestroy()
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu?) {
+
+        ( activity as BaseActivity).apply {
+            supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            supportActionBar?.setDisplayShowHomeEnabled(false)
+        }
+
+        super.onPrepareOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when( item?.itemId ){
+            android.R.id.home -> if( presenter.goBack() ) (activity as BaseActivity).finish()
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?

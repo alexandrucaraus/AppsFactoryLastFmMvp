@@ -10,7 +10,7 @@ import eu.caraus.appsflastfm.ui.search.albums.AlbumsFragment
 import eu.caraus.appsflastfm.ui.search.artists.ArtistsFragment
 import java.lang.ref.WeakReference
 
-class SearchActivityScreenFlow(activity: BaseActivity, @param:IdRes @field:IdRes private val containerId: Int) {
+class SearchActivityScreenLoader(activity: BaseActivity, @param:IdRes @field:IdRes private val containerId: Int) {
 
     private val refContext: WeakReference<Context> = WeakReference( activity )
 
@@ -43,7 +43,8 @@ class SearchActivityScreenFlow(activity: BaseActivity, @param:IdRes @field:IdRes
 
     private fun loadFragment( fragment : BaseFragment ) {
 
-        val currentFragment= fragmentManager.findFragmentById( containerId )
+        val currentFragment = fragmentManager.findFragmentById( containerId )
+
         val transaction = fragmentManager.beginTransaction()
 
         currentFragment?.let {

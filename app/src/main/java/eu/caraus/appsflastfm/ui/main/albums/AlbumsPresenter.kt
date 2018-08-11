@@ -12,22 +12,29 @@ class AlbumsPresenter( private val interactor : AlbumsContract.Interactor  ,
                        private val navigator  : AlbumsContract.Navigator   ,
                        private val scheduler  : SchedulerProvider) : AlbumsContract.Presenter {
 
-
     private var view : AlbumsContract.View? = null
 
-    private var disposable : Disposable? = null
+    private var disposable1 : Disposable? = null
+    private var disposable2 : Disposable? = null
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun onCreate(){
 
-        disposable = interactor.getAlbumsOutcome().subOnIoObsOnUi(scheduler).subscribe {
+        disposable1 = interactor.getAlbumsOutcome().subOnIoObsOnUi(scheduler).subscribe {
             when( it ){
                 is Outcome.Progress ->
                     if( it.loading ) showLoading() else hideLoading()
                 is Outcome.Failure  ->
                     showError( it.error )
-                is Outcome.Success  ->
-                    if( it.data.isEmpty() ) showFoundNothing() else showFoundAlbums( it.data )
+                is Outcome.Success  -> showFoundAlbums( it.data )
+                    //if( it.data.isEmpty() ) /*showFoundNothing()*/ else
+            }
+        }
+
+        disposable2 = interactor.deleteAlbumOutcum().subOnIoObsOnUi(scheduler).subscribe{
+            when(it){
+                is Outcome.Success -> view?.deleteSuccess()
+                is Outcome.Failure -> view?.deleteFailed()
             }
         }
 
@@ -38,11 +45,17 @@ class AlbumsPresenter( private val interactor : AlbumsContract.Interactor  ,
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun onResume(){
 
+        interactor.getAlbums()
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     fun onDestroy(){
-        disposable?.dispose()
+        disposable1?.dispose()
+        disposable2?.dispose()
+    }
+
+    override fun deleteAlbum( album : Album) {
+        interactor.deleteAlbum( album )
     }
 
     override fun showAlbumDetails( mbid: String ) {
@@ -50,7 +63,7 @@ class AlbumsPresenter( private val interactor : AlbumsContract.Interactor  ,
     }
 
     private fun showFoundAlbums( data : List<Album?> ) {
-        view?.showFoundAlbums( data)
+        view?.updateAlbums( data)
     }
 
     private fun showFoundNothing() {

@@ -29,7 +29,7 @@ class SearchActivityModule {
     @Provides
     @SearchActivityScope
     internal fun provideSearchNavigation( activityView : SearchActivity )
-            : SearchActivityScreenFlow = SearchActivityScreenFlow( activityView , R.id.search_fragment_container )
+            : SearchActivityScreenLoader = SearchActivityScreenLoader( activityView , R.id.search_fragment_container )
 
     // Main
     @Provides
@@ -39,7 +39,7 @@ class SearchActivityModule {
 
     @Provides
     @SearchActivityScope
-    internal fun provideSearchNavigator( navigation: SearchActivityScreenFlow)
+    internal fun provideSearchNavigator( navigation: SearchActivityScreenLoader)
             : SearchContract.Navigator = SearchNavigator( navigation )
 
 
@@ -60,7 +60,7 @@ class SearchActivityModule {
 
     @Provides
     @SearchActivityScope
-    internal fun provideAritstsNavigator( navigation: SearchActivityScreenFlow)
+    internal fun provideAritstsNavigator( navigation: SearchActivityScreenLoader)
             : ArtistsContract.Navigator = ArtistsNavigator( navigation )
 
 
@@ -82,7 +82,7 @@ class SearchActivityModule {
 
     @Provides
     @SearchActivityScope
-    internal fun provideAlbumsNavigator( navigation: SearchActivityScreenFlow)
+    internal fun provideAlbumsNavigator( navigation: SearchActivityScreenLoader)
             : AlbumsContract.Navigator = AlbumsNavigator( navigation )
 
 
@@ -102,7 +102,7 @@ class SearchActivityModule {
 
     @Provides
     @SearchActivityScope
-    internal fun provideAlbumDetailsNavigator( navigation: SearchActivityScreenFlow)
+    internal fun provideAlbumDetailsNavigator( navigation: SearchActivityScreenLoader)
             : AlbumDetailsContract.Navigator = AlbumDetailsNavigator( navigation )
 
 

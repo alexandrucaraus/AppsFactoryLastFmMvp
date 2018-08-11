@@ -47,4 +47,5 @@ data class Album(
 	@Ignore
 	@field:SerializedName("tags")
 	var tags: Tags? = null
+
 )

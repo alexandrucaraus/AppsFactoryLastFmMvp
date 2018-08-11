@@ -1,8 +1,8 @@
 package eu.caraus.appsflastfm.ui.search.albums
 
-import eu.caraus.appsflastfm.ui.search.SearchActivityScreenFlow
+import eu.caraus.appsflastfm.ui.search.SearchActivityScreenLoader
 
-class AlbumsNavigator( private val navigation: SearchActivityScreenFlow ) : AlbumsContract.Navigator {
+class AlbumsNavigator( private val navigation: SearchActivityScreenLoader ) : AlbumsContract.Navigator {
 
 
     override fun showAlbumDetails(artistName: String, albumName: String) {

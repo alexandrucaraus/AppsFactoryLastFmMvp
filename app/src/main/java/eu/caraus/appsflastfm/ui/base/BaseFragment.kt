@@ -32,6 +32,10 @@ open class BaseFragment : Fragment(), HasSupportFragmentInjector {
         return fragmentDispatchingAndroidInjector
     }
 
+    override fun onResume() {
+        super.onResume()
+        (activity as BaseActivity).invalidateOptionsMenu()
+    }
 
 }
 

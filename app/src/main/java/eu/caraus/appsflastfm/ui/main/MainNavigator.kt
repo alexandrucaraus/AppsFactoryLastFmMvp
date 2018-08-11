@@ -3,10 +3,10 @@ package eu.caraus.appsflastfm.ui.main
 
 /**
  *  MainNavigator - a class to hold all possible flow directions of the MainActivity,
- *  @param - navigation [MainActivityScreenFlow]
+ *  @param - navigation [MainActivityScreenLoader]
  */
 
-class MainNavigator( private val navigation : MainActivityScreenFlow) : MainContract.Navigator {
+class MainNavigator( private val navigation : MainActivityScreenLoader) : MainContract.Navigator {
 
     override fun showSavedAlbumsScreen() {
         navigation.navigateToSavedAlbums()

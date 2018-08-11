@@ -19,6 +19,20 @@
     <string name="to_details_transition">toDetailsTransition</string>
     <string name="track_name_placeholder">This is track name placeholder</string>
     <string name="track_duration_placeholder">3:45</string>
+
     <string name="search">Search</string>
+
+    <string name="title_saved_albums">Albums</string>
+    <string name="title_album_details">Album Details</string>
+
+    <string name="title_search_artist">Search result for artists</string>
+    <string name="title_search_artist_param">Search result for : %1$s</string>
+    <string name="title_search_artist_albums">Top Albums for Artist</string>
+    <string name="title_search_artist_albums_param">Albums for : %1$s</string>
+
+    <string name="delete_success">Successfully deleted the Album</string>
+    <string name="delete_failed">Someting vent rong vit delicion</string>
+
+    <string name="no_saved_albums">No Saved Albums</string>
 
 </resources>

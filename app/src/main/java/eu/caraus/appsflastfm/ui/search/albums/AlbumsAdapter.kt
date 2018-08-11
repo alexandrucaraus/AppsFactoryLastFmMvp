@@ -34,7 +34,7 @@ class AlbumsAdapter(var albums    : List<AlbumItem?>,
 
             Picasso.with( holder.itemView.context )
                      .load( Uri.parse( it.image?.get(2)?.text))
-                     //.error( R.drawable.image_broken)
+                     .error( R.mipmap.ic_last)
                      .fit()
                      .centerCrop()
                      .into( holder.albumImage )

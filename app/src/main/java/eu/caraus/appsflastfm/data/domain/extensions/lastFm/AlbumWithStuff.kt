@@ -1,4 +1,4 @@
-package eu.caraus.appsflastfm.data.domain.lastFmExtended
+package eu.caraus.appsflastfm.data.domain.extensions.lastFm
 
 import android.arch.persistence.room.Embedded
 import android.arch.persistence.room.Relation

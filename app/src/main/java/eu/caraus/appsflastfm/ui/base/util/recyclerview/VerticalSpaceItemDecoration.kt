@@ -1,4 +1,4 @@
-package eu.caraus.appsflastfm.ui.util.recyclerview
+package eu.caraus.appsflastfm.ui.base.util.recyclerview
 
 import android.graphics.Rect
 import android.support.v7.widget.RecyclerView
