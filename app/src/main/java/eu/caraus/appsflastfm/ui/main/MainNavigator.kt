@@ -27,4 +27,12 @@ class MainNavigator( private val navigation : MainActivityScreenLoader) : MainCo
         return navigation.goBack()
     }
 
+    override fun startMusicService() {
+        navigation.startMusicService()
+    }
+
+    override fun stopMusicService() {
+        navigation.stopMusicService()
+    }
+
 }

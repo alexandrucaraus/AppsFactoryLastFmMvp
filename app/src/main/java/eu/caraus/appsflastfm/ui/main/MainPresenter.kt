@@ -17,13 +17,16 @@ class MainPresenter( val navigator  : MainContract.Navigator   ) : MainContract.
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun onCreate() {
         navigator.showSavedAlbumsScreen()
+        navigator.startMusicService()
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun onResume() {
-        //navigator.showSavedAlbumsScreen()
-       run {}
+    }
 
+    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+    fun onDestroy(){
+        navigator.stopMusicService()
     }
 
     override fun goBack(): Boolean {

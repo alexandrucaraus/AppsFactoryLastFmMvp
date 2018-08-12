@@ -2,6 +2,7 @@ package eu.caraus.appsflastfm.data.domain.lastFm.albuminfo
 
 import android.arch.persistence.room.*
 import com.google.gson.annotations.SerializedName
+import eu.caraus.appsflastfm.data.domain.extensions.lastFm.TrackState
 
 @Entity(
 
@@ -44,7 +45,13 @@ data class TrackItem(
 
 	@Ignore
 	@field:SerializedName("streamable")
-	var streamable: Streamable? = null
+	var streamable: Streamable? = null,
+
+	@Ignore
+	var trackState : TrackState = TrackState.STOPPED,
+
+	@Ignore
+	var trackElapsed: Int = 0
 
 ) {
 	constructor() : this(0,"", "", "", "", null, null, null)

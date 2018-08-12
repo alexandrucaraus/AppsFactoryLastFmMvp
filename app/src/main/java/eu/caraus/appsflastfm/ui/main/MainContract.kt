@@ -18,6 +18,9 @@ interface MainContract : BaseContract {
 
     interface Navigator {
 
+        fun startMusicService()
+        fun stopMusicService()
+
         fun showSavedAlbumsScreen()
 
         fun showSearchResultScreen( string: String )

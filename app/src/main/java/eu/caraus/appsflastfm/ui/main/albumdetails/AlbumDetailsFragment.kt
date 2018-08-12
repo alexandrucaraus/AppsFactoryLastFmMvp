@@ -3,10 +3,12 @@ package eu.caraus.appsflastfm.ui.main.albumdetails
 import android.net.Uri
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.SimpleItemAnimator
 import android.view.*
 import com.squareup.picasso.Picasso
 import eu.caraus.appsflastfm.R
 import eu.caraus.appsflastfm.data.domain.lastFm.albuminfo.Album
+import eu.caraus.appsflastfm.services.youtube.model.youtube.YouTubeVideo
 import eu.caraus.appsflastfm.ui.base.BaseActivity
 import eu.caraus.appsflastfm.ui.base.BaseFragment
 import kotlinx.android.synthetic.main.fragment_album_details.*
@@ -89,6 +91,11 @@ class AlbumDetailsFragment : BaseFragment(), AlbumDetailsContract.View {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         rvTrackList.layoutManager = LinearLayoutManager(context)
+        (rvTrackList.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+    }
+
+    override fun updateTrackItem( youTubeVideo: YouTubeVideo) {
+        adapter?.updateTrack( youTubeVideo )
     }
 
     override fun showAlbumInfo( album: Album? ) {

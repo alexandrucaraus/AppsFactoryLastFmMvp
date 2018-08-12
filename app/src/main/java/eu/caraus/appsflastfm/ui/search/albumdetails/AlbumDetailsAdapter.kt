@@ -29,7 +29,7 @@ class AlbumDetailsAdapter(var tracks : List<TrackItem?>,
             holder.trackDuration?.text = it.duration
 
 //                       holder.trackPlay?.setOnClickListener { _->
-                //                    presenter.playTrack( it )
+                //                    presenter.triggerPlayTrack( it )
 //                }
 
         }

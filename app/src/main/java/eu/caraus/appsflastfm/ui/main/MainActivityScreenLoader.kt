@@ -5,6 +5,10 @@ import android.content.Intent
 import android.support.annotation.IdRes
 
 import android.support.v4.app.FragmentManager
+import eu.caraus.appsflastfm.services.youtube.YoutubePlayerService
+import eu.caraus.appsflastfm.services.youtube.model.youtube.YouTubeMediaType
+import eu.caraus.appsflastfm.services.youtube.model.youtube.YouTubeVideo
+import eu.caraus.appsflastfm.services.youtube.model.youtube.YouTubeConfig
 import eu.caraus.appsflastfm.ui.base.BaseActivity
 import eu.caraus.appsflastfm.ui.base.BaseFragment
 import eu.caraus.appsflastfm.ui.main.albumdetails.AlbumDetailsFragment
@@ -68,6 +72,30 @@ class MainActivityScreenLoader(activity: BaseActivity, @param:IdRes @field:IdRes
         transaction.addToBackStack( null )
         transaction.commit()
 
+    }
+
+    fun sendMusicIntent( youtubeVideoUrl : YouTubeVideo) {
+
+        context()?.let {
+            val serviceIntent = Intent( it , YoutubePlayerService::class.java)
+            serviceIntent.action = YoutubePlayerService.ACTION_PLAY
+            serviceIntent.putExtra( YouTubeConfig.YOUTUBE_TYPE, YouTubeMediaType.YOUTUBE_MEDIA_TYPE_VIDEO)
+            serviceIntent.putExtra(YouTubeConfig.YOUTUBE_TYPE_VIDEO, youtubeVideoUrl )
+            it.startService( serviceIntent )
+        }
+
+    }
+
+    fun startMusicService(){
+        context()?.let {
+            it.startService( Intent(it,YoutubePlayerService::class.java))
+        }
+    }
+
+    fun stopMusicService(){
+        context()?.let {
+            it.stopService( Intent(it,YoutubePlayerService::class.java))
+        }
     }
 
 }

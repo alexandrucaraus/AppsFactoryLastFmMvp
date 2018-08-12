@@ -6,6 +6,8 @@ import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule
+import eu.caraus.appsflastfm.services.youtube.YoutubePlayerService
+import eu.caraus.appsflastfm.services.youtube.YoutubeServiceBuilder
 import eu.caraus.appsflastfm.ui.main.di.MainActivityBuilder
 import eu.caraus.appsflastfm.ui.search.di.SearchActivityBuilder
 
@@ -16,7 +18,8 @@ import eu.caraus.appsflastfm.ui.search.di.SearchActivityBuilder
         AppModule::class,
 
         MainActivityBuilder::class,
-        SearchActivityBuilder::class
+        SearchActivityBuilder::class,
+        YoutubeServiceBuilder::class
 
 ])
 interface AppComponent : AndroidInjector<App> {
