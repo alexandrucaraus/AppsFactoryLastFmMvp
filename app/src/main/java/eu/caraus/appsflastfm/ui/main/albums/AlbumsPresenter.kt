@@ -2,6 +2,8 @@ package eu.caraus.appsflastfm.ui.main.albums
 
 import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.OnLifecycleEvent
+import android.view.View
+import android.widget.ImageView
 import eu.caraus.appsflastfm.common.extensions.subOnIoObsOnUi
 import eu.caraus.appsflastfm.common.retrofit.Outcome
 import eu.caraus.appsflastfm.common.schedulers.SchedulerProvider
@@ -11,6 +13,8 @@ import io.reactivex.disposables.Disposable
 class AlbumsPresenter( private val interactor : AlbumsContract.Interactor  ,
                        private val navigator  : AlbumsContract.Navigator   ,
                        private val scheduler  : SchedulerProvider) : AlbumsContract.Presenter {
+
+
 
     private var view : AlbumsContract.View? = null
 
@@ -44,7 +48,6 @@ class AlbumsPresenter( private val interactor : AlbumsContract.Interactor  ,
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun onResume(){
-
         interactor.getAlbums()
     }
 
@@ -54,12 +57,20 @@ class AlbumsPresenter( private val interactor : AlbumsContract.Interactor  ,
         disposable2?.dispose()
     }
 
+    override fun showSearchResultScreen( searchTerm: String ) {
+        navigator.showSearchResultScreen( searchTerm )
+    }
+
     override fun deleteAlbum( album : Album) {
         interactor.deleteAlbum( album )
     }
 
     override fun showAlbumDetails( mbid: String ) {
         navigator.showAlbumDetails( mbid )
+    }
+
+    override fun showAlbumDetails(mbid: String, view : ImageView) {
+        navigator.showAlbumDetails( mbid, view )
     }
 
     private fun showFoundAlbums( data : List<Album?> ) {

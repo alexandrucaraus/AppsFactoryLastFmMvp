@@ -35,9 +35,9 @@ class ArtistsFragment : BaseFragment(), ArtistsContract.View {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        lifecycle.addObserver(presenter)
+        lifecycle.addObserver( presenter )
 
-        setHasOptionsMenu(true)
+        setHasOptionsMenu( true )
 
         ( activity as BaseActivity).apply{
             supportActionBar?.title = resources.getString(R.string.title_search_artist)

@@ -1,6 +1,7 @@
 package eu.caraus.appsflastfm.ui.search.albums
 
 import android.net.Uri
+import android.support.v4.view.ViewCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -38,6 +39,8 @@ class AlbumsAdapter(var albums    : List<AlbumItem?>,
                      .fit()
                      .centerCrop()
                      .into( holder.albumImage )
+
+            ViewCompat.setTransitionName( holder.albumImage, "transition_$position" )
 
             holder.rootView?.setOnClickListener { _->
                     presenter.showAlbumDetails( it.artist?.name!! , it.name.toString()  )

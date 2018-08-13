@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/notification_height"
+    android:layout_marginStart="@dimen/card_inner_space"
+    android:layout_marginEnd="@dimen/card_inner_space"
+    android:clipChildren="false"
+    android:clipToPadding="false">
+
+    <ImageView
+        android:id="@+id/ivAlbumImage"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center_vertical"
+        android:paddingStart="@dimen/card_outer_space"
+        android:paddingEnd="@dimen/card_outer_space"
+        android:src="@mipmap/ic_last" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tvAlbumSong"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="@dimen/card_inner_space"
+        android:layout_marginStart="@dimen/card_outer_space"
+        android:textStyle="bold"
+        android:text="dummy song name" />
+
+    <TextView
+        android:id="@+id/tvAlbumArtist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/card_outer_space"
+        android:text="dummy artist name" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvElapsed"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:gravity="center"
+        android:paddingStart="@dimen/card_outer_space"
+        android:paddingEnd="@dimen/card_outer_space"
+        android:textStyle="bold"
+        android:text="3:45"/>
+
+    <ImageView
+        android:id="@+id/pause"
+        android:layout_width="@dimen/play_size"
+        android:layout_height="@dimen/play_size"
+        android:layout_gravity="center"
+        android:layout_marginStart="@dimen/card_outer_space"
+        android:layout_marginEnd="@dimen/card_outer_space"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?android:selectableItemBackgroundBorderless"
+        android:src="@drawable/pause" />
+
+</LinearLayout>

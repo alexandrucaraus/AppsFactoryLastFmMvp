@@ -3,6 +3,7 @@ package eu.caraus.appsflastfm.ui.search.di
 import dagger.Module
 import dagger.Provides
 import eu.caraus.appsflastfm.R
+import eu.caraus.appsflastfm.common.bus.RxBus
 import eu.caraus.appsflastfm.common.schedulers.SchedulerProvider
 import eu.caraus.appsflastfm.data.local.Database
 import eu.caraus.appsflastfm.data.remote.lastFm.LastFmApi
@@ -92,8 +93,9 @@ class SearchActivityModule {
     @SearchActivityScope
     internal fun provideAlbumDetailsPresenter(interactor : AlbumDetailsContract.Interactor,
                                               navigator  : AlbumDetailsContract.Navigator,
-                                              scheduler  : SchedulerProvider)
-            : AlbumDetailsContract.Presenter = AlbumDetailsPresenter( interactor, navigator , scheduler )
+                                              scheduler  : SchedulerProvider,
+                                              rxBus: RxBus)
+            : AlbumDetailsContract.Presenter = AlbumDetailsPresenter( interactor, navigator , scheduler, rxBus )
 
     @Provides
     @SearchActivityScope

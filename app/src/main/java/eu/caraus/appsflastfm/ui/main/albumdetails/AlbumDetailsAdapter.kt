@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.SeekBar
 import android.widget.TextView
 import eu.caraus.appsflastfm.R
 import eu.caraus.appsflastfm.data.domain.extensions.lastFm.TrackState
@@ -29,26 +30,26 @@ class AlbumDetailsAdapter(var tracks : List<TrackItem?>,
 
             holder.trackName?.text = it.name
 
+            it.duration?.toInt()?.let { max ->
+                holder.trackSeekTimeline?.max = max
+                holder.trackSeekTimeline?.progress = it.trackElapsed
+            }
+
             when( it.trackState ){
 
                 TrackState.PLAYING -> {
-                    holder.trackPlay?.setImageResource(R.drawable.pause)
+                    holder.trackMediaButton?.setImageResource(R.drawable.pause)
                     holder.trackDuration?.text = formatTrackLength( it.trackElapsed.toString())
+                    holder.trackSeekTimeline?.visibility = View.VISIBLE
                 }
 
                 TrackState.STOPPED -> {
-                    holder.trackPlay?.setImageResource(R.drawable.play)
+                    holder.trackMediaButton?.setImageResource(R.drawable.play)
                     holder.trackDuration?.text = formatTrackLength( it.duration!!)
+                    holder.trackSeekTimeline?.visibility = View.GONE
                 }
 
             }
-
-            holder.trackPlay?.setOnClickListener { _->
-                    when( it.trackState ){
-                        TrackState.PLAYING -> presenter.triggerStopTrack( it.apply { trackState = TrackState.STOPPED } )
-                        TrackState.STOPPED -> presenter.triggerPlayTrack( it.apply { trackState = TrackState.PLAYING } )
-                    }
-                }
 
         }
 
@@ -83,10 +84,38 @@ class AlbumDetailsAdapter(var tracks : List<TrackItem?>,
 
     }
 
-    class ViewHolder( view: View) : RecyclerView.ViewHolder(view) {
+    inner class ViewHolder( view: View ) : RecyclerView.ViewHolder(view) {
+
         var trackName      : TextView?   = view.tvTrackName
         var trackDuration  : TextView?   = view.tvTrackDuration
-        var trackPlay      : ImageView?  = view.ivTrackPlay
+        var trackMediaButton      : ImageView?  = view.ivTrackPlay
+        var trackSeekTimeline  : SeekBar?    = view.sbTrackTimeline
+
+        init {
+
+            trackMediaButton?.setOnClickListener {
+                val track = tracks[ adapterPosition ]
+                when( track?.trackState ){
+                    TrackState.PLAYING -> presenter.triggerStopTrack( track.apply { trackState = TrackState.STOPPED } )
+                    TrackState.STOPPED -> {
+                        presenter.triggerPlayTrack( track.apply { trackState = TrackState.PLAYING } )
+                        (it as ImageView).setImageResource(R.drawable.pause)
+                    }
+                }
+            }
+
+            trackSeekTimeline?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{
+                override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {}
+                override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+                override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                    seekBar?.let {
+                        presenter.triggerSeekTo( it.progress )
+                    }
+                }
+            })
+
+        }
+
     }
 
 }

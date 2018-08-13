@@ -14,7 +14,7 @@ import javax.inject.Inject
  *
  */
 
-class MainActivity : BaseActivity(), MainContract.View, SearchView.OnQueryTextListener {
+class MainActivity : BaseActivity(), MainContract.View {
 
     companion object {
         val TAG = MainActivity::class.java.simpleName!!
@@ -26,26 +26,6 @@ class MainActivity : BaseActivity(), MainContract.View, SearchView.OnQueryTextLi
     @Inject
     lateinit var navigator : MainContract.Navigator
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-
-        menuInflater.inflate( R.menu.main_menu, menu )
-
-        (menu?.findItem(R.id.search)?.actionView as SearchView).apply {
-            setOnQueryTextListener(this@MainActivity)
-            maxWidth = Int.MAX_VALUE
-
-        }
-        
-        return true
-    }
-
-    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
-
-        (menu?.findItem(R.id.search)?.actionView as SearchView).apply {
-            isIconified = true
-        }
-        return super.onPrepareOptionsMenu(menu)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,22 +51,6 @@ class MainActivity : BaseActivity(), MainContract.View, SearchView.OnQueryTextLi
     override fun onDestroy() {
         lifecycle.removeObserver( presenter )
         super.onDestroy()
-    }
-
-    override fun onQueryTextSubmit( searchTerm : String? ): Boolean {
-
-        navigator.showSearchResultScreen( searchTerm!! )
-
-        invalidateOptionsMenu()
-
-        return true
-    }
-
-    override fun onQueryTextChange( newText: String? ): Boolean {
-
-        //navigator.showSearchResultScreen( newText!! )
-
-        return true
     }
 
     override fun onBackPressed() {

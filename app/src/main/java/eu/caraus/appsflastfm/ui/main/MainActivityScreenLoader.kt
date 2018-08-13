@@ -3,8 +3,11 @@ package eu.caraus.appsflastfm.ui.main
 import android.content.Context
 import android.content.Intent
 import android.support.annotation.IdRes
+import android.support.transition.Fade
 
 import android.support.v4.app.FragmentManager
+import android.support.v4.view.ViewCompat
+import android.widget.ImageView
 import eu.caraus.appsflastfm.services.youtube.YoutubePlayerService
 import eu.caraus.appsflastfm.services.youtube.model.youtube.YouTubeMediaType
 import eu.caraus.appsflastfm.services.youtube.model.youtube.YouTubeVideo
@@ -13,6 +16,7 @@ import eu.caraus.appsflastfm.ui.base.BaseActivity
 import eu.caraus.appsflastfm.ui.base.BaseFragment
 import eu.caraus.appsflastfm.ui.main.albumdetails.AlbumDetailsFragment
 import eu.caraus.appsflastfm.ui.main.albums.AlbumsFragment
+import eu.caraus.appsflastfm.ui.main.albums.AlbumsTransition
 import eu.caraus.appsflastfm.ui.search.SearchActivity
 
 
@@ -58,6 +62,10 @@ class MainActivityScreenLoader(activity: BaseActivity, @param:IdRes @field:IdRes
         loadFragment( AlbumDetailsFragment.newInstance( mbid ))
     }
 
+    fun navigateToAlbumDetails( mbid : String, view : ImageView ){
+        loadFragmentWithSharedElement( AlbumDetailsFragment.newInstance( mbid , ViewCompat.getTransitionName(view)), view )
+    }
+
     private fun loadFragment( fragment: BaseFragment ) {
 
         val currentFragment = fragmentManager.findFragmentById( containerId )
@@ -68,6 +76,29 @@ class MainActivityScreenLoader(activity: BaseActivity, @param:IdRes @field:IdRes
             transaction.hide(it)
         }
 
+        transaction.setReorderingAllowed( true )
+        transaction.add( containerId, fragment)
+        transaction.addToBackStack( null )
+        transaction.commit()
+
+    }
+
+    private fun loadFragmentWithSharedElement( fragment: BaseFragment, sharedElement : ImageView ) {
+
+        val currentFragment = fragmentManager.findFragmentById( containerId )
+
+        fragment.sharedElementEnterTransition  = AlbumsTransition()
+        fragment.enterTransition = Fade()
+        fragment.exitTransition  = Fade()
+
+        val transaction = fragmentManager.beginTransaction()
+
+        currentFragment?.let {
+            transaction.hide(it)
+        }
+
+        transaction.setReorderingAllowed( true )
+        transaction.addSharedElement( sharedElement , ViewCompat.getTransitionName( sharedElement ))
         transaction.add( containerId, fragment)
         transaction.addToBackStack( null )
         transaction.commit()

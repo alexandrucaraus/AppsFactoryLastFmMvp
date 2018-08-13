@@ -32,7 +32,7 @@ class ArtistsAdapter( var artists   : List<ArtistItem?>,
             holder.artistInfo?.text = format( holder, R.string.artist_listeners, it.listeners)
 
             Picasso.with( holder.itemView.context )
-                     .load( Uri.parse( it.image?.get(1)?.text))
+                     .load( Uri.parse( it.image?.get(2)?.text))
                      .error( R.mipmap.ic_last)
                      .fit()
                      .centerCrop()

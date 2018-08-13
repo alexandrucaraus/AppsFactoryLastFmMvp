@@ -2,9 +2,13 @@ package eu.caraus.appsflastfm.ui.search
 
 import android.content.Context
 import android.support.annotation.IdRes
+import android.support.transition.Fade
 import android.support.v4.app.FragmentManager
+import android.support.v4.view.ViewCompat
+import android.widget.ImageView
 import eu.caraus.appsflastfm.ui.base.BaseActivity
 import eu.caraus.appsflastfm.ui.base.BaseFragment
+import eu.caraus.appsflastfm.ui.main.albums.AlbumsTransition
 import eu.caraus.appsflastfm.ui.search.albumdetails.AlbumDetailsFragment
 import eu.caraus.appsflastfm.ui.search.albums.AlbumsFragment
 import eu.caraus.appsflastfm.ui.search.artists.ArtistsFragment
@@ -33,6 +37,13 @@ class SearchActivityScreenLoader(activity: BaseActivity, @param:IdRes @field:IdR
         loadFragment( AlbumDetailsFragment.newInstance( artistName, albumName ))
     }
 
+    fun navigateToAlbumDetails ( artistName : String, albumName : String , sharedElement: ImageView) {
+        loadFragmentWithSharedElement(
+                AlbumDetailsFragment.newInstance( artistName, albumName,
+                        ViewCompat.getTransitionName( sharedElement )), sharedElement)
+    }
+
+
     fun goBack() : Boolean {
         if( fragmentManager.backStackEntryCount <= 1 )
             return true
@@ -51,6 +62,28 @@ class SearchActivityScreenLoader(activity: BaseActivity, @param:IdRes @field:IdR
             transaction.hide(it)
         }
 
+        transaction.add( containerId, fragment)
+        transaction.addToBackStack( null )
+        transaction.commit()
+
+    }
+
+    private fun loadFragmentWithSharedElement( fragment: BaseFragment, sharedElement : ImageView) {
+
+        val currentFragment = fragmentManager.findFragmentById( containerId )
+
+        fragment.sharedElementEnterTransition  = AlbumsTransition()
+        fragment.enterTransition = Fade()
+        fragment.exitTransition  = Fade()
+
+        val transaction = fragmentManager.beginTransaction()
+
+        currentFragment?.let {
+            transaction.hide(it)
+        }
+
+        transaction.setReorderingAllowed( true )
+        transaction.addSharedElement( sharedElement , ViewCompat.getTransitionName( sharedElement ))
         transaction.add( containerId, fragment)
         transaction.addToBackStack( null )
         transaction.commit()

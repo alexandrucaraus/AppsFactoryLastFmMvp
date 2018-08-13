@@ -4,86 +4,28 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
 import android.support.v4.app.NotificationCompat
-import com.squareup.picasso.Picasso
-import com.squareup.picasso.Target
+import android.support.v4.app.NotificationManagerCompat
 import eu.caraus.appsflastfm.R
 import eu.caraus.appsflastfm.services.youtube.YoutubePlayerService
 import eu.caraus.appsflastfm.services.youtube.model.youtube.YouTubeVideo
 import eu.caraus.appsflastfm.ui.main.MainActivity
+import android.app.NotificationChannel
+import android.os.Build
+import android.widget.RemoteViews
+
 
 class NotificationHandler( private val context: Context ) {
 
-    private var builder: NotificationCompat.Builder? = null
+    companion object {
 
-    fun buildNotification( action : NotificationCompat.Action, video : YouTubeVideo ) {
+        const val CHANNEL_ID = "eu.caraus.appsflastfm.YOUTUBE_PLAY_SERVICE"
 
-        val style = android.support.v4.media.app.NotificationCompat.MediaStyle()
-
-        val serviceIntentStop = getServiceIntent().apply {
-            this.action = YoutubePlayerService.ACTION_STOP
-        }
-
-        val servicePendingStop = getPendingIntent( serviceIntentStop , 1)
-
-        val activityIntentOpen = getActivityIntent().apply {
-            this.action = Intent.ACTION_MAIN
-            this.addCategory(Intent.CATEGORY_LAUNCHER)
-        }
-
-        val activityPendingOpen = getPendingIntent( activityIntentOpen, 0)
-
-        builder = NotificationCompat.Builder( context, "1")
-        builder!!.setSmallIcon(R.mipmap.ic_launcher)
-        builder!!.setContentTitle(video.title)
-        builder!!.setContentInfo(video.duration)
-        builder!!.setShowWhen(false)
-        builder!!.setContentIntent(activityPendingOpen)
-        builder!!.setDeleteIntent( servicePendingStop )
-        builder!!.setOngoing(false)
-        builder!!.setSubText(video.viewCount)
-        builder!!.setStyle(style)
-
-        //load bitmap for largeScreen
-        if (video.thumbnailURL != null && !video.thumbnailURL!!.isEmpty()) {
-            //TODO : handle notification
-            Picasso.with(context).load(video!!.thumbnailURL).into(object : Target {
-                override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom) {
-                    updateNotificationLargeIcon(bitmap)
-                }
-
-                override fun onBitmapFailed(errorDrawable: Drawable) {}
-                override fun onPrepareLoad(placeHolderDrawable: Drawable) {
-
-                }
-            })
-        }
-
-        builder!!.addAction(generateAction(android.R.drawable.ic_media_previous, "Previous", YoutubePlayerService.ACTION_PREVIOUS))
-        builder!!.addAction(action)
-        builder!!.addAction(generateAction(android.R.drawable.ic_media_next, "Next", YoutubePlayerService.ACTION_NEXT))
-
-        style.setShowActionsInCompactView(0, 1, 2)
-
-
-        getSystemService().notify( 1, builder!!.build())
+        const val NOTIFICATION_ID = 69
 
     }
 
-
-    private fun updateNotificationLargeIcon( bitmap : Bitmap ) {
-        builder!!.setLargeIcon(bitmap)
-        getSystemService().notify( 1, builder!!.build())
-    }
-
-    fun generateAction( icon: Int, title: String, intentAction: String) : NotificationCompat.Action {
-        val intent = getServiceIntent().apply {
-            action = intentAction
-        }
-        return NotificationCompat.Action.Builder( icon, title, getPendingIntent( intent,0 ) ).build()
-    }
+    private var builder : NotificationCompat.Builder? = null
 
     private fun getServiceIntent() : Intent
             = Intent( context, YoutubePlayerService::class.java)
@@ -94,7 +36,68 @@ class NotificationHandler( private val context: Context ) {
     private fun getPendingIntent( intent : Intent, requestCode : Int = 0 ) : PendingIntent
             = PendingIntent.getService( context, requestCode, intent, 0)
 
-    private fun getSystemService() : NotificationManager
+    private fun getNotificationManager() : NotificationManager
             = context.getSystemService( Context.NOTIFICATION_SERVICE ) as NotificationManager
+
+    private fun getNotificationManagerCompat() : NotificationManagerCompat
+            = NotificationManagerCompat.from(context)
+
+
+    fun buildNotification( pendingAction : String, video : YouTubeVideo ) {
+
+        if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.O ) {
+            val importance = NotificationManager.IMPORTANCE_LOW
+            val channel = NotificationChannel( CHANNEL_ID , CHANNEL_ID, importance )
+            getNotificationManager().createNotificationChannel(channel)
+        }
+
+        val servicePendingStop
+                = getPendingIntent( getServiceIntent().apply { this.action = pendingAction } , 0)
+
+        val remoteViews
+                = RemoteViews( context.packageName, R.layout.player_notification ).apply{
+
+            setTextViewText( R.id.tvAlbumSong   , video.title )
+            setTextViewText( R.id.tvAlbumArtist , "-" )
+            setTextViewText( R.id.tvElapsed     , formatTrackLength( video.trackElapsed ))
+            setImageViewResource( R.id.ivAlbumImage, R.drawable.icon)
+
+            setOnClickPendingIntent( R.id.pause , servicePendingStop )
+
+        }
+
+        builder = NotificationCompat.Builder( context, CHANNEL_ID ).apply {
+
+            setSmallIcon(R.drawable.ic_play)
+            setStyle( NotificationCompat.DecoratedCustomViewStyle() )
+            setCustomContentView(remoteViews)
+            setCustomBigContentView(remoteViews)
+
+            setDeleteIntent( servicePendingStop )
+            setAutoCancel(false)
+
+        }
+
+        if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.O ) {
+            builder?.setChannelId( CHANNEL_ID )
+        }
+
+        builder?.let {
+            getNotificationManagerCompat().notify( NOTIFICATION_ID , it.build())
+        }
+
+    }
+
+    fun cancel(){
+        getNotificationManagerCompat().cancel(NOTIFICATION_ID)
+    }
+
+    private fun formatTrackLength( length : Int ) : String {
+
+        val minutes = length / 60
+        val seconds = length % 60
+
+        return String.format("%02d:%02d",minutes,seconds)
+    }
 
 }

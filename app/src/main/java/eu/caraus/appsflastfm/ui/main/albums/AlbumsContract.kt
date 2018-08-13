@@ -1,6 +1,7 @@
 package eu.caraus.appsflastfm.ui.main.albums
 
 import android.arch.lifecycle.LifecycleObserver
+import android.widget.ImageView
 import eu.caraus.appsflastfm.common.retrofit.Outcome
 import eu.caraus.appsflastfm.data.domain.lastFm.albuminfo.Album
 import eu.caraus.appsflastfm.ui.base.BaseContract
@@ -11,7 +12,12 @@ interface AlbumsContract : BaseContract {
     interface Presenter : BaseContract.BasePresenter<View>, LifecycleObserver {
 
         fun showAlbumDetails( mbid : String )
+        fun showAlbumDetails( mbid : String, view : ImageView )
+
         fun deleteAlbum( album : Album )
+
+        fun showSearchResultScreen( searchTerm : String )
+
         fun goBack() : Boolean
 
     }
@@ -41,7 +47,12 @@ interface AlbumsContract : BaseContract {
     }
 
     interface Navigator {
+
         fun showAlbumDetails( mbid : String )
+        fun showAlbumDetails( mbid : String , view: ImageView )
+
+        fun showSearchResultScreen( searchTerm : String )
+
         fun goBack() : Boolean
     }
 

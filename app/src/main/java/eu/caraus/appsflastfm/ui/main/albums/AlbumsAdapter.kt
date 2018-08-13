@@ -1,6 +1,7 @@
 package eu.caraus.appsflastfm.ui.main.albums
 
 import android.net.Uri
+import android.support.v4.view.ViewCompat
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -63,8 +64,10 @@ class AlbumsAdapter(var albums    : MutableList<Album?>,
                      .centerCrop()
                      .into( holder.albumImage )
 
+            ViewCompat.setTransitionName( holder.albumImage, "transition_$position" )
+
             holder.rootView?.setOnClickListener { _->
-                    presenter.showAlbumDetails( it.mbid  )
+                    presenter.showAlbumDetails( it.mbid , holder.albumImage!! )
                 }
 
             holder.albumDelete?.setOnClickListener { _->

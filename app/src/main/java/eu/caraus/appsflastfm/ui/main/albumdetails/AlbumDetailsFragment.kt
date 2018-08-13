@@ -12,6 +12,7 @@ import eu.caraus.appsflastfm.services.youtube.model.youtube.YouTubeVideo
 import eu.caraus.appsflastfm.ui.base.BaseActivity
 import eu.caraus.appsflastfm.ui.base.BaseFragment
 import kotlinx.android.synthetic.main.fragment_album_details.*
+import kotlinx.android.synthetic.main.fragment_album_details.view.*
 import javax.inject.Inject
 
 class AlbumDetailsFragment : BaseFragment(), AlbumDetailsContract.View {
@@ -20,12 +21,22 @@ class AlbumDetailsFragment : BaseFragment(), AlbumDetailsContract.View {
 
         val TAG = AlbumDetailsFragment::class.java.simpleName!!
 
-        private const val  ALBUM_ID = "ALBUM_NAME"
+        const val  ALBUM_ID = "ALBUM_NAME"
+        const val  TRANSITION_NAME = "TRANSITION_NAME"
 
         fun newInstance( albumId : String ) : AlbumDetailsFragment {
             val fragment = AlbumDetailsFragment()
             val bundle = Bundle()
             bundle.putString( ALBUM_ID , albumId )
+            fragment.arguments = bundle
+            return fragment
+        }
+
+        fun newInstance( albumId : String, transitionName : String ) : AlbumDetailsFragment {
+            val fragment = AlbumDetailsFragment()
+            val bundle = Bundle()
+            bundle.putString( ALBUM_ID , albumId )
+            bundle.putString( TRANSITION_NAME, transitionName)
             fragment.arguments = bundle
             return fragment
         }
@@ -44,17 +55,21 @@ class AlbumDetailsFragment : BaseFragment(), AlbumDetailsContract.View {
 
         setHasOptionsMenu(true)
 
+        presenter.transitionEnter {
+            startPostponedEnterTransition()
+        }
+
         arguments?.let {
             if( it.containsKey( ALBUM_ID )){
-                presenter.getAlbumInfo( it.getString(ALBUM_ID))
+                presenter.getAlbumInfo( it.getString( ALBUM_ID ) )
             }
         }
 
     }
 
     override fun onResume() {
-        super.onResume()
         presenter.onViewAttached(this)
+        super.onResume()
     }
 
     override fun onPause() {
@@ -85,13 +100,22 @@ class AlbumDetailsFragment : BaseFragment(), AlbumDetailsContract.View {
         return true
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
-            = inflater.inflate(R.layout.fragment_album_details, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_album_details, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         rvTrackList.layoutManager = LinearLayoutManager(context)
         (rvTrackList.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+
+        arguments?.let {
+            if( it.containsKey( TRANSITION_NAME )){
+                view.ivAlbumImage.transitionName = it.getString( TRANSITION_NAME )
+            }
+        }
+
     }
 
     override fun updateTrackItem( youTubeVideo: YouTubeVideo) {
@@ -99,12 +123,15 @@ class AlbumDetailsFragment : BaseFragment(), AlbumDetailsContract.View {
     }
 
     override fun showAlbumInfo( album: Album? ) {
+
         album?.let {
+
             Picasso.with(context)
                     .load(Uri.parse( it.image?.get(2)?.text))
                     .fit()
-                    .centerInside()
-                    .into(ivAlbumImage)
+                    .centerCrop()
+                    .into( ivAlbumImage )
+
             tvAlbumName.text  = it.name
             tvArtistName.text = format( R.string.album_by_artist, it.artist )
             it.tracks?.track?.let { trackList ->
@@ -113,6 +140,9 @@ class AlbumDetailsFragment : BaseFragment(), AlbumDetailsContract.View {
                 rvTrackList.adapter = adapter
                 rvTrackList.adapter.notifyDataSetChanged()
             }
+
+        } ?: run {
+            startPostponedEnterTransition()
         }
     }
 

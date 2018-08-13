@@ -2,6 +2,7 @@ package eu.caraus.appsflastfm.ui.search.albums
 
 import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.OnLifecycleEvent
+import android.widget.ImageView
 import eu.caraus.appsflastfm.common.extensions.subOnIoObsOnUi
 import eu.caraus.appsflastfm.common.retrofit.Outcome
 import eu.caraus.appsflastfm.common.schedulers.SchedulerProvider
@@ -42,6 +43,10 @@ class AlbumsPresenter( private val interactor : AlbumsContract.Interactor  ,
 
     override fun showAlbumDetails( artistName: String, albumName : String ) {
         navigator.showAlbumDetails( artistName,  albumName )
+    }
+
+    override fun showAlbumDetails(artistName: String, albumName: String, sharedElement: ImageView) {
+
     }
 
     override fun saveAlbumDetails( artistName: String, albumName: String ) {

@@ -12,6 +12,9 @@ interface AlbumDetailsContract : BaseContract {
 
     interface Presenter : BaseContract.BasePresenter<View>, LifecycleObserver {
 
+        fun transitionEnter(enterPostponedTransition : () -> Unit )
+
+        fun triggerSeekTo( seekTo : Int )
         fun triggerPlayTrack( track : TrackItem )
         fun triggerStopTrack( track : TrackItem)
 

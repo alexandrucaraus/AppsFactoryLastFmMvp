@@ -28,11 +28,13 @@
 
     <!-- DETAILS -->
 
-    <dimen name="details_image_height">200dp</dimen>
-    <dimen name="play_size">32dp</dimen>
+    <dimen name="details_image_height">250dp</dimen>
+    <dimen name="play_size">40dp</dimen>
 
     <!-- RECYCLE VIEW -->
 
     <dimen name="item_spacing">2dp</dimen>
+
+    <dimen name="notification_height">70dp</dimen>
 
 </resources>

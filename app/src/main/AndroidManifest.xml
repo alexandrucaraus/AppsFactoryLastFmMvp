@@ -19,6 +19,7 @@
         <activity
             android:name=".ui.main.MainActivity"
             android:theme="@style/AppTheme.MainTheme"
+            android:configChanges="orientation|screenSize"
             android:launchMode="singleInstance">
 
             <intent-filter>
@@ -33,6 +34,7 @@
 
         <activity android:name=".ui.search.SearchActivity"
                   android:theme="@style/AppTheme.MainTheme"
+                  android:configChanges="orientation|screenSize"
                   android:launchMode="singleInstance">
 
             <intent-filter>

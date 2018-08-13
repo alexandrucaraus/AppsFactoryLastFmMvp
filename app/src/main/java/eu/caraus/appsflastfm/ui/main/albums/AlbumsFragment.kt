@@ -4,10 +4,8 @@ import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.View
-import android.view.ViewGroup
+import android.support.v7.widget.SearchView
+import android.view.*
 import eu.caraus.appsflastfm.R
 import eu.caraus.appsflastfm.data.domain.lastFm.albuminfo.Album
 import eu.caraus.appsflastfm.ui.base.BaseActivity
@@ -15,9 +13,10 @@ import eu.caraus.appsflastfm.ui.base.BaseFragment
 import eu.caraus.appsflastfm.ui.base.util.metrics.dpToPx
 import eu.caraus.appsflastfm.ui.base.util.recyclerview.VerticalSpaceItemDecoration
 import kotlinx.android.synthetic.main.fragment_albums.*
+import kotlinx.android.synthetic.main.fragment_albums.view.*
 import javax.inject.Inject
 
-class AlbumsFragment : BaseFragment(), AlbumsContract.View {
+class AlbumsFragment : BaseFragment(), SearchView.OnQueryTextListener, AlbumsContract.View {
 
     companion object {
         val TAG = AlbumsFragment::class.java.simpleName
@@ -58,6 +57,19 @@ class AlbumsFragment : BaseFragment(), AlbumsContract.View {
         super.onDestroy()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+
+        inflater?.inflate( R.menu.main_menu, menu )
+
+        (menu?.findItem(R.id.search)?.actionView as SearchView).apply {
+            setOnQueryTextListener(this@AlbumsFragment)
+            maxWidth = Int.MAX_VALUE
+
+        }
+
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
     override fun onPrepareOptionsMenu(menu: Menu?) {
 
         ( activity as BaseActivity).apply {
@@ -65,6 +77,10 @@ class AlbumsFragment : BaseFragment(), AlbumsContract.View {
             supportActionBar?.setDisplayShowHomeEnabled(true)
             supportActionBar?.setIcon( R.mipmap.ic_last)
             supportActionBar?.setTitle(R.string.title_saved_albums)
+        }
+
+        (menu?.findItem(R.id.search)?.actionView as SearchView).apply {
+            isIconified = true
         }
 
         super.onPrepareOptionsMenu(menu)
@@ -86,6 +102,19 @@ class AlbumsFragment : BaseFragment(), AlbumsContract.View {
         })
         rvAlbums.adapter = adapter
         rvAlbums.adapter.notifyDataSetChanged()
+
+        waitRecycleViewToRender( view )
+    }
+
+    private fun waitRecycleViewToRender( view: View ){
+        postponeEnterTransition()
+        view.rvAlbums?.viewTreeObserver?.addOnPreDrawListener( object : ViewTreeObserver.OnPreDrawListener {
+            override fun onPreDraw(): Boolean {
+                startPostponedEnterTransition()
+                view.rvAlbums.viewTreeObserver.removeOnPreDrawListener( this )
+                return true
+            }
+        })
     }
 
     override fun updateAlbums( albums : List<Album?> ) {
@@ -137,6 +166,22 @@ class AlbumsFragment : BaseFragment(), AlbumsContract.View {
         clRoot?.let {
             Snackbar.make( it, message, Snackbar.LENGTH_LONG).show()
         }
+    }
+
+    override fun onQueryTextSubmit( query: String?): Boolean {
+
+        query?.let {
+            presenter.showSearchResultScreen( it )
+        }
+
+        activity?.invalidateOptionsMenu()
+
+        return true
+    }
+
+    override fun onQueryTextChange(newText: String?): Boolean {
+
+        return true
     }
 
 }
