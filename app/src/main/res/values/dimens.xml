@@ -37,4 +37,9 @@
 
     <dimen name="notification_height">70dp</dimen>
 
+    <!-- TOOLBAR -->
+    <dimen name="shrine_toolbar_image_offset_top">100dp</dimen>
+    <dimen name="shrine_toolbar_offset_top">150dp</dimen>
+    <dimen name="shrine_toolbar_offset_start">25dp</dimen>
+
 </resources>

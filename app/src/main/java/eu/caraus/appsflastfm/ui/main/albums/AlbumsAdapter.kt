@@ -31,7 +31,7 @@ class AlbumsAdapter(var albums    : MutableList<Album?>,
     }
 
     class ViewHolder( view: View) : RecyclerView.ViewHolder(view) {
-        var rootView       : RelativeLayout? = view.rlAlbum
+        var rootView       : LinearLayout? = view.llAlbum
         var albumImage     : ImageView?  = view.ivAlbumImage
         var albumName      : TextView ?  = view.tvAlbumName
         var albumArtist    : TextView ?  = view.tvAlbumArtist

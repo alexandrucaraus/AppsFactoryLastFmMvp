@@ -104,6 +104,11 @@ class YoutubePlayerService : BaseService(),
     }
 
     private fun actionPlay( youTubeVideo : YouTubeVideo ){
+
+        this.youTubeVideo.let {
+            // stop the one playing now
+            actionStop()
+        }
         this.youTubeVideo = youTubeVideo
         this.youTubeVideo?.let { video ->
             playYouTubeUrl( video , {

@@ -7,6 +7,10 @@
     android:elevation="@dimen/card_resting_elevation">
 
     <LinearLayout
+        android:id="@+id/llAlbum"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="?android:attr/selectableItemBackground"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -19,12 +23,9 @@
             />
 
         <RelativeLayout
-            android:id="@+id/rlAlbum"
             android:layout_width="match_parent"
             android:layout_height="@dimen/card_album_content_height"
-            android:background="?android:attr/selectableItemBackground"
-            android:clickable="true"
-            android:focusable="true">
+            >
 
             <TextView
                 android:id="@+id/tvAlbumName"

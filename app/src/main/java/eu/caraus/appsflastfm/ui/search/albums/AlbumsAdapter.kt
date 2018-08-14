@@ -68,7 +68,7 @@ class AlbumsAdapter(var albums    : List<AlbumItem?>,
             = holder?.itemView?.resources?.getString( resId, text)
 
     class ViewHolder( view: View) : RecyclerView.ViewHolder(view) {
-        var rootView       : RelativeLayout? = view.rlAlbum
+        var rootView       : LinearLayout? = view.llAlbum
         var albumImage     : ImageView?  = view.ivAlbumImage
         var albumName      : TextView ?  = view.tvAlbumName
         var albumArtist    : TextView ?  = view.tvAlbumArtist
