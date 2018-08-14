@@ -33,6 +33,8 @@ class AlbumsFragment : BaseFragment(), AlbumsContract.View {
 
     private var adapter : AlbumsAdapter? = null
 
+    // Android
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -40,16 +42,29 @@ class AlbumsFragment : BaseFragment(), AlbumsContract.View {
 
         setHasOptionsMenu(true)
 
-        ( activity as BaseActivity).apply{
-            supportActionBar?.title = resources.getString(R.string.title_search_artist)
-        }
-
         arguments?.let {
+
             if( it.containsKey( AlbumsFragment.SEARCH_TERM )){
-                presenter.getAlbums( it.getString( AlbumsFragment.SEARCH_TERM ))
+                val searchTerm = it.getString( AlbumsFragment.SEARCH_TERM )
+                presenter.getAlbums( searchTerm )
+                setTitle( searchTerm )
+            } else {
+                setTitle()
+            }
+        } ?: run { setTitle() }
+
+    }
+
+    private fun setTitle( title : String = "" ){
+        if( title == "" ){
+            ( activity as BaseActivity).apply{
+                supportActionBar?.title = resources.getString(R.string.title_search_artist_albums)
+            }
+        } else {
+            ( activity as BaseActivity).apply{
+                supportActionBar?.title = resources.getString(R.string.title_search_artist_albums_param,title)
             }
         }
-
     }
 
     override fun onResume() {
@@ -94,33 +109,35 @@ class AlbumsFragment : BaseFragment(), AlbumsContract.View {
         rvAlbums.addItemDecoration( VerticalSpaceItemDecoration( resources.dpToPx( R.dimen.item_spacing)))
 
         waitRecycleViewToRender(view)
-
     }
 
-    private fun waitRecycleViewToRender( view: View ){
-        postponeEnterTransition()
-        view.rvAlbums?.viewTreeObserver?.addOnPreDrawListener( object : ViewTreeObserver.OnPreDrawListener {
-            override fun onPreDraw(): Boolean {
-                startPostponedEnterTransition()
-                view.rvAlbums.viewTreeObserver.removeOnPreDrawListener( this )
-                return true
-            }
-        })
-    }
+    // Contract
 
     override fun showFoundAlbums( albums : List<AlbumItem?>) {
 
-        llEmptyListPlaceholder.visibility = View.GONE
-
         adapter = AlbumsAdapter( albums , presenter )
+
+        adapter?.let { toggleView( it.itemCount > 0) }
 
         rvAlbums.adapter = adapter
         rvAlbums.adapter.notifyDataSetChanged()
 
     }
 
-    override fun showFoundNothing() {
-        llEmptyListPlaceholder.visibility = View.VISIBLE
+    override fun showPlaceholder() {
+        placeholder.visibility = View.VISIBLE
+    }
+
+    override fun hidePlaceholder() {
+        placeholder.visibility = View.GONE
+    }
+
+    override fun showList() {
+        rvAlbums.visibility = View.VISIBLE
+    }
+
+    override fun hideList() {
+        rvAlbums.visibility = View.GONE
     }
 
     override fun showLoading() {
@@ -133,6 +150,27 @@ class AlbumsFragment : BaseFragment(), AlbumsContract.View {
 
     override fun showError(error: Throwable) {
         snack( error.localizedMessage )
+    }
+
+    // Private
+
+    private fun waitRecycleViewToRender( view: View ){
+        postponeEnterTransition()
+        view.rvAlbums?.viewTreeObserver?.addOnPreDrawListener( object : ViewTreeObserver.OnPreDrawListener {
+            override fun onPreDraw(): Boolean {
+                startPostponedEnterTransition()
+                view.rvAlbums.viewTreeObserver.removeOnPreDrawListener( this )
+                return true
+            }
+        })
+    }
+
+    private fun toggleView(listVisible : Boolean ){
+        if( listVisible ){
+            showList() ; hidePlaceholder()
+        } else {
+            hideList() ; showPlaceholder()
+        }
     }
 
     private fun snack( message : String ){

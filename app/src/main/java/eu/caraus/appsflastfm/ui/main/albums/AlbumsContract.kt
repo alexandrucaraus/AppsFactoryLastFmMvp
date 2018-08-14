@@ -26,10 +26,15 @@ interface AlbumsContract : BaseContract {
     interface View : BaseContract.BaseView {
 
         fun updateAlbums(albums : List<Album?>)
-        fun showFoundNothing()
 
         fun showLoading()
         fun hideLoading()
+
+        fun showPlaceholder()
+        fun hidePlaceholder()
+
+        fun showList()
+        fun hideList()
 
         fun deleteSuccess()
         fun deleteFailed()

@@ -19,6 +19,8 @@ class AlbumsPresenter( private val interactor : AlbumsContract.Interactor  ,
     private var disposable1 : Disposable? = null
     private var disposable2 : Disposable? = null
 
+    private var data = listOf<Album?>()
+
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun onCreate(){
 
@@ -28,8 +30,11 @@ class AlbumsPresenter( private val interactor : AlbumsContract.Interactor  ,
                     if( it.loading ) showLoading() else hideLoading()
                 is Outcome.Failure  ->
                     showError( it.error )
-                is Outcome.Success  -> showFoundAlbums( it.data )
-                    //if( it.data.isEmpty() ) /*showFoundNothing()*/ else
+                is Outcome.Success  -> {
+                    data = it.data
+                    showFoundAlbums(it.data)
+                }
+
             }
         }
 
@@ -41,12 +46,13 @@ class AlbumsPresenter( private val interactor : AlbumsContract.Interactor  ,
         }
 
         interactor.getAlbums()
-
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun onResume(){
-        interactor.getAlbums()
+        data?.let {
+            showFoundAlbums(it)
+        }
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
@@ -76,12 +82,7 @@ class AlbumsPresenter( private val interactor : AlbumsContract.Interactor  ,
     }
 
     private fun showFoundAlbums( data : List<Album?> ) {
-        view?.hideLoading()
         view?.updateAlbums( data)
-    }
-
-    private fun showFoundNothing() {
-        view?.showFoundNothing()
     }
 
     private fun hideLoading() {

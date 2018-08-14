@@ -12,9 +12,9 @@
     <string name="album_name_placeholder">Album Name Placeholder</string>
     <string name="album_by_artist_placeholder">by Album Artist</string>
     <string name="album_by_artist">by %1$s</string>
-    <string name="album_play_count">played %1$s times</string>
-    <string name="album_play_count_placeholder">played 123 times</string>
-    <string name="artist_listeners">Listened by %1$s people</string>
+    <string name="album_play_count">%1$s times played</string>
+    <string name="album_play_count_placeholder">123 times played</string>
+    <string name="artist_listeners">%1$s people listened it</string>
 
     <string name="to_details_transition">toDetailsTransition</string>
     <string name="track_name_placeholder">This is track name placeholder</string>
@@ -22,13 +22,14 @@
 
     <string name="search">Search</string>
 
-    <string name="title_saved_albums">Top-Alben</string>
+    <string name="title_saved_albums">Your \u2661 Albums</string>
     <string name="title_album_details">Album Details</string>
 
     <string name="title_search_artist">Search result for artists</string>
     <string name="title_search_artist_param">Search result for : %1$s</string>
     <string name="title_search_artist_albums">Top Albums for Artist</string>
-    <string name="title_search_artist_albums_param">Albums for : %1$s</string>
+    <string name="title_search_artist_albums_param">Top Alben for : %1$s</string>
+    <string name="title_for_album_param">%1$s by %2$s</string>
 
     <string name="delete_success">Successfully deleted the Album</string>
     <string name="delete_failed">Someting vent rong vit delicion</string>

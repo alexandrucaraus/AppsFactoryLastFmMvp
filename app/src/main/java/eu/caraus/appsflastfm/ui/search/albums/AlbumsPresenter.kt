@@ -27,7 +27,7 @@ class AlbumsPresenter( private val interactor : AlbumsContract.Interactor  ,
                 is Outcome.Failure  ->
                     showError( it.error )
                 is Outcome.Success  ->
-                    if( it.data.isEmpty()) showFoundAlbums( it.data )
+                    showFoundAlbums( it.data )
             }
         }
     }

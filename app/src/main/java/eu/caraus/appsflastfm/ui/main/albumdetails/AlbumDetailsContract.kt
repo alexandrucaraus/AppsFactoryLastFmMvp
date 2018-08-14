@@ -12,8 +12,6 @@ interface AlbumDetailsContract : BaseContract {
 
     interface Presenter : BaseContract.BasePresenter<View>, LifecycleObserver {
 
-        fun transitionEnter(enterPostponedTransition : () -> Unit )
-
         fun triggerSeekTo( seekTo : Int )
         fun triggerPlayTrack( track : TrackItem )
         fun triggerStopTrack( track : TrackItem)
@@ -34,12 +32,14 @@ interface AlbumDetailsContract : BaseContract {
 
         fun updateTrackItem( youTubeVideo: YouTubeVideo)
 
-
     }
 
     interface Interactor {
+
         fun getAlbumInfo( mbid : String )
+
         fun getAlbumInfoOutcome() : PublishSubject<Outcome<Album?>>
+
     }
 
     interface Navigator {

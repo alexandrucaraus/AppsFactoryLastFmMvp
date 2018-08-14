@@ -72,11 +72,18 @@ class AlbumDetailsFragment : BaseFragment(), AlbumDetailsContract.View {
         arguments?.let {
             if( it.containsKey( ALBUM_NAME ) && it.containsKey(ARTIST_NAME)){
                 presenter.getAlbumInfo(  it.getString(ARTIST_NAME), it.getString(ALBUM_NAME))
+                setTitle( it.getString(ALBUM_NAME), it.getString(ARTIST_NAME) )
             }
         }
 
         postponeEnterTransition()
 
+    }
+
+    private fun setTitle( album : String = "" , artist : String = ""){
+        ( activity as BaseActivity).apply{
+            supportActionBar?.title = resources.getString(R.string.title_for_album_param, album, artist)
+        }
     }
 
     override fun onResume() {

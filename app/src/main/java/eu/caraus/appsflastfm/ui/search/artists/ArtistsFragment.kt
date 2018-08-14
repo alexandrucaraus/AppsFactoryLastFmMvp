@@ -39,19 +39,27 @@ class ArtistsFragment : BaseFragment(), ArtistsContract.View {
 
         setHasOptionsMenu( true )
 
-        ( activity as BaseActivity).apply{
-            supportActionBar?.title = resources.getString(R.string.title_search_artist)
-        }
-
         arguments?.let {
             if( it.containsKey( SEARCH_TERM )){
-                presenter.searchArtist( it.getString(SEARCH_TERM) )
-                ( activity as BaseActivity).apply{
-                    supportActionBar?.title = resources.getString(R.string.title_search_artist_param,it.getString(SEARCH_TERM))
-                }
+                val searchTerm = it.getString(SEARCH_TERM)
+                presenter.searchArtist( searchTerm )
+                  setTitle( searchTerm)
+
+            } else setTitle()
+        } ?: run { setTitle() }
+
+    }
+
+    private fun setTitle( title : String = "" ){
+        if( title == "" ){
+            ( activity as BaseActivity).apply{
+                supportActionBar?.title = resources.getString(R.string.title_search_artist)
+            }
+        } else {
+            ( activity as BaseActivity).apply{
+                supportActionBar?.title = resources.getString(R.string.title_search_artist_param,title)
             }
         }
-
     }
 
     override fun onResume() {

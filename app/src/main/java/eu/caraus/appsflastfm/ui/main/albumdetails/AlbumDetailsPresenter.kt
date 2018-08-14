@@ -37,7 +37,6 @@ class AlbumDetailsPresenter( private val interactor: AlbumDetailsContract.Intera
 
     private var album : Album? = null
 
-    //private var activateTransition = {}
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun onCreate(){
@@ -77,11 +76,6 @@ class AlbumDetailsPresenter( private val interactor: AlbumDetailsContract.Intera
     fun onDestroy(){
         infoDisposable?.dispose()
         trackDisposable?.dispose()
-
-    }
-
-    override fun transitionEnter( activate:()->Unit ) {
-
     }
 
     override fun triggerPlayTrack(track : TrackItem ) {

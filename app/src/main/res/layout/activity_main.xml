@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:layout_scrollFlags="scroll|enterAlways"
-            app:logo="@mipmap/ic_last"
+            app:logo="@mipmap/ic_launcher"
             app:titleTextColor="@color/colorTextWhite"
             android:theme="@style/AppTheme.ToolbarStyle"
             />

@@ -73,12 +73,13 @@
                 android:layout_alignParentBottom="true"
                 android:orientation="horizontal">
 
-                <Button
+                <ImageButton
                     android:id="@+id/btSaveArtists"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/card_save"
                     android:gravity="center"
+                    android:src="@drawable/heart_not_saved"
                     style="@style/AppTheme.CardButton"/>
 
             </LinearLayout>

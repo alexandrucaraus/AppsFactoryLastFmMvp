@@ -31,7 +31,7 @@ class ArtistsAdapter( var artists   : List<ArtistItem?>,
 
             Picasso.with( holder.itemView.context )
                      .load( Uri.parse( it.image?.get(2)?.text))
-                     .error( R.mipmap.ic_last)
+                     .error( R.mipmap.ic_launcher)
                      .fit()
                      .centerCrop()
                      .into( holder.artistImage )

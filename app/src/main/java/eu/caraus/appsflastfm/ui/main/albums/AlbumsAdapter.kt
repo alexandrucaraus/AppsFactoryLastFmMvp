@@ -6,10 +6,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.RelativeLayout
-import android.widget.TextView
+import android.widget.*
 import com.squareup.picasso.Picasso
 import eu.caraus.appsflastfm.R
 import eu.caraus.appsflastfm.data.domain.lastFm.albuminfo.Album
@@ -39,7 +36,7 @@ class AlbumsAdapter(var albums    : MutableList<Album?>,
         var albumName      : TextView ?  = view.tvAlbumName
         var albumArtist    : TextView ?  = view.tvAlbumArtist
         var albumPlayCount : TextView ?  = view.tvAlbumPlayCount
-        var albumDelete    : Button?     = view.btDeleteAlbum
+        var albumDelete    : ImageButton?     = view.btDeleteAlbum
     }
 
     override fun getItemCount() = albums.size
@@ -58,7 +55,7 @@ class AlbumsAdapter(var albums    : MutableList<Album?>,
 
             Picasso.with( holder.itemView.context )
                      .load( Uri.parse( it.image?.get(2)?.text))
-                     .error( R.mipmap.ic_last )
+                     .error( R.mipmap.ic_launcher )
                      .fit()
                      .centerCrop()
                      .into( holder.albumImage )

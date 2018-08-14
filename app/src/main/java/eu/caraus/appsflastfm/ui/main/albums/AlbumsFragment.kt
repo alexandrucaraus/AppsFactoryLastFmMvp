@@ -33,6 +33,8 @@ class AlbumsFragment : BaseFragment(), SearchView.OnQueryTextListener, AlbumsCon
 
     private var adapter : AlbumsAdapter? = null
 
+    // Android
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -75,7 +77,7 @@ class AlbumsFragment : BaseFragment(), SearchView.OnQueryTextListener, AlbumsCon
         ( activity as BaseActivity).apply {
             supportActionBar?.setDisplayHomeAsUpEnabled(false)
             supportActionBar?.setDisplayShowHomeEnabled(true)
-            supportActionBar?.setIcon( R.mipmap.ic_last)
+            supportActionBar?.setIcon( R.mipmap.ic_logo)
             supportActionBar?.setTitle(R.string.title_saved_albums)
         }
 
@@ -99,7 +101,7 @@ class AlbumsFragment : BaseFragment(), SearchView.OnQueryTextListener, AlbumsCon
         adapter?.registerAdapterDataObserver( object : RecyclerView.AdapterDataObserver() {
             override fun onChanged() {
                 super.onChanged()
-                checkEmptyAdapter()
+                adapter?.let { toggleRecycleViewVisibility( it.itemCount > 0) }
             }
         })
 
@@ -109,42 +111,40 @@ class AlbumsFragment : BaseFragment(), SearchView.OnQueryTextListener, AlbumsCon
         waitRecycleViewToRender( view )
     }
 
-    private fun waitRecycleViewToRender( view: View ){
-        postponeEnterTransition()
-        view.rvAlbums?.viewTreeObserver?.addOnPreDrawListener( object : ViewTreeObserver.OnPreDrawListener {
-            override fun onPreDraw(): Boolean {
-                startPostponedEnterTransition()
-                view.rvAlbums.viewTreeObserver.removeOnPreDrawListener( this )
-                return true
-            }
-        })
+    override fun onQueryTextSubmit( query: String?): Boolean {
+        query?.let { presenter.showSearchResultScreen( it ) }
+        activity?.invalidateOptionsMenu()
+        return true
     }
+
+    override fun onQueryTextChange(newText: String?) = true
+
+    // Contract
 
     override fun updateAlbums( albums : List<Album?> ) {
 
+        hideLoading()
+
+        adapter?.updateAlbums( albums )
+
+        adapter?.let { toggleRecycleViewVisibility( it.itemCount > 0) }
+
+    }
+
+    override fun showPlaceholder() {
+        placeholder.visibility = View.VISIBLE
+    }
+
+    override fun hidePlaceholder() {
+        placeholder.visibility = View.GONE
+    }
+
+    override fun showList() {
         rvAlbums.visibility = View.VISIBLE
-
-        adapter?.updateAlbums(albums)
-
-        if( checkEmptyAdapter() ) return
-
     }
 
-    private fun checkEmptyAdapter() : Boolean {
-        return adapter?.let {
-            if( it.itemCount == 0 ) {
-                llEmptyListPlaceholder.visibility = View.VISIBLE;false
-            }
-            else {
-                llEmptyListPlaceholder.visibility = View.GONE ;true
-            }
-        } ?: run {
-            llEmptyListPlaceholder.visibility = View.VISIBLE;false
-        }
-    }
-
-    override fun showFoundNothing() {
-        checkEmptyAdapter()
+    override fun hideList() {
+        rvAlbums.visibility = View.GONE
     }
 
     override fun showLoading() {
@@ -167,26 +167,33 @@ class AlbumsFragment : BaseFragment(), SearchView.OnQueryTextListener, AlbumsCon
         snack( error.localizedMessage )
     }
 
+    // Private
+
+    private fun waitRecycleViewToRender( view: View ){
+        postponeEnterTransition()
+        view.rvAlbums?.viewTreeObserver?.addOnPreDrawListener( object : ViewTreeObserver.OnPreDrawListener {
+            override fun onPreDraw(): Boolean {
+                startPostponedEnterTransition()
+                view.rvAlbums.viewTreeObserver.removeOnPreDrawListener( this )
+                return true
+            }
+        })
+    }
+
+    private fun toggleRecycleViewVisibility(listVisible : Boolean ){
+        if( listVisible ){
+            showList() ; hidePlaceholder()
+        } else {
+            hideList() ; showPlaceholder()
+        }
+    }
+
     private fun snack( message : String ){
         clRoot?.let {
             Snackbar.make( it, message, Snackbar.LENGTH_LONG).show()
         }
     }
 
-    override fun onQueryTextSubmit( query: String?): Boolean {
 
-        query?.let {
-            presenter.showSearchResultScreen( it )
-        }
-
-        activity?.invalidateOptionsMenu()
-
-        return true
-    }
-
-    override fun onQueryTextChange(newText: String?): Boolean {
-
-        return true
-    }
 
 }

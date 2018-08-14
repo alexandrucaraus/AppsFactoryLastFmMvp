@@ -24,11 +24,16 @@ interface AlbumsContract : BaseContract {
 
     interface View : BaseContract.BaseView {
 
-        fun showFoundAlbums( artists : List<AlbumItem?>)
-        fun showFoundNothing()
+        fun showFoundAlbums( albums : List<AlbumItem?>)
 
         fun showLoading()
         fun hideLoading()
+
+        fun showPlaceholder()
+        fun hidePlaceholder()
+
+        fun showList()
+        fun hideList()
 
         fun showError( error : Throwable )
     }

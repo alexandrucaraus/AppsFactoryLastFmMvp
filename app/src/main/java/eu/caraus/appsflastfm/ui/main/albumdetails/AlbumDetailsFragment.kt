@@ -76,6 +76,13 @@ class AlbumDetailsFragment : BaseFragment(), AlbumDetailsContract.View {
 
     }
 
+    private fun setTitle( album : String = "" , artist : String = ""){
+        ( activity as BaseActivity).apply{
+            supportActionBar?.title = resources.getString(R.string.title_for_album_param, album, artist)
+            invalidateOptionsMenu()
+        }
+    }
+
     override fun onResume() {
         presenter.onViewAttached(this)
         super.onResume()
@@ -96,7 +103,6 @@ class AlbumDetailsFragment : BaseFragment(), AlbumDetailsContract.View {
         ( activity as BaseActivity).apply {
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
             supportActionBar?.setDisplayShowHomeEnabled(false)
-            supportActionBar?.setTitle(R.string.title_album_details)
         }
 
         super.onPrepareOptionsMenu(menu)
@@ -145,6 +151,8 @@ class AlbumDetailsFragment : BaseFragment(), AlbumDetailsContract.View {
 
         album?.let {
 
+            setTitle( it.name ?: "", it.artist ?: "")
+
             Picasso.with(context)
                     .load(Uri.parse( it.image?.get(2)?.text))
                     .fit()
@@ -153,6 +161,7 @@ class AlbumDetailsFragment : BaseFragment(), AlbumDetailsContract.View {
 
             tvAlbumName.text  = it.name
             tvArtistName.text = format( R.string.album_by_artist, it.artist )
+
             it.tracks?.track?.let { trackList ->
 
                 adapter = AlbumDetailsAdapter( trackList, presenter )
