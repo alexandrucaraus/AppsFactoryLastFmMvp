@@ -16,6 +16,7 @@ import javax.inject.Inject
 
 class AlbumsFragment : BaseFragment(), AlbumsContract.View {
 
+
     companion object {
         val TAG = AlbumsFragment::class.java.simpleName!!
         private const val SEARCH_TERM = "SEARCH_TERM"
@@ -94,7 +95,7 @@ class AlbumsFragment : BaseFragment(), AlbumsContract.View {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when( item?.itemId ){
-            android.R.id.home -> if( presenter.goBack() ) (activity as BaseActivity).finish()
+            android.R.id.home -> presenter.goBack()
         }
         return super.onOptionsItemSelected(item)
     }
@@ -146,6 +147,10 @@ class AlbumsFragment : BaseFragment(), AlbumsContract.View {
 
     override fun hideLoading() {
         progress.visibility = View.GONE
+    }
+
+    override fun showMessage( msg: String ) {
+        snack( msg )
     }
 
     override fun showError(error: Throwable) {

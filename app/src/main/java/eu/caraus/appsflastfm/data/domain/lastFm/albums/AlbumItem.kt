@@ -1,5 +1,6 @@
 package eu.caraus.appsflastfm.data.domain.lastFm.albums
 
+import android.arch.persistence.room.Ignore
 import com.google.gson.annotations.SerializedName
 
 data class AlbumItem(
@@ -20,6 +21,9 @@ data class AlbumItem(
 	val name: String? = null,
 
 	@field:SerializedName("url")
-	val url: String? = null
+	val url: String? = null,
+
+	@Ignore
+	var saved: Boolean? = false
 
 )

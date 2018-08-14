@@ -17,10 +17,11 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
+            android:theme="@style/AppTheme.ToolbarStyle"
             app:layout_scrollFlags="scroll|enterAlways"
             app:logo="@mipmap/ic_launcher"
             app:titleTextColor="@color/colorTextWhite"
-            android:theme="@style/AppTheme.ToolbarStyle"
+            app:titleMarginStart="24dp"
             />
 
     </android.support.design.widget.AppBarLayout>

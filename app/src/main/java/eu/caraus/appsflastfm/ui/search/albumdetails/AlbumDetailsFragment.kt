@@ -113,7 +113,7 @@ class AlbumDetailsFragment : BaseFragment(), AlbumDetailsContract.View {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when( item?.itemId ){
-            android.R.id.home -> if( presenter.goBack() ) (activity as BaseActivity).finish()
+            android.R.id.home -> activity?.onBackPressed()
         }
         return super.onOptionsItemSelected(item)
     }

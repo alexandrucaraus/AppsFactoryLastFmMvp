@@ -42,7 +42,7 @@ class SearchActivity : BaseActivity() {
     }
 
     override fun onBackPressed() {
-        if( presenter.goBack() ) finish()
+        if( presenter.goBack()) finish()
     }
 
 }

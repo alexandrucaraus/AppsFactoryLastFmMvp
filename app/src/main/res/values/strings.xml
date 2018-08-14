@@ -26,9 +26,9 @@
     <string name="title_album_details">Album Details</string>
 
     <string name="title_search_artist">Search result for artists</string>
-    <string name="title_search_artist_param">Search result for : %1$s</string>
+    <string name="title_search_artist_param">Search result for %1$s</string>
     <string name="title_search_artist_albums">Top Albums for Artist</string>
-    <string name="title_search_artist_albums_param">Top Alben for : %1$s</string>
+    <string name="title_search_artist_albums_param">Top Alben for %1$s</string>
     <string name="title_for_album_param">%1$s by %2$s</string>
 
     <string name="delete_success">Successfully deleted the Album</string>

@@ -3,6 +3,7 @@ package eu.caraus.appsflastfm.ui.search.albums
 import android.arch.lifecycle.LifecycleObserver
 import android.widget.ImageView
 import eu.caraus.appsflastfm.common.retrofit.Outcome
+import eu.caraus.appsflastfm.data.domain.lastFm.albuminfo.Album
 import eu.caraus.appsflastfm.data.domain.lastFm.albums.AlbumItem
 import eu.caraus.appsflastfm.ui.base.BaseContract
 import io.reactivex.subjects.PublishSubject
@@ -35,6 +36,7 @@ interface AlbumsContract : BaseContract {
         fun showList()
         fun hideList()
 
+        fun showMessage( msg : String )
         fun showError( error : Throwable )
     }
 
@@ -44,6 +46,7 @@ interface AlbumsContract : BaseContract {
         fun getAlbumsOutcome () : PublishSubject<Outcome<List<AlbumItem?>>>
 
         fun saveAlbum( artistName: String, albumName: String)
+        fun getAlbumSaveOutcome() : PublishSubject<Outcome<Album>>
 
     }
 

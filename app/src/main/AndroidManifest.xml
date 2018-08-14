@@ -20,7 +20,8 @@
             android:name=".ui.main.MainActivity"
             android:theme="@style/AppTheme.MainTheme"
             android:configChanges="orientation|screenSize"
-            android:launchMode="singleInstance">
+            android:launchMode="singleTask"
+            >
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -35,7 +36,8 @@
         <activity android:name=".ui.search.SearchActivity"
                   android:theme="@style/AppTheme.MainTheme"
                   android:configChanges="orientation|screenSize"
-                  android:launchMode="singleInstance">
+                  android:launchMode="singleTask"
+                  >
 
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />

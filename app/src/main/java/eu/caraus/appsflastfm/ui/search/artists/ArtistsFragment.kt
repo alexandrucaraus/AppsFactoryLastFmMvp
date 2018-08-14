@@ -89,7 +89,7 @@ class ArtistsFragment : BaseFragment(), ArtistsContract.View {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when( item?.itemId ){
-            android.R.id.home -> if( presenter.goBack() ) (activity as BaseActivity).finish()
+            android.R.id.home -> if( presenter.goBack() ) activity?.finish()
         }
         return super.onOptionsItemSelected(item)
     }

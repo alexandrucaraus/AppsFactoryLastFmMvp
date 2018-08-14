@@ -44,10 +44,22 @@ class AlbumsAdapter(var albums    : List<AlbumItem?>,
                             it.image?.get(2)?.text ?: "", holder.albumImage!! )
                 }
 
-         holder.albumSave?.setOnClickListener { _->
-                    presenter.saveAlbumDetails( it.artist?.name!! , it.name.toString())
-                }
+            if( it.saved == true ) {
 
+                holder.albumSave?.setImageResource(R.drawable.heart_saved)
+
+                holder.albumSave?.setOnClickListener { _-> }
+
+            } else {
+
+                holder.albumSave?.setImageResource(R.drawable.heart_not_saved)
+
+                holder.albumSave?.setOnClickListener { _->
+                        presenter.saveAlbumDetails(it.artist?.name!!, it.name.toString())
+                        it.saved = true
+                        notifyItemChanged(position)
+                }
+            }
          }
 
     }

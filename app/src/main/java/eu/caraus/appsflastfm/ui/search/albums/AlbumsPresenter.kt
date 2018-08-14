@@ -16,11 +16,14 @@ class AlbumsPresenter( private val interactor : AlbumsContract.Interactor  ,
 
     private var view : AlbumsContract.View? = null
 
-    private var disposable : Disposable? = null
+    private var disposableList : Disposable? = null
+
+    private var disposableSave : Disposable? = null
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun onCreate(){
-        disposable = interactor.getAlbumsOutcome().subOnIoObsOnUi(scheduler).subscribe {
+
+        disposableList = interactor.getAlbumsOutcome().subOnIoObsOnUi(scheduler).subscribe {
             when( it ){
                 is Outcome.Progress ->
                     if( it.loading ) showLoading() else hideLoading()
@@ -30,6 +33,14 @@ class AlbumsPresenter( private val interactor : AlbumsContract.Interactor  ,
                     showFoundAlbums( it.data )
             }
         }
+
+        disposableSave = interactor.getAlbumSaveOutcome().subOnIoObsOnUi(scheduler).subscribe {
+            when( it ){
+                is Outcome.Success -> showMessage( "\u2661 ${it.data.name}")
+                is Outcome.Failure -> showError(it.error)
+            }
+        }
+
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
@@ -39,7 +50,7 @@ class AlbumsPresenter( private val interactor : AlbumsContract.Interactor  ,
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     fun onDestroy(){
-        disposable?.dispose()
+        disposableList?.dispose()
     }
 
     override fun showAlbumDetails( artistName: String, albumName : String ) {
@@ -72,6 +83,10 @@ class AlbumsPresenter( private val interactor : AlbumsContract.Interactor  ,
 
     private fun showLoading() {
         view?.showLoading()
+    }
+
+    private fun showMessage( msg : String ){
+        view?.showMessage( msg )
     }
 
     private fun showError( error : Throwable ) {

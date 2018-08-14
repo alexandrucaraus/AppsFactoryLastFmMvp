@@ -50,6 +50,7 @@ class MainActivityScreenLoader(activity: BaseActivity, @param:IdRes @field:IdRes
 
     fun navigateToSearchResult( searchTerm : String ){
         val intent = Intent( context(), SearchActivity::class.java)
+
         intent.putExtra("SEARCH_TERM", searchTerm)
         context()?.startActivity(intent)
     }

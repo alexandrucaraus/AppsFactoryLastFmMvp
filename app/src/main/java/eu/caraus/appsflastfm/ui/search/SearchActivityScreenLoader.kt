@@ -48,7 +48,7 @@ class SearchActivityScreenLoader(activity: BaseActivity, @param:IdRes @field:IdR
         if( fragmentManager.backStackEntryCount <= 1 )
             return true
         else
-            fragmentManager.popBackStackImmediate()
+            fragmentManager.popBackStack()
         return false
     }
 
