@@ -2,9 +2,11 @@ package eu.caraus.appsflastfm.ui.main.albumdetails
 
 import android.net.Uri
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.SimpleItemAnimator
 import android.view.*
+import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import eu.caraus.appsflastfm.R
 import eu.caraus.appsflastfm.data.domain.lastFm.albuminfo.Album
@@ -22,7 +24,8 @@ class AlbumDetailsFragment : BaseFragment(), AlbumDetailsContract.View {
         val TAG = AlbumDetailsFragment::class.java.simpleName!!
 
         const val  ALBUM_ID = "ALBUM_NAME"
-        const val  TRANSITION_NAME = "TRANSITION_NAME"
+        const val  TRANSITION_NAME  = "TRANSITION_NAME"
+        const val  TRANSITION_PIC_URL = "TRANSITION_PIC_URL"
 
         fun newInstance( albumId : String ) : AlbumDetailsFragment {
             val fragment = AlbumDetailsFragment()
@@ -32,12 +35,20 @@ class AlbumDetailsFragment : BaseFragment(), AlbumDetailsContract.View {
             return fragment
         }
 
-        fun newInstance( albumId : String, transitionName : String ) : AlbumDetailsFragment {
+        fun newInstance( albumId : String,
+                         imageUrl : String,
+                         transitionName  : String ) : AlbumDetailsFragment {
+
             val fragment = AlbumDetailsFragment()
+
             val bundle = Bundle()
+
             bundle.putString( ALBUM_ID , albumId )
-            bundle.putString( TRANSITION_NAME, transitionName)
+            bundle.putString( TRANSITION_NAME  , transitionName  )
+            bundle.putString( TRANSITION_PIC_URL , imageUrl )
+
             fragment.arguments = bundle
+
             return fragment
         }
 
@@ -51,19 +62,17 @@ class AlbumDetailsFragment : BaseFragment(), AlbumDetailsContract.View {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        lifecycle.addObserver(presenter)
+        lifecycle.addObserver( presenter )
 
         setHasOptionsMenu(true)
-
-        presenter.transitionEnter {
-            startPostponedEnterTransition()
-        }
 
         arguments?.let {
             if( it.containsKey( ALBUM_ID )){
                 presenter.getAlbumInfo( it.getString( ALBUM_ID ) )
             }
         }
+
+        postponeEnterTransition()
 
     }
 
@@ -114,7 +123,17 @@ class AlbumDetailsFragment : BaseFragment(), AlbumDetailsContract.View {
             if( it.containsKey( TRANSITION_NAME )){
                 view.ivAlbumImage.transitionName = it.getString( TRANSITION_NAME )
             }
-        }
+            if( it.containsKey( TRANSITION_PIC_URL )){
+                Picasso.with(context)
+                        .load( it.getString(TRANSITION_PIC_URL))
+                        .fit()
+                        .centerCrop()
+                        .into( ivAlbumImage, object : Callback {
+                            override fun onSuccess() { startPostponedEnterTransition() }
+                            override fun onError()   { startPostponedEnterTransition() }
+                        })
+            } else { startPostponedEnterTransition() }
+        } ?: run { startPostponedEnterTransition() }
 
     }
 
@@ -155,10 +174,16 @@ class AlbumDetailsFragment : BaseFragment(), AlbumDetailsContract.View {
     }
 
     override fun showError(error: Throwable) {
-
+        snack( error.localizedMessage )
     }
 
     private fun format(resId : Int, text : String?) : String?
                     = context?.resources?.getString( resId, text)
+
+    private fun snack( message : String ){
+        clRoot?.let {
+            Snackbar.make( it, message, Snackbar.LENGTH_LONG).show()
+        }
+    }
 
 }

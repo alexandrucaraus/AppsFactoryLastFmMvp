@@ -43,7 +43,8 @@ class AlbumsAdapter(var albums    : List<AlbumItem?>,
             ViewCompat.setTransitionName( holder.albumImage, "transition_$position" )
 
             holder.rootView?.setOnClickListener { _->
-                    presenter.showAlbumDetails( it.artist?.name!! , it.name.toString()  )
+                    presenter.showAlbumDetails( it.artist?.name!! ,  it.name.toString() ,
+                            it.image?.get(2)?.text ?: "", holder.albumImage!! )
                 }
 
          holder.albumSave?.setOnClickListener { _->

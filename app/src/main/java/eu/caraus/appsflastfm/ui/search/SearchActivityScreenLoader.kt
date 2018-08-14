@@ -37,9 +37,9 @@ class SearchActivityScreenLoader(activity: BaseActivity, @param:IdRes @field:IdR
         loadFragment( AlbumDetailsFragment.newInstance( artistName, albumName ))
     }
 
-    fun navigateToAlbumDetails ( artistName : String, albumName : String , sharedElement: ImageView) {
+    fun navigateToAlbumDetails ( artistName : String, albumName : String , sharedPicUrl : String, sharedElement: ImageView) {
         loadFragmentWithSharedElement(
-                AlbumDetailsFragment.newInstance( artistName, albumName,
+                AlbumDetailsFragment.newInstance( artistName, albumName, sharedPicUrl,
                         ViewCompat.getTransitionName( sharedElement )), sharedElement)
     }
 
@@ -74,7 +74,6 @@ class SearchActivityScreenLoader(activity: BaseActivity, @param:IdRes @field:IdR
 
         fragment.sharedElementEnterTransition  = AlbumsTransition()
         fragment.enterTransition = Fade()
-        fragment.exitTransition  = Fade()
 
         val transaction = fragmentManager.beginTransaction()
 

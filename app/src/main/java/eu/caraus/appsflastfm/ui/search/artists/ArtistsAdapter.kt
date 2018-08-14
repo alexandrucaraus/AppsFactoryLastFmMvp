@@ -11,12 +11,11 @@ import android.widget.TextView
 import com.squareup.picasso.Picasso
 import eu.caraus.appsflastfm.R
 import eu.caraus.appsflastfm.data.domain.lastFm.artists.ArtistItem
-import eu.caraus.appsflastfm.ui.main.albumdetails.AlbumDetailsAdapter
 import kotlinx.android.synthetic.main.artist_list_item.view.*
 
 class ArtistsAdapter( var artists   : List<ArtistItem?>,
                       val presenter : ArtistsContract.Presenter )
-                                        : RecyclerView.Adapter<ArtistsAdapter.ViewHolder>() {
+            : RecyclerView.Adapter<ArtistsAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
             ViewHolder( LayoutInflater.from( parent.context)
@@ -25,7 +24,6 @@ class ArtistsAdapter( var artists   : List<ArtistItem?>,
     override fun getItemCount() = artists.size
 
     override fun onBindViewHolder( holder: ViewHolder, position: Int) {
-
          artists[ position ]?.let {
 
             holder.artistName?.text = it.name
@@ -41,9 +39,7 @@ class ArtistsAdapter( var artists   : List<ArtistItem?>,
             holder.rootView?.setOnClickListener { view ->
                     presenter.showTopAlbums( it.name.toString() )
                 }
-
          }
-
     }
 
     private fun format(holder : ViewHolder?, resId : Int, text : String?) : String?

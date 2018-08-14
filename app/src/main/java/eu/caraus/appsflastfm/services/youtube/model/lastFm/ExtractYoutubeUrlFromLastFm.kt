@@ -5,24 +5,28 @@ import org.jsoup.Jsoup
 
 class ExtractYoutubeUrlFromLastFm {
 
+    @Throws(Throwable::class)
     fun extract( lastFmUrl : String ) : YouTubeVideo? {
-
-        val document = Jsoup.connect(lastFmUrl).get()
-        val elements = document.getElementsByClass("video-preview")
 
         val video = YouTubeVideo()
 
-        elements.forEach {
-
-            val id =  it.getElementsByAttribute("data-youtube-id").attr("data-youtube-id")
-            val name =  it.getElementsByAttribute("data-youtube-id").attr("data-track-name")
+            val document = Jsoup.connect(lastFmUrl).get()
+            val elements = document.getElementsByClass("video-preview")
 
 
-            if( id.isNotEmpty() && id != null){
-                video.id = id
-                video.title = name
+
+            elements.forEach {
+
+                val id = it.getElementsByAttribute("data-youtube-id").attr("data-youtube-id")
+                val name = it.getElementsByAttribute("data-youtube-id").attr("data-track-name")
+
+
+                if (id.isNotEmpty() && id != null) {
+                    video.id = id
+                    video.title = name
+                }
             }
-        }
+
 
         return video
     }

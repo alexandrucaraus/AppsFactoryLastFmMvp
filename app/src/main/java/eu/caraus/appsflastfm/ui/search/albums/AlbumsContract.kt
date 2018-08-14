@@ -13,6 +13,8 @@ interface AlbumsContract : BaseContract {
 
         fun showAlbumDetails( artistName: String, albumName: String )
         fun showAlbumDetails( artistName: String, albumName: String , sharedElement : ImageView )
+        fun showAlbumDetails( artistName: String, albumName: String ,
+                              sharedPicUrl  : String, sharedElement : ImageView )
 
         fun saveAlbumDetails( artistName: String, albumName: String )
 
@@ -44,6 +46,8 @@ interface AlbumsContract : BaseContract {
 
         fun showAlbumDetails( artistName : String, albumName : String )
         fun showAlbumDetails( artistName : String, albumName : String, sharedElement : ImageView )
+        fun showAlbumDetails( artistName   : String, albumName     : String    ,
+                              sharedPicUrl : String, sharedElement : ImageView )
 
         fun goBack() : Boolean
     }

@@ -1,4 +1,4 @@
-package eu.caraus.appsflastfm.ui.base.util.recyclerview.adapter
+package eu.caraus.appsflastfm.ui.common.recyclerview.adapter
 
 class ListDiff<Item> {
 

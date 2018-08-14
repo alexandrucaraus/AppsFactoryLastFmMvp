@@ -14,8 +14,6 @@ class AlbumsPresenter( private val interactor : AlbumsContract.Interactor  ,
                        private val navigator  : AlbumsContract.Navigator   ,
                        private val scheduler  : SchedulerProvider) : AlbumsContract.Presenter {
 
-
-
     private var view : AlbumsContract.View? = null
 
     private var disposable1 : Disposable? = null
@@ -69,11 +67,16 @@ class AlbumsPresenter( private val interactor : AlbumsContract.Interactor  ,
         navigator.showAlbumDetails( mbid )
     }
 
-    override fun showAlbumDetails(mbid: String, view : ImageView) {
-        navigator.showAlbumDetails( mbid, view )
+    override fun showAlbumDetails( mbid: String, view : ImageView) {
+
+    }
+
+    override fun showAlbumDetails( mbid: String, imageUrl: String, view: ImageView) {
+       navigator.showAlbumDetails( mbid, imageUrl, view)
     }
 
     private fun showFoundAlbums( data : List<Album?> ) {
+        view?.hideLoading()
         view?.updateAlbums( data)
     }
 

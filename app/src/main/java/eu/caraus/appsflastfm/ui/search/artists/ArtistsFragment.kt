@@ -7,8 +7,8 @@ import eu.caraus.appsflastfm.R
 import eu.caraus.appsflastfm.data.domain.lastFm.artists.ArtistItem
 import eu.caraus.appsflastfm.ui.base.BaseActivity
 import eu.caraus.appsflastfm.ui.base.BaseFragment
-import eu.caraus.appsflastfm.ui.base.util.metrics.dpToPx
-import eu.caraus.appsflastfm.ui.base.util.recyclerview.VerticalSpaceItemDecoration
+import eu.caraus.appsflastfm.ui.common.metrics.dpToPx
+import eu.caraus.appsflastfm.ui.common.recyclerview.VerticalSpaceItemDecoration
 import kotlinx.android.synthetic.main.fragment_artists.*
 import javax.inject.Inject
 

@@ -15,6 +15,7 @@ import eu.caraus.appsflastfm.services.youtube.busevents.client.ActionStop
 import eu.caraus.appsflastfm.services.youtube.busevents.service.PlayingUpdate
 import eu.caraus.appsflastfm.services.youtube.busevents.service.StoppedUpdate
 import eu.caraus.appsflastfm.services.youtube.busevents.service.ElapsedUpdate
+import eu.caraus.appsflastfm.services.youtube.busevents.service.ErrorUpdate
 import eu.caraus.appsflastfm.services.youtube.model.lastFm.ExtractYoutubeUrlFromLastFm
 import eu.caraus.appsflastfm.services.youtube.model.youtube.YouTubeVideo
 import io.reactivex.BackpressureStrategy
@@ -36,7 +37,7 @@ class AlbumDetailsPresenter( private val interactor: AlbumDetailsContract.Intera
 
     private var album : Album? = null
 
-    private var activateTransition = {}
+    //private var activateTransition = {}
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun onCreate(){
@@ -59,6 +60,7 @@ class AlbumDetailsPresenter( private val interactor: AlbumDetailsContract.Intera
                     updateTrackStopped( it.youTubeVideo )
                 is ElapsedUpdate ->
                     updateTrackElapsed( it.youTubeVideo )
+                is ErrorUpdate   ->  showError( Throwable( it.message))
             }
         }
 
@@ -75,11 +77,11 @@ class AlbumDetailsPresenter( private val interactor: AlbumDetailsContract.Intera
     fun onDestroy(){
         infoDisposable?.dispose()
         trackDisposable?.dispose()
-        this.activateTransition = {}
+
     }
 
     override fun transitionEnter( activate:()->Unit ) {
-        this.activateTransition = activate
+
     }
 
     override fun triggerPlayTrack(track : TrackItem ) {
@@ -87,16 +89,17 @@ class AlbumDetailsPresenter( private val interactor: AlbumDetailsContract.Intera
         trackDisposable?.dispose()
         trackDisposable = track.url?.let {
             Observable.fromCallable { return@fromCallable ExtractYoutubeUrlFromLastFm().extract(it) }
-                      .toFlowable(BackpressureStrategy.DROP)
-                      .subOnIoObsOnUi(scheduler)
-                      .subscribe { video ->
-                            video?.let {
-                                it.trackId = track.id
-                                it.trackState = TrackState.STOPPED
-                                it.trackElapsed = 0
-                                rxBus.sentEventToService( ActionPlay().apply { this.youTubeVideo = it })
-                            }
-                      }}
+                    .toFlowable(BackpressureStrategy.DROP)
+                    .subOnIoObsOnUi(scheduler)
+                    .subscribe({ video ->
+                        video?.let {
+                            it.trackId = track.id
+                            it.trackState = TrackState.STOPPED
+                            it.trackElapsed = 0
+                            rxBus.sentEventToService(ActionPlay().apply { this.youTubeVideo = it })
+                        }
+                    }, { err -> showError(err) })
+        }
 
     }
 
@@ -129,8 +132,6 @@ class AlbumDetailsPresenter( private val interactor: AlbumDetailsContract.Intera
     }
 
     private fun showAlbumInfo( album : Album?) {
-        activateTransition()
-        activateTransition = {}
         view?.showAlbumInfo( album )
     }
 

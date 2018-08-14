@@ -1,6 +1,6 @@
 package eu.caraus.appsflastfm.data.ui.base.recyclerview.adapter
 
-import eu.caraus.appsflastfm.ui.base.util.recyclerview.adapter.ListDiff
+import eu.caraus.appsflastfm.ui.common.recyclerview.adapter.ListDiff
 import org.junit.Assert.assertEquals
 
 import org.junit.Test

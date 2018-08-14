@@ -1,40 +1,32 @@
 package eu.caraus.appsflastfm.services.youtube
 
-import android.app.PendingIntent
+
 import android.content.Intent
 import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.os.IBinder
-import android.os.PowerManager
 
-import android.support.v4.media.session.MediaControllerCompat
-import android.support.v4.media.session.MediaSessionCompat
 import com.commit451.youtubeextractor.YouTubeExtraction
 import com.commit451.youtubeextractor.YouTubeExtractor
 
-//import com.facebook.network.connectionclass.ConnectionQuality
-//import com.facebook.network.connectionclass.DeviceBandwidthSampler
-
 import eu.caraus.appsflastfm.common.bus.RxBus
 import eu.caraus.appsflastfm.common.extensions.subOnIoObsOnUi
-import eu.caraus.appsflastfm.common.notification.NotificationHandler
+import eu.caraus.appsflastfm.ui.common.notification.NotificationsUtil
 import eu.caraus.appsflastfm.common.schedulers.SchedulerProvider
 import eu.caraus.appsflastfm.data.domain.extensions.lastFm.TrackState
 import eu.caraus.appsflastfm.services.youtube.busevents.client.ActionPlay
 import eu.caraus.appsflastfm.services.youtube.busevents.client.ActionSeek
 import eu.caraus.appsflastfm.services.youtube.busevents.client.ActionStop
 import eu.caraus.appsflastfm.services.youtube.busevents.service.ElapsedUpdate
+import eu.caraus.appsflastfm.services.youtube.busevents.service.ErrorUpdate
 import eu.caraus.appsflastfm.services.youtube.busevents.service.PlayingUpdate
 import eu.caraus.appsflastfm.services.youtube.busevents.service.StoppedUpdate
 
-import eu.caraus.appsflastfm.services.youtube.model.youtube.YouTubeMediaType
 import eu.caraus.appsflastfm.services.youtube.model.youtube.YouTubeVideo
 import eu.caraus.appsflastfm.ui.base.BaseService
 
 import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -50,23 +42,15 @@ class YoutubePlayerService : BaseService(),
 
         const val ACTION_STOP = "ACTION_STOP"
 
-        const val ACTION_PAUSE = "ACTION_PAUSE"
-
     }
 
-
     private val mediaPlayer      : MediaPlayer = MediaPlayer()
-    private var mediaController  : MediaControllerCompat? = null
-    private var mediaSession     : MediaSessionCompat? = null
-
-    private var mediaType = YouTubeMediaType.YOUTUBE_MEDIA_NONE
 
     private var youTubeVideo : YouTubeVideo? = null
 
-    private var notificationHandler = NotificationHandler(this)
+    private var notificationHandler = NotificationsUtil(this)
 
     private var elapsedDisposable : Disposable? = null
-    private var playingDisposable  : Disposable? = null
 
     @Inject
     lateinit var schedulers : SchedulerProvider
@@ -83,8 +67,6 @@ class YoutubePlayerService : BaseService(),
 
         mediaPlayer.setOnCompletionListener(this)
         mediaPlayer.setOnPreparedListener(this)
-
-        initMediaSessions()
 
         initBus()
 
@@ -107,24 +89,9 @@ class YoutubePlayerService : BaseService(),
         notificationHandler.cancel()
     }
 
-    /**
-     * Called when the media file is ready for playback.
-     *
-     * @param mp the MediaPlayer that is ready for playback
-     */
+    override fun onPrepared( mp : MediaPlayer ) { }
 
-    override fun onPrepared( mp : MediaPlayer ) {
-
-    }
-
-    /**
-     * Called when the end of a media source is reached during playback.
-     *
-     * @param mp the MediaPlayer that reached the end of the file
-     */
-    override fun onCompletion( mPlayer : MediaPlayer) {
-
-    }
+    override fun onCompletion( mPlayer : MediaPlayer) { }
 
     private fun initBus() {
         rxBus.client().subscribe {
@@ -140,7 +107,6 @@ class YoutubePlayerService : BaseService(),
         this.youTubeVideo = youTubeVideo
         this.youTubeVideo?.let { video ->
             playYouTubeUrl( video , {
-                video.thumbnailURL = it?.thumbnails?.get(0)?.url
                 playAudio(it)
                 actionPlayUpdate()
             }, {
@@ -177,9 +143,7 @@ class YoutubePlayerService : BaseService(),
             elapsedUpdateTimerStart()
 
             notificationHandler.buildNotification( ACTION_STOP, it )
-
         }
-
     }
 
     private fun actionStopUpdate(){
@@ -226,54 +190,6 @@ class YoutubePlayerService : BaseService(),
         elapsedDisposable?.dispose()
     }
 
-    private fun getPendingIntent() : PendingIntent
-            = PendingIntent.getBroadcast(
-            this, 0, Intent(Intent.ACTION_MEDIA_BUTTON),
-                        PendingIntent.FLAG_CANCEL_CURRENT)
-
-    private fun initMediaSessions() {
-
-        mediaPlayer.setWakeMode( this , PowerManager.PARTIAL_WAKE_LOCK )
-
-        mediaSession = MediaSessionCompat( this, "SESSION", null, getPendingIntent())
-
-        mediaSession?.let {
-
-            mediaController = MediaControllerCompat(this, it.sessionToken )
-
-            it.setCallback( object : MediaSessionCompat.Callback(){
-                override fun onPlay() {
-                    super.onPlay()
-                    resumePlayback()
-
-                }
-                override fun onPause() {
-                    super.onPause()
-                    pausePlayback()
-
-                }
-                override fun onStop() {
-                    super.onStop()
-                    stopPlayback()
-
-                }
-            })
-        }
-
-    }
-
-    private fun pausePlayback() {
-        mediaPlayer.let {
-            if( it.isPlaying ) it.pause()
-        }
-    }
-
-    private fun resumePlayback() {
-        mediaPlayer.let {
-            if( !it.isPlaying ) it.start()
-        }
-    }
-
     private fun stopPlayback(){
         mediaPlayer.let {
             it.stop()
@@ -306,21 +222,29 @@ class YoutubePlayerService : BaseService(),
 
     private fun playAudio( youtubeUrl : YouTubeExtraction?) {
 
-        if( youtubeUrl?.videoStreams?.isNotEmpty() == true )
-        youtubeUrl.videoStreams.get(0).url.let { url ->
-            mediaPlayer.let {
-                it.reset()
-                it.setDataSource( url)
-                it.setVolume(1.0f,1.0f)
-                it.setAudioAttributes( audioAttributes())
-                it.prepare()
-                it.start()
+        if( youtubeUrl?.videoStreams?.isNotEmpty() == true ){
+            youtubeUrl.videoStreams[0].url.let { url ->
+                mediaPlayer.let {
+                    it.reset()
+                    it.setDataSource( url)
+                    it.setVolume(1.0f,1.0f)
+                    it.setAudioAttributes( audioAttributes())
+                    it.prepare()
+                    it.start()
+                }
             }
+        } else {
+            playError( Throwable("Can't play, empty streams") )
         }
     }
 
     private fun playError( error : Throwable ){
         stopPlayback()
+        playErrorUpdate( error.localizedMessage )
+    }
+
+    private fun playErrorUpdate( error : String ){
+        rxBus.sendEventToClient( ErrorUpdate(error) )
     }
 
     private fun audioAttributes() : AudioAttributes {

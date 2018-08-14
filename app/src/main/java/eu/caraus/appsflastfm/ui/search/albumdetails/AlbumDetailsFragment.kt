@@ -2,9 +2,11 @@ package eu.caraus.appsflastfm.ui.search.albumdetails
 
 import android.net.Uri
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.SimpleItemAnimator
 import android.view.*
+import com.squareup.picasso.Callback
 
 import com.squareup.picasso.Picasso
 
@@ -25,9 +27,10 @@ class AlbumDetailsFragment : BaseFragment(), AlbumDetailsContract.View {
 
         val TAG = AlbumDetailsFragment::class.java.simpleName!!
 
-        const val ARTIST_NAME     = "ARTIST_NAME"
-        const val ALBUM_NAME      = "ALBUM_NAME"
-        const val TRANSITION_NAME = "TRANSITION_NAME"
+        const val ARTIST_NAME        = "ARTIST_NAME"
+        const val ALBUM_NAME         = "ALBUM_NAME"
+        const val TRANSITION_NAME    = "TRANSITION_NAME"
+        const val TRANSITION_PIC_URL = "TRANSITION_PIC_URL"
 
         fun newInstance( artistName : String, albumName : String ) : AlbumDetailsFragment {
             val fragment = AlbumDetailsFragment()
@@ -38,12 +41,16 @@ class AlbumDetailsFragment : BaseFragment(), AlbumDetailsContract.View {
             return fragment
         }
 
-        fun newInstance( artistName : String, albumName : String , transitionName : String) : AlbumDetailsFragment {
+        fun newInstance( artistName       : String,
+                         albumName        : String ,
+                         transitionPicUrl : String,
+                         transitionName   : String) : AlbumDetailsFragment {
             val fragment = AlbumDetailsFragment()
             val bundle = Bundle()
-            bundle.putString( ARTIST_NAME     , artistName)
-            bundle.putString( ALBUM_NAME      , albumName )
-            bundle.putString( TRANSITION_NAME , transitionName)
+            bundle.putString( ARTIST_NAME       , artistName)
+            bundle.putString( ALBUM_NAME        , albumName )
+            bundle.putString( TRANSITION_PIC_URL, transitionPicUrl)
+            bundle.putString( TRANSITION_NAME   , transitionName)
             fragment.arguments = bundle
             return fragment
         }
@@ -61,10 +68,6 @@ class AlbumDetailsFragment : BaseFragment(), AlbumDetailsContract.View {
         lifecycle.addObserver(presenter)
 
         setHasOptionsMenu(true)
-
-        presenter.transitionHandler {
-            startPostponedEnterTransition()
-        }
 
         arguments?.let {
             if( it.containsKey( ALBUM_NAME ) && it.containsKey(ARTIST_NAME)){
@@ -118,22 +121,30 @@ class AlbumDetailsFragment : BaseFragment(), AlbumDetailsContract.View {
         (rvTrackList.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
 
         arguments?.let {
+
             if( it.containsKey( TRANSITION_NAME )){
                 view.ivAlbumImage.transitionName = it.getString( TRANSITION_NAME )
             }
-        }
+
+            if( it.containsKey( TRANSITION_PIC_URL) ){
+                Picasso.with(context)
+                        .load( it.getString( TRANSITION_PIC_URL))
+                        .fit()
+                        .centerCrop()
+                        .into( ivAlbumImage, object : Callback {
+                            override fun onSuccess() { startPostponedEnterTransition() }
+                            override fun onError()   { startPostponedEnterTransition() }
+                        })
+
+            } else { startPostponedEnterTransition() }
+
+        } ?: run { startPostponedEnterTransition() }
 
     }
 
     override fun showAlbumInfo( album: Album? ) {
 
         album?.let {
-            Picasso.with(context)
-                    .load(Uri.parse( it.image?.get(2)?.text))
-                    .error( R.mipmap.ic_last)
-                    .fit()
-                    .centerCrop()
-                    .into( ivAlbumImage )
             tvAlbumName.text  = it.name
             tvArtistName.text = format( R.string.album_by_artist, it.artist )
             it.tracks?.track?.let { trackList ->
@@ -157,10 +168,16 @@ class AlbumDetailsFragment : BaseFragment(), AlbumDetailsContract.View {
     }
 
     override fun showError(error: Throwable) {
-
+        snack( error.localizedMessage )
     }
 
     private fun format(resId : Int, text : String?) : String?
             = context?.resources?.getString( resId, text)
+
+    private fun snack( message : String ){
+        clRoot?.let {
+            Snackbar.make( it, message, Snackbar.LENGTH_LONG).show()
+        }
+    }
 
 }

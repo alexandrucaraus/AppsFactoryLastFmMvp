@@ -7,8 +7,8 @@ import eu.caraus.appsflastfm.ui.main.MainActivityScreenLoader
 class AlbumsNavigator( private val navigation: MainActivityScreenLoader ) : AlbumsContract.Navigator {
 
 
-    override fun showAlbumDetails( mbid: String, view: ImageView) {
-        navigation.navigateToAlbumDetails( mbid, view)
+    override fun showAlbumDetails( mbid: String, imageUrl : String, view: ImageView) {
+        navigation.navigateToAlbumDetails( mbid, imageUrl, view)
     }
 
     override fun showAlbumDetails( mbid: String) {

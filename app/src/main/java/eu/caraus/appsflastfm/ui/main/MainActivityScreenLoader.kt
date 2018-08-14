@@ -62,8 +62,8 @@ class MainActivityScreenLoader(activity: BaseActivity, @param:IdRes @field:IdRes
         loadFragment( AlbumDetailsFragment.newInstance( mbid ))
     }
 
-    fun navigateToAlbumDetails( mbid : String, view : ImageView ){
-        loadFragmentWithSharedElement( AlbumDetailsFragment.newInstance( mbid , ViewCompat.getTransitionName(view)), view )
+    fun navigateToAlbumDetails( mbid : String, imageUrl: String,  view : ImageView ){
+        loadFragmentWithSharedElement( AlbumDetailsFragment.newInstance( mbid , imageUrl, ViewCompat.getTransitionName(view)), view )
     }
 
     private fun loadFragment( fragment: BaseFragment ) {
@@ -89,7 +89,6 @@ class MainActivityScreenLoader(activity: BaseActivity, @param:IdRes @field:IdRes
 
         fragment.sharedElementEnterTransition  = AlbumsTransition()
         fragment.enterTransition = Fade()
-        fragment.exitTransition  = Fade()
 
         val transaction = fragmentManager.beginTransaction()
 

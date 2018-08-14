@@ -13,6 +13,7 @@ class AlbumsPresenter( private val interactor : AlbumsContract.Interactor  ,
                        private val navigator  : AlbumsContract.Navigator   ,
                        private val scheduler  : SchedulerProvider) : AlbumsContract.Presenter {
 
+
     private var view : AlbumsContract.View? = null
 
     private var disposable : Disposable? = null
@@ -26,7 +27,7 @@ class AlbumsPresenter( private val interactor : AlbumsContract.Interactor  ,
                 is Outcome.Failure  ->
                     showError( it.error )
                 is Outcome.Success  ->
-                    if( it.data.isEmpty() ) showFoundNothing() else showFoundAlbums( it.data )
+                    if( it.data.isEmpty()) showFoundAlbums( it.data )
             }
         }
     }
@@ -49,6 +50,10 @@ class AlbumsPresenter( private val interactor : AlbumsContract.Interactor  ,
 
     }
 
+    override fun showAlbumDetails(artistName: String, albumName: String, sharedPicUrl: String, sharedElement: ImageView) {
+        navigator.showAlbumDetails( artistName, albumName, sharedPicUrl, sharedElement)
+    }
+
     override fun saveAlbumDetails( artistName: String, albumName: String ) {
         interactor.saveAlbum( artistName, albumName )
     }
@@ -59,10 +64,6 @@ class AlbumsPresenter( private val interactor : AlbumsContract.Interactor  ,
 
     private fun showFoundAlbums( data : List<AlbumItem?> ) {
         view?.showFoundAlbums( data)
-    }
-
-    private fun showFoundNothing() {
-        view?.showFoundNothing()
     }
 
     private fun hideLoading() {

@@ -1,4 +1,4 @@
-package eu.caraus.appsflastfm.common.notification
+package eu.caraus.appsflastfm.ui.common.notification
 
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -15,7 +15,7 @@ import android.os.Build
 import android.widget.RemoteViews
 
 
-class NotificationHandler( private val context: Context ) {
+class NotificationsUtil(private val context: Context ) {
 
     companion object {
 

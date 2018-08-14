@@ -12,8 +12,6 @@ interface AlbumDetailsContract : BaseContract {
 
     interface Presenter : BaseContract.BasePresenter<View>, LifecycleObserver {
 
-        fun transitionHandler( enterPostponedTransition : () -> Unit )
-
         fun getAlbumInfo( artistName: String, albumName: String )
 
         fun triggerSeekTo( seekTo : Int )

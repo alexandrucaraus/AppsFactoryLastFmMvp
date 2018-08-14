@@ -10,8 +10,8 @@ import eu.caraus.appsflastfm.R
 import eu.caraus.appsflastfm.data.domain.lastFm.albuminfo.Album
 import eu.caraus.appsflastfm.ui.base.BaseActivity
 import eu.caraus.appsflastfm.ui.base.BaseFragment
-import eu.caraus.appsflastfm.ui.base.util.metrics.dpToPx
-import eu.caraus.appsflastfm.ui.base.util.recyclerview.VerticalSpaceItemDecoration
+import eu.caraus.appsflastfm.ui.common.metrics.dpToPx
+import eu.caraus.appsflastfm.ui.common.recyclerview.VerticalSpaceItemDecoration
 import kotlinx.android.synthetic.main.fragment_albums.*
 import kotlinx.android.synthetic.main.fragment_albums.view.*
 import javax.inject.Inject
@@ -91,8 +91,10 @@ class AlbumsFragment : BaseFragment(), SearchView.OnQueryTextListener, AlbumsCon
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated( view, savedInstanceState)
+
         rvAlbums.layoutManager = LinearLayoutManager( context )
         rvAlbums.addItemDecoration( VerticalSpaceItemDecoration( resources.dpToPx( R.dimen.item_spacing)))
+
         adapter = AlbumsAdapter( mutableListOf() , presenter )
         adapter?.registerAdapterDataObserver( object : RecyclerView.AdapterDataObserver() {
             override fun onChanged() {
@@ -100,6 +102,7 @@ class AlbumsFragment : BaseFragment(), SearchView.OnQueryTextListener, AlbumsCon
                 checkEmptyAdapter()
             }
         })
+
         rvAlbums.adapter = adapter
         rvAlbums.adapter.notifyDataSetChanged()
 
@@ -118,6 +121,8 @@ class AlbumsFragment : BaseFragment(), SearchView.OnQueryTextListener, AlbumsCon
     }
 
     override fun updateAlbums( albums : List<Album?> ) {
+
+        rvAlbums.visibility = View.VISIBLE
 
         adapter?.updateAlbums(albums)
 
@@ -143,11 +148,11 @@ class AlbumsFragment : BaseFragment(), SearchView.OnQueryTextListener, AlbumsCon
     }
 
     override fun showLoading() {
-
+        progress.visibility = View.VISIBLE
     }
 
     override fun hideLoading() {
-
+        progress.visibility = View.GONE
     }
 
     override fun deleteSuccess() {

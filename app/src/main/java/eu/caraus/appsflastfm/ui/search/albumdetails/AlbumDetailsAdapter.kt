@@ -18,6 +18,11 @@ class AlbumDetailsAdapter(var tracks : List<TrackItem?>,
                           val presenter : AlbumDetailsContract.Presenter )
                                 : RecyclerView.Adapter<AlbumDetailsAdapter.ViewHolder>() {
 
+    init {
+        // emulate ids for player
+        tracks.forEachIndexed { index , item -> item?.id = index.toLong() }
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
             ViewHolder( LayoutInflater.from( parent.context)
                     .inflate( R.layout.album_details_track_item, parent, false))
@@ -36,8 +41,6 @@ class AlbumDetailsAdapter(var tracks : List<TrackItem?>,
                 holder.trackSeekTimeline?.progress = it.trackElapsed
             }
 
-
-
             when( it.trackState ){
 
                 TrackState.PLAYING -> {
@@ -53,7 +56,6 @@ class AlbumDetailsAdapter(var tracks : List<TrackItem?>,
                 }
 
             }
-
         }
 
     }

@@ -2,7 +2,6 @@ package eu.caraus.appsflastfm.ui.main.albums
 
 import android.net.Uri
 import android.support.v4.view.ViewCompat
-import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -14,7 +13,7 @@ import android.widget.TextView
 import com.squareup.picasso.Picasso
 import eu.caraus.appsflastfm.R
 import eu.caraus.appsflastfm.data.domain.lastFm.albuminfo.Album
-import eu.caraus.appsflastfm.ui.base.util.recyclerview.adapter.ListDiff
+import eu.caraus.appsflastfm.ui.common.recyclerview.adapter.ListDiff
 import kotlinx.android.synthetic.main.album_list_item.view.*
 
 class AlbumsAdapter(var albums    : MutableList<Album?>,
@@ -67,7 +66,7 @@ class AlbumsAdapter(var albums    : MutableList<Album?>,
             ViewCompat.setTransitionName( holder.albumImage, "transition_$position" )
 
             holder.rootView?.setOnClickListener { _->
-                    presenter.showAlbumDetails( it.mbid , holder.albumImage!! )
+                    presenter.showAlbumDetails( it.mbid , it.image?.get(2)?.text ?: "" , holder.albumImage!! )
                 }
 
             holder.albumDelete?.setOnClickListener { _->

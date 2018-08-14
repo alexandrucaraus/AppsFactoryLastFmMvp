@@ -13,6 +13,7 @@ interface AlbumsContract : BaseContract {
 
         fun showAlbumDetails( mbid : String )
         fun showAlbumDetails( mbid : String, view : ImageView )
+        fun showAlbumDetails( mbid : String, imageUrl : String, view : ImageView )
 
         fun deleteAlbum( album : Album )
 
@@ -49,7 +50,7 @@ interface AlbumsContract : BaseContract {
     interface Navigator {
 
         fun showAlbumDetails( mbid : String )
-        fun showAlbumDetails( mbid : String , view: ImageView )
+        fun showAlbumDetails( mbid : String , imageUrl : String,  view : ImageView )
 
         fun showSearchResultScreen( searchTerm : String )
 

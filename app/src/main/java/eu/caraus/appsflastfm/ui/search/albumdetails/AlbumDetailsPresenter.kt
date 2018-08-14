@@ -13,6 +13,7 @@ import eu.caraus.appsflastfm.services.youtube.busevents.client.ActionPlay
 import eu.caraus.appsflastfm.services.youtube.busevents.client.ActionSeek
 import eu.caraus.appsflastfm.services.youtube.busevents.client.ActionStop
 import eu.caraus.appsflastfm.services.youtube.busevents.service.ElapsedUpdate
+import eu.caraus.appsflastfm.services.youtube.busevents.service.ErrorUpdate
 import eu.caraus.appsflastfm.services.youtube.busevents.service.PlayingUpdate
 import eu.caraus.appsflastfm.services.youtube.busevents.service.StoppedUpdate
 import eu.caraus.appsflastfm.services.youtube.model.lastFm.ExtractYoutubeUrlFromLastFm
@@ -32,8 +33,6 @@ class AlbumDetailsPresenter( private val interactor: AlbumDetailsContract.Intera
     private var trackDisposable : Disposable? = null
 
     private var album : Album? = null
-
-    private var activateTransition = {}
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun onCreate(){
@@ -56,6 +55,7 @@ class AlbumDetailsPresenter( private val interactor: AlbumDetailsContract.Intera
                     updateTrackStopped( it.youTubeVideo )
                 is ElapsedUpdate ->
                     updateTrackElapsed( it.youTubeVideo )
+                is ErrorUpdate ->  showError( Throwable( it.message))
             }
         }
 
@@ -72,11 +72,6 @@ class AlbumDetailsPresenter( private val interactor: AlbumDetailsContract.Intera
     fun onDestroy(){
         albumDisposable?.dispose()
         trackDisposable?.dispose()
-        activateTransition = {}
-    }
-
-    override fun transitionHandler( activate: () -> Unit ) {
-        activateTransition = activate
     }
 
     override fun getAlbumInfo( artistName: String, albumName: String) {
@@ -85,8 +80,6 @@ class AlbumDetailsPresenter( private val interactor: AlbumDetailsContract.Intera
     }
 
     private fun showAlbumInfo( album : Album?) {
-        activateTransition()
-        activateTransition = {}
         view?.showAlbumInfo( album  )
     }
 
@@ -139,8 +132,8 @@ class AlbumDetailsPresenter( private val interactor: AlbumDetailsContract.Intera
 
     }
 
-    private fun showError( error: Throwable ) {
-
+    private fun showError( error : Throwable ) {
+        view?.showError( error )
     }
 
     override fun goBack(): Boolean {

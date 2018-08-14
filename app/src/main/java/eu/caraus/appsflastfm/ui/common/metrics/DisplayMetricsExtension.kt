@@ -1,4 +1,4 @@
-package eu.caraus.appsflastfm.ui.base.util.metrics
+package eu.caraus.appsflastfm.ui.common.metrics
 
 import android.content.res.Resources
 
