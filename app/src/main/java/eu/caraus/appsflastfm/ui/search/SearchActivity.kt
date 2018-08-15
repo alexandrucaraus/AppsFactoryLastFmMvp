@@ -17,6 +17,10 @@ import javax.inject.Inject
 
 class SearchActivity : BaseActivity() {
 
+    companion object {
+        const val SEARCH_TERM = "SEARCH_TERM"
+    }
+
     @Inject
     lateinit var presenter : SearchContract.Presenter
 
@@ -33,7 +37,7 @@ class SearchActivity : BaseActivity() {
 
     private fun handleIntent(intent: Intent?){
 
-        val searchedArtist = intent?.getStringExtra("SEARCH_TERM")
+        val searchedArtist = intent?.getStringExtra(SEARCH_TERM)
 
         searchedArtist?.let {
             presenter.searchArtist(it)

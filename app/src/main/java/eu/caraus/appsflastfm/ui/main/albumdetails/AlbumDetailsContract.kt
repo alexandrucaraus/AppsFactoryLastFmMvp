@@ -43,9 +43,6 @@ interface AlbumDetailsContract : BaseContract {
     }
 
     interface Navigator {
-
-        fun playSong( youtubeUrl : YouTubeVideo)
-
         fun goBack() : Boolean
     }
 

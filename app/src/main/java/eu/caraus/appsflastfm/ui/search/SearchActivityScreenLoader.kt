@@ -73,7 +73,6 @@ class SearchActivityScreenLoader(activity: BaseActivity, @param:IdRes @field:IdR
         val currentFragment = fragmentManager.findFragmentById( containerId )
 
         fragment.sharedElementEnterTransition  = AlbumsTransition()
-        fragment.enterTransition = Fade()
 
         val transaction = fragmentManager.beginTransaction()
 

@@ -47,7 +47,7 @@ class LastFmDbTest {
 
                     database.albumsDao().insert( it.album!! )
 
-                    database.albumsDao().selectAll().subscribe { list ->
+                    database.albumsDao().selectAll().let{ list ->
                         assertThat( list.size , `is`(1) )
                     }
 
@@ -67,7 +67,7 @@ class LastFmDbTest {
 
                     database.albumsDao().insertWhole( it.album!! )
 
-                    database.albumsDao().selectAll().subscribe { list ->
+                    database.albumsDao().selectAll().let { list ->
                         assertThat( list.size , `is`(1) )
                     }
 

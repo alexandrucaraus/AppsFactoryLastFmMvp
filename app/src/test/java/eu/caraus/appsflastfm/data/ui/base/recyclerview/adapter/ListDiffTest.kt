@@ -13,8 +13,8 @@ class ListDiffTest {
 
         val listDiff = ListDiff<String>()
 
-        val oldList = mutableListOf<String>("o1","o2","o3","o4","o5","o6")
-        val newList = mutableListOf<String>("o1","o2","n1","o3","o4","o5","o6")
+        val oldList = mutableListOf("o1","o2","o3","o4","o5","o6")
+        val newList = mutableListOf("o1","o2","n1","o3","o4","o5","o6")
 
 
 
@@ -31,8 +31,8 @@ class ListDiffTest {
 
         val listDiff = ListDiff<String>()
 
-        val newList = mutableListOf<String>("o1","o2","o3","o4","o5","o6")
-        val oldList = mutableListOf<String>("o1","o2","n1","o3","o4","o5","o6")
+        val newList = mutableListOf("o1","o2","o3","o4","o5","o6")
+        val oldList = mutableListOf("o1","o2","n1","o3","o4","o5","o6")
 
         listDiff.delete = { i,o ->
             assertEquals( 2 ,i)
@@ -46,8 +46,8 @@ class ListDiffTest {
 
         val listDiff = ListDiff<String>()
 
-        val oldList = mutableListOf<String>("o1","o2","o3","o4","o5")
-        val newList = mutableListOf<String>("o1_","o2","o3","o4","o5")
+        val oldList = mutableListOf("o1","o2","o3","o4","o5")
+        val newList = mutableListOf("o1_","o2","o3","o4","o5")
 
         listDiff.update = { i,o ->
             assertEquals( 0, i)

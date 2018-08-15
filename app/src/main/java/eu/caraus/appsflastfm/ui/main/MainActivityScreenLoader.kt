@@ -18,6 +18,7 @@ import eu.caraus.appsflastfm.ui.main.albumdetails.AlbumDetailsFragment
 import eu.caraus.appsflastfm.ui.main.albums.AlbumsFragment
 import eu.caraus.appsflastfm.ui.main.albums.AlbumsTransition
 import eu.caraus.appsflastfm.ui.search.SearchActivity
+import eu.caraus.appsflastfm.ui.search.SearchActivity.Companion.SEARCH_TERM
 
 
 import java.lang.ref.WeakReference
@@ -50,8 +51,7 @@ class MainActivityScreenLoader(activity: BaseActivity, @param:IdRes @field:IdRes
 
     fun navigateToSearchResult( searchTerm : String ){
         val intent = Intent( context(), SearchActivity::class.java)
-
-        intent.putExtra("SEARCH_TERM", searchTerm)
+        intent.putExtra( SEARCH_TERM, searchTerm )
         context()?.startActivity(intent)
     }
 
@@ -89,7 +89,6 @@ class MainActivityScreenLoader(activity: BaseActivity, @param:IdRes @field:IdRes
         val currentFragment = fragmentManager.findFragmentById( containerId )
 
         fragment.sharedElementEnterTransition  = AlbumsTransition()
-        fragment.enterTransition = Fade()
 
         val transaction = fragmentManager.beginTransaction()
 
@@ -102,18 +101,6 @@ class MainActivityScreenLoader(activity: BaseActivity, @param:IdRes @field:IdRes
         transaction.add( containerId, fragment)
         transaction.addToBackStack( null )
         transaction.commit()
-
-    }
-
-    fun sendMusicIntent( youtubeVideoUrl : YouTubeVideo) {
-
-        context()?.let {
-            val serviceIntent = Intent( it , YoutubePlayerService::class.java)
-            serviceIntent.action = YoutubePlayerService.ACTION_PLAY
-            serviceIntent.putExtra( YouTubeConfig.YOUTUBE_TYPE, YouTubeMediaType.YOUTUBE_MEDIA_TYPE_VIDEO)
-            serviceIntent.putExtra(YouTubeConfig.YOUTUBE_TYPE_VIDEO, youtubeVideoUrl )
-            it.startService( serviceIntent )
-        }
 
     }
 
