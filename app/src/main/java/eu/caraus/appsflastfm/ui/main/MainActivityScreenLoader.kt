@@ -3,15 +3,11 @@ package eu.caraus.appsflastfm.ui.main
 import android.content.Context
 import android.content.Intent
 import android.support.annotation.IdRes
-import android.support.transition.Fade
 
 import android.support.v4.app.FragmentManager
 import android.support.v4.view.ViewCompat
 import android.widget.ImageView
 import eu.caraus.appsflastfm.services.youtube.YoutubePlayerService
-import eu.caraus.appsflastfm.services.youtube.model.youtube.YouTubeMediaType
-import eu.caraus.appsflastfm.services.youtube.model.youtube.YouTubeVideo
-import eu.caraus.appsflastfm.services.youtube.model.youtube.YouTubeConfig
 import eu.caraus.appsflastfm.ui.base.BaseActivity
 import eu.caraus.appsflastfm.ui.base.BaseFragment
 import eu.caraus.appsflastfm.ui.main.albumdetails.AlbumDetailsFragment

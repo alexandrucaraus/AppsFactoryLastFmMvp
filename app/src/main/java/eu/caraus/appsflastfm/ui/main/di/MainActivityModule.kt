@@ -20,6 +20,8 @@ import eu.caraus.appsflastfm.ui.main.albums.AlbumsContract
 import eu.caraus.appsflastfm.ui.main.albums.AlbumsInteractor
 import eu.caraus.appsflastfm.ui.main.albums.AlbumsNavigator
 import eu.caraus.appsflastfm.ui.main.albums.AlbumsPresenter
+import io.reactivex.disposables.CompositeDisposable
+import javax.inject.Named
 
 
 @Module
@@ -50,18 +52,26 @@ class MainActivityModule {
     @MainActivityScope
     internal fun provideAlbumsPresenter( interactor : AlbumsContract.Interactor,
                                          navigator  : AlbumsContract.Navigator,
-                                         scheduler  : SchedulerProvider)
-            : AlbumsContract.Presenter = AlbumsPresenter( interactor, navigator , scheduler )
+                                         scheduler  : SchedulerProvider,
+                                         @Named("albumsList.disposable") disposable: CompositeDisposable)
+            : AlbumsContract.Presenter = AlbumsPresenter( interactor, navigator , scheduler, disposable )
 
     @Provides
     @MainActivityScope
-    internal fun provideAlbumsInteractor(database: Database, scheduler: SchedulerProvider)
-            : AlbumsContract.Interactor = AlbumsInteractor( database, scheduler )
+    internal fun provideAlbumsInteractor( database: Database,
+                                          scheduler: SchedulerProvider,
+                                          @Named("albumsList.disposable") disposable: CompositeDisposable)
+            : AlbumsContract.Interactor = AlbumsInteractor( database, scheduler, disposable )
 
     @Provides
     @MainActivityScope
     internal fun provideAlbumsNavigator( navigation: MainActivityScreenLoader)
             : AlbumsContract.Navigator = AlbumsNavigator( navigation )
+
+    @Provides
+    @Named("albumsList.disposable")
+    @MainActivityScope
+    fun provideAlbumsDisposable() = CompositeDisposable()
 
     // Album Details
 
@@ -70,18 +80,26 @@ class MainActivityModule {
     internal fun provideAlbumDetailsPresenter( interactor : AlbumDetailsContract.Interactor,
                                                navigator  : AlbumDetailsContract.Navigator,
                                                scheduler  : SchedulerProvider,
-                                               rxBus: RxBus )
-            : AlbumDetailsContract.Presenter = AlbumDetailsPresenter( interactor, navigator , scheduler, rxBus )
+                                               rxBus      : RxBus,
+                                               @Named("albumDetails.disposable")
+                                               disposable : CompositeDisposable)
+            : AlbumDetailsContract.Presenter = AlbumDetailsPresenter( interactor, navigator , scheduler, rxBus , disposable )
 
     @Provides
     @MainActivityScope
-    internal fun provideAlbumDetailsInteractor( database: Database , scheduler: SchedulerProvider)
-            : AlbumDetailsContract.Interactor = AlbumDetailsInteractor( database, scheduler )
+    internal fun provideAlbumDetailsInteractor( database: Database ,
+                                                scheduler: SchedulerProvider,
+                                                @Named("albumDetails.disposable") disposable : CompositeDisposable)
+            : AlbumDetailsContract.Interactor = AlbumDetailsInteractor( database, scheduler, disposable )
 
     @Provides
     @MainActivityScope
     internal fun provideAlbumDetailsNavigator( navigation: MainActivityScreenLoader)
             : AlbumDetailsContract.Navigator = AlbumDetailsNavigator( navigation )
 
+    @Provides
+    @Named("albumDetails.disposable")
+    @MainActivityScope
+    fun provideAlbumDetailsDisposable() = CompositeDisposable()
 
 }

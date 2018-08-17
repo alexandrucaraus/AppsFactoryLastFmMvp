@@ -1,5 +1,6 @@
 package eu.caraus.appsflastfm.ui.main.albums
 
+import eu.caraus.appsflastfm.common.extensions.addTo
 import eu.caraus.appsflastfm.common.extensions.failed
 import eu.caraus.appsflastfm.common.extensions.loading
 import eu.caraus.appsflastfm.common.extensions.success
@@ -8,12 +9,14 @@ import eu.caraus.appsflastfm.common.schedulers.SchedulerProvider
 import eu.caraus.appsflastfm.data.domain.lastFm.albuminfo.Album
 import eu.caraus.appsflastfm.data.local.Database
 import io.reactivex.Observable
+import io.reactivex.disposables.CompositeDisposable
 
 import io.reactivex.subjects.PublishSubject
 
 
-class AlbumsInteractor( private val database  : Database         ,
-                        private val scheduler : SchedulerProvider ) : AlbumsContract.Interactor {
+class AlbumsInteractor( private val database   : Database          ,
+                        private val scheduler  : SchedulerProvider ,
+                        private val disposable : CompositeDisposable ) : AlbumsContract.Interactor {
 
     private val albumsFetchResult = PublishSubject.create<Outcome<List<Album?>>>()
     private val albumDeleteResult = PublishSubject.create<Outcome<Boolean>>()
@@ -30,6 +33,7 @@ class AlbumsInteractor( private val database  : Database         ,
                     },{
                         albumsFetchResult.failed(it)
                 })
+                .addTo( disposable )
     }
 
     override fun deleteAlbum( album : Album ) {
@@ -45,12 +49,12 @@ class AlbumsInteractor( private val database  : Database         ,
                     },
                     {
                         albumDeleteResult.failed(it)
-                    })
-
+                })
+                .addTo( disposable )
     }
 
     override fun getAlbumsOutcome(): PublishSubject<Outcome<List<Album?>>> = albumsFetchResult
 
-    override fun deleteAlbumOutcum() : PublishSubject<Outcome<Boolean>> = albumDeleteResult
+    override fun deleteAlbumOutcome() : PublishSubject<Outcome<Boolean>> = albumDeleteResult
 
 }

@@ -3,6 +3,7 @@ package eu.caraus.appsflastfm.ui.main.albumdetails
 import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.OnLifecycleEvent
 import eu.caraus.appsflastfm.common.bus.RxBus
+import eu.caraus.appsflastfm.common.extensions.addTo
 import eu.caraus.appsflastfm.common.extensions.subOnIoObsOnUi
 import eu.caraus.appsflastfm.common.retrofit.Outcome
 import eu.caraus.appsflastfm.common.schedulers.SchedulerProvider
@@ -25,7 +26,8 @@ import io.reactivex.disposables.Disposable
 class AlbumDetailsPresenter( private val interactor: AlbumDetailsContract.Interactor,
                              private val navigator: AlbumDetailsContract.Navigator,
                              private val scheduler : SchedulerProvider,
-                             private val rxBus : RxBus ) : AlbumDetailsContract.Presenter {
+                             private val rxBus : RxBus,
+                             private val disposable: Disposable ) : AlbumDetailsContract.Presenter {
 
     private var view : AlbumDetailsContract.View? = null
 
@@ -76,6 +78,7 @@ class AlbumDetailsPresenter( private val interactor: AlbumDetailsContract.Intera
     fun onDestroy(){
         infoDisposable?.dispose()
         trackDisposable?.dispose()
+        disposable?.dispose()
     }
 
     override fun triggerPlayTrack(track : TrackItem ) {

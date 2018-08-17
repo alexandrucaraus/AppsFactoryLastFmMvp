@@ -3,6 +3,7 @@ package eu.caraus.appsflastfm.data.remote
 
 import eu.caraus.appsflastfm.data.remote.lastFm.LastFmApi
 import eu.caraus.appsflastfm.data.remote.lastFm.LastFmApiClient
+import eu.caraus.appsflastfm.data.remote.lastFm.LastFmApiKeyInterceptor
 import junit.framework.Assert.assertEquals
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.not
@@ -11,7 +12,7 @@ import org.junit.Test
 
 class LastFmApiTest {
 
-    private val lastFmApi : LastFmApi? =  LastFmApiClient().client.create( LastFmApi::class.java )
+    private val lastFmApi : LastFmApi? =  LastFmApiClient(LastFmApiKeyInterceptor.LAST_FM_API_KEY).client.create( LastFmApi::class.java )
 
     @Test
     fun searchArtists() {

@@ -10,7 +10,7 @@ import retrofit2.converter.gson.GsonConverterFactory
  *  Retrofit client class for LastFmApi service
  */
 
-class LastFmApiClient {
+class LastFmApiClient( private val apiKey : String ) {
 
     companion object{
         const val BASE_URL = "http://ws.audioscrobbler.com/"
@@ -24,7 +24,7 @@ class LastFmApiClient {
              //level = HttpLoggingInterceptor.Level.BODY
         }
 
-        val apiKeyInterceptor = LastFmApiKeyInterceptor()
+        val apiKeyInterceptor = LastFmApiKeyInterceptor(apiKey)
 
         val client = OkHttpClient.Builder()
                                     .addInterceptor( httpLoggingInterceptor )

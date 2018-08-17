@@ -1,4 +1,4 @@
-package eu.caraus.appsflastfm.data.ui.base.recyclerview.adapter
+package eu.caraus.appsflastfm.ui.base.recyclerview.adapter
 
 import eu.caraus.appsflastfm.ui.common.recyclerview.adapter.ListDiff
 import org.junit.Assert.assertEquals

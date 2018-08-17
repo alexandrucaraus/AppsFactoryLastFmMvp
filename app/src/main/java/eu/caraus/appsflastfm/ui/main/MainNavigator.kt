@@ -19,7 +19,6 @@ class MainNavigator( private val navigation : MainActivityScreenLoader) : MainCo
         navigation.navigateToSearchResult( searchTerm )
     }
 
-
     /**
      *  this method is used for back navigation in MainActivity
      */

@@ -12,7 +12,6 @@ interface AlbumsContract : BaseContract {
     interface Presenter : BaseContract.BasePresenter<View>, LifecycleObserver {
 
         fun showAlbumDetails( mbid : String )
-        fun showAlbumDetails( mbid : String, view : ImageView )
         fun showAlbumDetails( mbid : String, imageUrl : String, view : ImageView )
 
         fun deleteAlbum( album : Album )
@@ -48,7 +47,7 @@ interface AlbumsContract : BaseContract {
         fun getAlbumsOutcome () : PublishSubject<Outcome<List<Album?>>>
 
         fun deleteAlbum( album : Album )
-        fun deleteAlbumOutcum() : PublishSubject<Outcome<Boolean>>
+        fun deleteAlbumOutcome() : PublishSubject<Outcome<Boolean>>
 
     }
 

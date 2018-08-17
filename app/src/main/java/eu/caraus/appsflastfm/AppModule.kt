@@ -13,9 +13,9 @@ import android.arch.persistence.room.Room
 import android.content.Context
 import eu.caraus.appsflastfm.common.bus.RxBus
 import eu.caraus.appsflastfm.data.local.Database
-import eu.caraus.appsflastfm.services.youtube.YoutubePlayerService
 import eu.caraus.appsflastfm.services.youtube.YoutubeServiceComponent
 import eu.caraus.appsflastfm.ui.search.di.SearchActivityComponent
+import javax.inject.Named
 
 
 @Module( subcomponents = [
@@ -35,7 +35,8 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideHome24Api() : LastFmApi = LastFmApiClient().client.create( LastFmApi::class.java )
+    fun provideHome24Api( @Named("lastFm.apiKey") lastFmApiKey : String ) : LastFmApi
+            = LastFmApiClient( lastFmApiKey ).client.create( LastFmApi::class.java )
 
     @Provides
     @Singleton
@@ -53,5 +54,10 @@ class AppModule {
     @Provides
     @Singleton
     fun providesRxBus() = RxBus()
+
+    @Provides
+    @Named("lastFm.apiKey")
+    @Singleton
+    fun providesLastFmApiKey( context: Context ) = context.resources.getString( R.string.LAST_FM_API_KEY)
 
 }

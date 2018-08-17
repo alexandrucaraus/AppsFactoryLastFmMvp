@@ -2,8 +2,6 @@ package eu.caraus.appsflastfm.ui
 
 import android.support.test.espresso.Espresso
 import android.support.test.espresso.Espresso.onView
-import android.support.test.espresso.UiController
-import android.support.test.espresso.ViewAction
 import android.support.test.espresso.action.ViewActions.*
 import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.contrib.RecyclerViewActions
@@ -12,25 +10,26 @@ import android.support.test.filters.LargeTest
 import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
 import android.support.v7.widget.RecyclerView
-import android.view.View
-import android.view.ViewGroup
-import android.widget.ImageButton
 import android.widget.TextView
 import eu.caraus.appsflastfm.R
+import eu.caraus.appsflastfm.testUtils.views.RecyclerViewUtils.withRecyclerView
 import eu.caraus.appsflastfm.ui.idlingResources.IdlingResourceUtils.Companion.idlingPoliciesSetup
 import eu.caraus.appsflastfm.ui.idlingResources.IdlingResourceUtils.Companion.whenReady
 import eu.caraus.appsflastfm.ui.idlingResources.search.*
 import eu.caraus.appsflastfm.ui.main.MainActivity
 import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.CoreMatchers.containsString
-import org.hamcrest.Description
-import org.hamcrest.Matcher
-import org.hamcrest.TypeSafeMatcher
+
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+
+import android.support.test.espresso.matcher.ViewMatchers.isDisplayed
+import android.support.test.espresso.NoMatchingViewException
+
+import eu.caraus.appsflastfm.testUtils.views.RecyclerViewUtils.recyclerViewItemsCount
 
 
 @RunWith(AndroidJUnit4::class)
@@ -99,19 +98,7 @@ class UiFlowsTest {
 
         whenReady( SearchAlbumsListIdlingResource() ) {
             onView( withId( R.id.rvAlbums)).check( matches( isDisplayed()))
-            onView( withId( R.id.rvAlbums)).perform(
-                    RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0, object : ViewAction {
-                        override fun getDescription(): String { return ""}
-                        override fun getConstraints(): Matcher<View> { return object: Matcher<View>{
-                            override fun describeTo(description: Description?) {}
-                            override fun describeMismatch(item: Any?, mismatchDescription: Description?) {}
-                            override fun _dont_implement_Matcher___instead_extend_BaseMatcher_() {}
-                            override fun matches(item: Any?): Boolean { return false }
-                        }}
-                        override fun perform(uiController: UiController?, view: View?) {
-                            view?.findViewById<ImageButton>(R.id.btSaveArtists)?.performClick()
-                        }
-                    }))
+            onView( withRecyclerView(R.id.rvAlbums).atPositionOnView(0, R.id.btSaveArtists)).perform(click())
         }
 
         Espresso.pressBack()
@@ -122,51 +109,89 @@ class UiFlowsTest {
 
         Espresso.pressBack()
 
-
         whenReady( AlbumsListIdlingResource()){
             onView( withId( R.id.rvAlbums)).check( matches( isDisplayed()))
         }
 
     }
 
+    @Test
+    fun searchSaveAndThenDelete() {
+
+        cleanAllSavedAlbums()
+
+        onView( withId( R.id.search )).perform( click())
+        onView( withId( R.id.search_src_text)).perform( typeText ( ARTIST ), pressImeActionButton())
+
+        whenReady ( SearchArtistListIdlingResource() ) {
+            onView( withId( R.id.rvArtists)).check( matches( isDisplayed()))
+            onView( withId( R.id.rvArtists)).perform( RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
+        }
+
+        whenReady( SearchAlbumsListIdlingResource() ) {
+            onView( withId( R.id.rvAlbums)).check( matches( isDisplayed()))
+            onView( withRecyclerView(R.id.rvAlbums).atPositionOnView(0, R.id.btSaveArtists)).perform(click())
+        }
+
+        Espresso.pressBack()
+
+        whenReady ( SearchArtistListIdlingResource() ) {
+            onView( withId( R.id.rvArtists)).check( matches( isDisplayed()))
+        }
+
+        Espresso.pressBack()
+
+        whenReady( AlbumsListIdlingResource()){
+            onView( withId( R.id.rvAlbums)).check( matches( isDisplayed()))
+            onView( withRecyclerView(R.id.rvAlbums).atPositionOnView(0 , R.id.btDeleteAlbum)).perform(click())
+        }
+
+    }
+
 
     @Test
-    fun mainOpenAlbumDetails() {
+    fun deleteAllSearchSaveAndThenCheckDetails() {
+
+        cleanAllSavedAlbums()
+
+        searchAndSaveTest()
+
+        whenReady( AlbumsListIdlingResource()){
+            onView( withId( R.id.rvAlbums)).check( matches( isDisplayed()))
+            onView( withId( R.id.rvAlbums)).perform( RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
+        }
+
+        whenReady( AlbumsDetailsIdlingResource()) {
+            onView( allOf( withId( R.id.tvArtistName) , isDescendantOfA( withId(R.id.nsvAlbumDetails)))).check {
+                view,_-> assertThat( (view as TextView).text.toString(), containsString(ARTIST))
+            }
+            onView( allOf( withId( R.id.tvAlbumName) , isDescendantOfA( withId(R.id.nsvAlbumDetails)))).check {
+                view,_-> assertThat( (view as TextView).text.toString(), containsString(ALBUM))
+            }
+        }
+
 
     }
 
-    private fun childAtPosition(
-            parentMatcher: Matcher<View>, position: Int): Matcher<View> {
+    private fun cleanAllSavedAlbums() {
+        var items = 0
+        try {
+            items = recyclerViewItemsCount(R.id.rvAlbums)
+        } catch ( e : NoMatchingViewException ){
 
-        return object : TypeSafeMatcher<View>() {
-            override fun describeTo(description: Description) {
-                description.appendText("Child at position $position in parent ")
-                parentMatcher.describeTo(description)
+        }
+        // clean all albums
+        if( items > 0 ) {
+            whenReady(AlbumsListIdlingResource()) {
+                onView(withId(R.id.rvAlbums)).check(matches(isDisplayed()))
             }
-
-            public override fun matchesSafely(view: View): Boolean {
-                val parent = view.parent
-                return parent is ViewGroup && parentMatcher.matches(parent)
-                        && view == parent.getChildAt(position)
+            for (i in 0..(items - 1)) {
+                onView(withRecyclerView(R.id.rvAlbums).atPositionOnView(0, R.id.btDeleteAlbum)).perform(click())
+                Thread.sleep(1000)
             }
         }
     }
 
-    private fun childWithId( parentMatcher: Matcher<View>, position: Int): Matcher<View> {
-
-        return object : TypeSafeMatcher<View>() {
-            override fun describeTo(description: Description) {
-                description.appendText("Child at position $position in parent ")
-                parentMatcher.describeTo(description)
-            }
-
-            public override fun matchesSafely(view: View): Boolean {
-                val parent = view.parent
-                return parent is ViewGroup && parentMatcher.matches(parent)
-                        && view == parent.getChildAt(position)
-            }
-        }
-    }
 
 }
 

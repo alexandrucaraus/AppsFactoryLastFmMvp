@@ -6,6 +6,7 @@ import android.support.test.runner.AndroidJUnit4
 
 import eu.caraus.appsflastfm.data.remote.lastFm.LastFmApi
 import eu.caraus.appsflastfm.data.remote.lastFm.LastFmApiClient
+import eu.caraus.appsflastfm.data.remote.lastFm.LastFmApiKeyInterceptor
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.not
 import org.junit.Assert.assertEquals
@@ -21,7 +22,7 @@ import org.junit.runners.MethodSorters
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 class LastFmDbTest {
 
-    private val lastFmApi : LastFmApi? =  LastFmApiClient().client.create( LastFmApi::class.java )
+    private val lastFmApi : LastFmApi? =  LastFmApiClient(LastFmApiKeyInterceptor.LAST_FM_API_KEY).client.create( LastFmApi::class.java )
 
     private lateinit var database : Database
 

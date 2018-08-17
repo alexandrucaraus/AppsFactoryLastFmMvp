@@ -123,8 +123,6 @@ class AlbumsFragment : BaseFragment(), SearchView.OnQueryTextListener, AlbumsCon
 
     override fun updateAlbums( albums : List<Album?> ) {
 
-        hideLoading()
-
         adapter?.updateAlbums( albums )
 
         adapter?.let { toggleRecycleViewVisibility( it.itemCount > 0) }

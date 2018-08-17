@@ -2,8 +2,6 @@
 
     <string name="app_name">AppsF.LastFm</string>
 
-    <string name="LAST_FM_API_KEY">ea925ddd5cc742fea4488fc786d21731</string>
-
     <string name="search_hint">Search Artist</string>
 
     <string name="card_save">save</string>
@@ -35,5 +33,9 @@
     <string name="delete_failed">Someting vent rong vit delicion</string>
 
     <string name="no_saved_albums">No Saved Albums</string>
+
+    <!-- API KEY -->
+
+    <string name="LAST_FM_API_KEY">ea925ddd5cc742fea4488fc786d21731</string>
 
 </resources>
