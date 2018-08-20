@@ -30,7 +30,7 @@ interface AlbumDetailsContract : BaseContract {
 
         fun showError( error : Throwable )
 
-        fun updateTrackItem( youTubeVideo: YouTubeVideo)
+        fun updateTrackItem( youTubeVideo: YouTubeVideo )
 
     }
 

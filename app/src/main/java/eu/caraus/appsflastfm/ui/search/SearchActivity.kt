@@ -1,11 +1,13 @@
 package eu.caraus.appsflastfm.ui.search
 
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 
 import eu.caraus.appsflastfm.R
 import eu.caraus.appsflastfm.ui.base.BaseActivity
+import eu.caraus.appsflastfm.ui.main.MainActivityScreenLoader
 import kotlinx.android.synthetic.main.activity_search.*
 import javax.inject.Inject
 
@@ -18,7 +20,9 @@ import javax.inject.Inject
 class SearchActivity : BaseActivity() {
 
     companion object {
+
         const val SEARCH_TERM = "SEARCH_TERM"
+
     }
 
     @Inject
@@ -46,7 +50,7 @@ class SearchActivity : BaseActivity() {
     }
 
     override fun onBackPressed() {
-        if( presenter.goBack()) finish()
+        if( presenter.goBack()) { setResult( Activity.RESULT_OK) ; finish() }
     }
 
 }

@@ -44,19 +44,18 @@ class AlbumsFragment : BaseFragment(), AlbumsContract.View {
         setHasOptionsMenu(true)
 
         arguments?.let {
-
             if( it.containsKey( AlbumsFragment.SEARCH_TERM )){
                 val searchTerm = it.getString( AlbumsFragment.SEARCH_TERM )
                 presenter.getAlbums( searchTerm )
-                setTitle( searchTerm )
+                setFragmentTitle( searchTerm )
             } else {
-                setTitle()
+                setFragmentTitle()
             }
-        } ?: run { setTitle() }
+        } ?: run { setFragmentTitle() }
 
     }
 
-    private fun setTitle( title : String = "" ){
+    private fun setFragmentTitle(title : String = "" ){
         if( title == "" ){
             ( activity as BaseActivity).apply{
                 supportActionBar?.title = resources.getString(R.string.title_search_artist_albums)
@@ -88,6 +87,15 @@ class AlbumsFragment : BaseFragment(), AlbumsContract.View {
         ( activity as BaseActivity).apply {
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
             supportActionBar?.setDisplayShowHomeEnabled(false)
+            arguments?.let {
+                if( it.containsKey( AlbumsFragment.SEARCH_TERM )){
+                    val searchTerm = it.getString( AlbumsFragment.SEARCH_TERM )
+                    presenter.getAlbums( searchTerm )
+                    setFragmentTitle( searchTerm )
+                } else {
+                    setFragmentTitle()
+                }
+            }
         }
 
         super.onPrepareOptionsMenu(menu)
@@ -170,7 +178,7 @@ class AlbumsFragment : BaseFragment(), AlbumsContract.View {
         })
     }
 
-    private fun toggleView(listVisible : Boolean ){
+    private fun toggleView( listVisible : Boolean ){
         if( listVisible ){
             showList() ; hidePlaceholder()
         } else {

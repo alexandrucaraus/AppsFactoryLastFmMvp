@@ -5,6 +5,7 @@ import android.arch.lifecycle.OnLifecycleEvent
 import eu.caraus.appsflastfm.common.extensions.subOnIoObsOnUi
 import eu.caraus.appsflastfm.common.retrofit.Outcome
 import eu.caraus.appsflastfm.common.schedulers.SchedulerProvider
+import eu.caraus.appsflastfm.data.domain.lastFm.albuminfo.Artist
 import eu.caraus.appsflastfm.data.domain.lastFm.artists.ArtistItem
 import io.reactivex.disposables.Disposable
 
@@ -16,25 +17,36 @@ class ArtistsPresenter( val interactor : ArtistsContract.Interactor ,
 
     private var disposable : Disposable? = null
 
+    private var data : List<ArtistItem?>? = null
+
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun onCreate(){
+
         disposable = interactor.getArtistsOutcome().subOnIoObsOnUi(scheduler).subscribe {
             when( it ){
                 is Outcome.Progress ->
-                    if( it.loading ) showLoading() else hideLoading()
+                    if( it.loading )
+                         if( data == null) showLoading()
+                    else hideLoading()
 
                 is Outcome.Failure  ->
                     showError( it.error )
 
-                is Outcome.Success  ->
-                    if( it.data.isEmpty() ) showFoundNothing() else showFoundArtists( it.data )
+                is Outcome.Success  -> {
+                    data = it.data
+                    showFoundArtists(it.data)
+                }
+
             }
         }
+
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun onResume(){
-
+        data?.let {
+            showFoundArtists(it)
+        }
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
@@ -51,11 +63,17 @@ class ArtistsPresenter( val interactor : ArtistsContract.Interactor ,
     }
 
     private fun showFoundArtists( artists : List<ArtistItem?> ){
-        view?.showFoundArtists(artists)
-    }
-
-    private fun showFoundNothing(){
-        view?.showFoundNothing()
+        if( artists.isNotEmpty() ) {
+            view?.hidePlaceholder()
+            view?.showFoundArtists(artists)
+            view?.hideLoading()
+            view?.showList()
+        } else {
+            view?.showPlaceholder()
+            view?.showFoundArtists(artists)
+            view?.hideLoading()
+            view?.showList()
+        }
     }
 
     private fun showLoading(){

@@ -6,22 +6,22 @@ import com.google.gson.annotations.SerializedName
 data class AlbumItem(
 
 	@field:SerializedName("mbid")
-	val mbid: String? = null,
+	var mbid: String? = null,
 
 	@field:SerializedName("image")
-	val image: List<ImageItem?>? = null,
+	var image: List<ImageItem?>? = null,
 
 	@field:SerializedName("artist")
-	val artist: Artist? = null,
+	var artist: Artist? = null,
 
 	@field:SerializedName("playcount")
-	val playcount: Int? = null,
+	var playcount: Int? = null,
 
 	@field:SerializedName("name")
-	val name: String? = null,
+	var name: String? = null,
 
 	@field:SerializedName("url")
-	val url: String? = null,
+	var url: String? = null,
 
 	@Ignore
 	var saved: Boolean? = false

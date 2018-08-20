@@ -36,21 +36,12 @@ class YoutubePlayerService : BaseService(),
         MediaPlayer.OnCompletionListener ,
         MediaPlayer.OnPreparedListener   {
 
-    companion object {
 
-        const val ACTION_PLAY = "ACTION_PLAY"
+    companion object {
 
         const val ACTION_STOP = "ACTION_STOP"
 
     }
-
-    private val mediaPlayer      : MediaPlayer = MediaPlayer()
-
-    private var youTubeVideo : YouTubeVideo? = null
-
-    private var notificationHandler = NotificationsUtil(this)
-
-    private var elapsedDisposable : Disposable? = null
 
     @Inject
     lateinit var schedulers : SchedulerProvider
@@ -58,7 +49,16 @@ class YoutubePlayerService : BaseService(),
     @Inject
     lateinit var rxBus : RxBus
 
-    override fun onBind(intent: Intent): IBinder? {
+    @Inject
+    lateinit var notifications : NotificationsUtil
+
+    private val mediaPlayer      : MediaPlayer = MediaPlayer()
+
+    private var youTubeVideo : YouTubeVideo? = null
+
+    private var elapsedTickerDisposable : Disposable? = null
+
+    override fun onBind(intent: Intent?): IBinder? {
         return null
     }
 
@@ -68,7 +68,7 @@ class YoutubePlayerService : BaseService(),
         mediaPlayer.setOnCompletionListener(this)
         mediaPlayer.setOnPreparedListener(this)
 
-        initBus()
+        startListeningPlayerActions()
 
     }
 
@@ -86,14 +86,14 @@ class YoutubePlayerService : BaseService(),
     }
 
     override fun onTaskRemoved( rootIntent : Intent ) {
-        notificationHandler.cancel()
+        notifications.cancel()
     }
 
     override fun onPrepared( mp : MediaPlayer ) { }
 
     override fun onCompletion( mPlayer : MediaPlayer) { }
 
-    private fun initBus() {
+    private fun startListeningPlayerActions() {
         rxBus.client().subscribe {
             when( it ){
                 is ActionPlay -> actionPlay( it.youTubeVideo )
@@ -105,15 +105,13 @@ class YoutubePlayerService : BaseService(),
 
     private fun actionPlay( youTubeVideo : YouTubeVideo ){
 
-        this.youTubeVideo.let {
-            // stop the one playing now
-            actionStop()
-        }
+        actionStop()
+
         this.youTubeVideo = youTubeVideo
         this.youTubeVideo?.let { video ->
             playYouTubeUrl( video , {
                 playAudio(it)
-                actionPlayUpdate()
+                playingServiceUpdates()
             }, {
                 playError(it)
                 actionStop()
@@ -121,22 +119,22 @@ class YoutubePlayerService : BaseService(),
         }
     }
 
+    private fun actionSeek( seekTo : Int ){
+        this.youTubeVideo?.let {
+            seekToPosition( seekTo )
+            elapsedServiceUpdates()
+        }
+    }
+
     private fun actionStop( ){
         this.youTubeVideo?.let {
             stopPlayback()
-            actionStopUpdate()
+            stoppedServiceUpdates()
         }
         this.youTubeVideo = null
     }
 
-    private fun actionSeek( seekTo : Int ){
-        this.youTubeVideo?.let {
-            seekToPosition( seekTo )
-            actionElapsedUpdate()
-        }
-    }
-
-    private fun actionPlayUpdate(){
+    private fun playingServiceUpdates(){
 
         youTubeVideo?.let {
 
@@ -147,11 +145,11 @@ class YoutubePlayerService : BaseService(),
 
             elapsedUpdateTimerStart()
 
-            notificationHandler.buildNotification( ACTION_STOP, it )
+            notifications.buildNotification( ACTION_STOP, it )
         }
     }
 
-    private fun actionStopUpdate(){
+    private fun stoppedServiceUpdates(){
         youTubeVideo?.let {
 
             it.trackState = TrackState.STOPPED
@@ -161,11 +159,11 @@ class YoutubePlayerService : BaseService(),
 
             elapsedUpdateTimerStop()
 
-            notificationHandler.cancel()
+            notifications.cancel()
         }
     }
 
-    private fun actionElapsedUpdate(){
+    private fun elapsedServiceUpdates(){
 
         youTubeVideo?.let {
 
@@ -174,25 +172,25 @@ class YoutubePlayerService : BaseService(),
 
             rxBus.sendEventToClient( ElapsedUpdate(it))
 
-            notificationHandler.buildNotification( ACTION_STOP, it )
+            notifications.buildNotification( ACTION_STOP, it )
         }
 
     }
 
     private fun elapsedUpdateTimerStart(){
-        elapsedDisposable?.dispose()
-        elapsedDisposable =
+        elapsedTickerDisposable?.dispose()
+        elapsedTickerDisposable =
                 Observable.interval(1,TimeUnit.SECONDS).timeInterval()
                           .subOnIoObsOnUi(schedulers)
                           .subscribe({ _->
-                                actionElapsedUpdate()
+                                elapsedServiceUpdates()
                             },{
                                 playError(it)
                           })
     }
 
     private fun elapsedUpdateTimerStop(){
-        elapsedDisposable?.dispose()
+        elapsedTickerDisposable?.dispose()
     }
 
     private fun stopPlayback(){
@@ -231,7 +229,7 @@ class YoutubePlayerService : BaseService(),
             youtubeUrl.videoStreams[0].url.let { url ->
                 mediaPlayer.let {
                     it.reset()
-                    it.setDataSource( url)
+                    it.setDataSource( url )
                     it.setVolume(1.0f,1.0f)
                     it.setAudioAttributes( audioAttributes())
                     it.prepare()
@@ -253,9 +251,10 @@ class YoutubePlayerService : BaseService(),
     }
 
     private fun audioAttributes() : AudioAttributes {
-        return AudioAttributes.Builder().setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                                        .setUsage(AudioAttributes.USAGE_MEDIA)
-                                        .build()
+        return AudioAttributes.Builder()
+                              .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                              .setUsage(AudioAttributes.USAGE_MEDIA)
+                              .build()
     }
 
 }

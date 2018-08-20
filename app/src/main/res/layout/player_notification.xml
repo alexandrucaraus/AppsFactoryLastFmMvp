@@ -27,7 +27,7 @@
         android:id="@+id/tvAlbumSong"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="4dp"
         android:layout_marginBottom="@dimen/card_inner_space"
         android:layout_marginStart="@dimen/card_outer_space"
         android:textStyle="bold"

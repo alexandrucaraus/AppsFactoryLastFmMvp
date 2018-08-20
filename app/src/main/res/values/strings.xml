@@ -33,6 +33,7 @@
     <string name="delete_failed">Someting vent rong vit delicion</string>
 
     <string name="no_saved_albums">No Saved Albums</string>
+    <string name="no_found_artist">Did not find such an artist</string>
 
     <!-- API KEY -->
 

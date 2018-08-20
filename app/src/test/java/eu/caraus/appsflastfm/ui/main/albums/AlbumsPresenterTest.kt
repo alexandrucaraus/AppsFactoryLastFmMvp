@@ -34,6 +34,7 @@ class AlbumsPresenterTest {
         val testSubscriber = TestSubscriber<Any>()
 
         RxJavaPlugins.setErrorHandler {
+            assertEquals("isSuccess", it.localizedMessage)
             testSubscriber.onError(it)
         }
 

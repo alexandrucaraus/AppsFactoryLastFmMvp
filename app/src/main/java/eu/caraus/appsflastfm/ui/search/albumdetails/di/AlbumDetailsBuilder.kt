@@ -1,4 +1,4 @@
-package eu.caraus.appsflastfm.ui.search.albums.di
+package eu.caraus.appsflastfm.ui.search.albumdetails.di
 
 import android.support.v4.app.Fragment
 

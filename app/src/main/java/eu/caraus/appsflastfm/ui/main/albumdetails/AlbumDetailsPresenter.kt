@@ -21,29 +21,27 @@ import eu.caraus.appsflastfm.services.youtube.model.lastFm.ExtractYoutubeUrlFrom
 import eu.caraus.appsflastfm.services.youtube.model.youtube.YouTubeVideo
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Observable
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 
 class AlbumDetailsPresenter( private val interactor: AlbumDetailsContract.Interactor,
                              private val navigator: AlbumDetailsContract.Navigator,
                              private val scheduler : SchedulerProvider,
                              private val rxBus : RxBus,
-                             private val disposable: Disposable ) : AlbumDetailsContract.Presenter {
+                             private val disposable: CompositeDisposable ) : AlbumDetailsContract.Presenter {
 
     private var view : AlbumDetailsContract.View? = null
-
-    private var infoDisposable : Disposable? = null
-
-    private var trackDisposable : Disposable? = null
 
     private var mbid : String? = null
 
     private var album : Album? = null
 
+    private var trackDisposable : Disposable? = null
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun onCreate(){
 
-        infoDisposable = interactor.getAlbumInfoOutcome().subOnIoObsOnUi(scheduler).subscribe {
+        interactor.getAlbumInfoOutcome().subOnIoObsOnUi(scheduler).subscribe {
             when( it ){
                 is Outcome.Progress ->
                     if( it.loading ) showLoading() else hideLoading()
@@ -63,7 +61,7 @@ class AlbumDetailsPresenter( private val interactor: AlbumDetailsContract.Intera
                     updateTrackElapsed( it.youTubeVideo )
                 is ErrorUpdate   ->  showError( Throwable( it.message))
             }
-        }
+        }.addTo( disposable )
 
     }
 
@@ -76,9 +74,8 @@ class AlbumDetailsPresenter( private val interactor: AlbumDetailsContract.Intera
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     fun onDestroy(){
-        infoDisposable?.dispose()
         trackDisposable?.dispose()
-        disposable?.dispose()
+        disposable.clear()
     }
 
     override fun triggerPlayTrack(track : TrackItem ) {
@@ -93,7 +90,7 @@ class AlbumDetailsPresenter( private val interactor: AlbumDetailsContract.Intera
                             it.trackId = track.id
                             it.trackState = TrackState.STOPPED
                             it.trackElapsed = 0
-                            rxBus.sentEventToService(ActionPlay().apply { this.youTubeVideo = it })
+                            rxBus.sentEventToService( ActionPlay().apply { this.youTubeVideo = it })
                         }
                     }, { err -> showError(err) })
         }
@@ -101,6 +98,7 @@ class AlbumDetailsPresenter( private val interactor: AlbumDetailsContract.Intera
     }
 
     override fun triggerStopTrack( track: TrackItem ) {
+        trackDisposable?.dispose()
         rxBus.sentEventToService( ActionStop() )
     }
 
@@ -124,7 +122,7 @@ class AlbumDetailsPresenter( private val interactor: AlbumDetailsContract.Intera
     }
 
     override fun getAlbumInfo( mbid: String ) {
-        this.mbid = mbid
+        this.mbid = mbid ; album = null
         interactor.getAlbumInfo( mbid )
     }
 

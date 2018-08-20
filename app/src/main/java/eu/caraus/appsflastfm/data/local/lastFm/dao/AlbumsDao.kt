@@ -18,9 +18,9 @@ abstract class AlbumsDao {
 
     @Transaction
     @Insert( onConflict = OnConflictStrategy.REPLACE)
-    fun insertWhole( album: Album ) {
+    fun insertWhole( album: Album ) : Long {
 
-        insert( album )
+        val rowId  = insert( album )
 
         album.tracks?.track?.forEach { item ->
 
@@ -39,16 +39,18 @@ abstract class AlbumsDao {
                 }
             }
         }
+
+        return rowId
     }
 
     @Insert( onConflict = OnConflictStrategy.REPLACE )
-    abstract fun insert( album : Album )
+    abstract fun insert( album : Album ) : Long
 
     @Insert( onConflict = OnConflictStrategy.REPLACE )
     abstract fun insert( track : TrackItem ) : Long
 
     @Insert( onConflict = OnConflictStrategy.REPLACE )
-    abstract fun insert( artist : Artist )
+    abstract fun insert( artist : Artist ) : Long
 
     // Updates
 

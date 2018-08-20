@@ -16,7 +16,6 @@ abstract class AlbumsBuilder {
     @Binds
     @IntoMap
     @FragmentKey(AlbumsFragment::class)
-    internal abstract fun bindCourseList(builder: AlbumsComponent.Builder): AndroidInjector.Factory<out Fragment>
-
+    abstract fun bindCourseList(builder: AlbumsComponent.Builder): AndroidInjector.Factory<out Fragment>
 
 }

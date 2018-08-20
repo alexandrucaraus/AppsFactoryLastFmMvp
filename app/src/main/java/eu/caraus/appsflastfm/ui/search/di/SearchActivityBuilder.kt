@@ -7,10 +7,11 @@ import dagger.Module
 import dagger.android.ActivityKey
 import dagger.android.AndroidInjector
 import dagger.multibindings.IntoMap
-import eu.caraus.appsflastfm.ui.search.albums.di.ArtistsComponent
+
 import eu.caraus.appsflastfm.ui.search.SearchActivity
-import eu.caraus.appsflastfm.ui.search.albums.di.AlbumDetailsComponent
+import eu.caraus.appsflastfm.ui.search.albumdetails.di.AlbumDetailsComponent
 import eu.caraus.appsflastfm.ui.search.albums.di.AlbumsComponent
+import eu.caraus.appsflastfm.ui.search.artists.di.ArtistsComponent
 
 
 @Module( subcomponents = [

@@ -21,7 +21,12 @@ interface ArtistsContract {
     interface View : BaseContract.BaseView {
 
         fun showFoundArtists( artists : List<ArtistItem?>)
-        fun showFoundNothing()
+
+        fun showList()
+        fun hideList()
+
+        fun showPlaceholder()
+        fun hidePlaceholder()
 
         fun showLoading()
         fun hideLoading()

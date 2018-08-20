@@ -1,4 +1,4 @@
-package eu.caraus.appsflastfm.ui.main.albums.di
+package eu.caraus.appsflastfm.ui.main.albumdetails.di
 
 import android.support.v4.app.Fragment
 
@@ -15,7 +15,7 @@ abstract class AlbumDetailsBuilder {
     @Binds
     @IntoMap
     @FragmentKey(AlbumDetailsFragment::class)
-    internal abstract fun bindCourseList(builder: AlbumDetailsComponent.Builder): AndroidInjector.Factory<out Fragment>
+    abstract fun bindCourseList(builder: AlbumDetailsComponent.Builder): AndroidInjector.Factory<out Fragment>
 
 
 }

@@ -1,8 +1,7 @@
 package eu.caraus.appsflastfm.ui.main
 
+import android.content.Intent
 import android.os.Bundle
-import android.support.v7.widget.SearchView
-import android.view.Menu
 import eu.caraus.appsflastfm.R
 import eu.caraus.appsflastfm.ui.base.BaseActivity
 import kotlinx.android.synthetic.main.activity_main.*
@@ -25,7 +24,6 @@ class MainActivity : BaseActivity(), MainContract.View {
 
     @Inject
     lateinit var navigator : MainContract.Navigator
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

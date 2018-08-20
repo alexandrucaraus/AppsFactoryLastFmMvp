@@ -8,7 +8,7 @@ import dagger.android.ActivityKey
 import dagger.android.AndroidInjector
 import dagger.multibindings.IntoMap
 import eu.caraus.appsflastfm.ui.main.MainActivity
-import eu.caraus.appsflastfm.ui.main.albums.di.AlbumDetailsComponent
+import eu.caraus.appsflastfm.ui.main.albumdetails.di.AlbumDetailsComponent
 import eu.caraus.appsflastfm.ui.main.albums.di.AlbumsComponent
 
 @Module( subcomponents = [

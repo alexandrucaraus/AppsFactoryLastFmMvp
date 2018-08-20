@@ -1,6 +1,8 @@
 package eu.caraus.appsflastfm.ui.search.artists
 
+import android.app.Activity.RESULT_OK
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v7.widget.LinearLayoutManager
 import android.view.*
 import eu.caraus.appsflastfm.R
@@ -9,6 +11,7 @@ import eu.caraus.appsflastfm.ui.base.BaseActivity
 import eu.caraus.appsflastfm.ui.base.BaseFragment
 import eu.caraus.appsflastfm.ui.common.metrics.dpToPx
 import eu.caraus.appsflastfm.ui.common.recyclerview.VerticalSpaceItemDecoration
+import eu.caraus.appsflastfm.ui.main.MainActivityScreenLoader
 import kotlinx.android.synthetic.main.fragment_artists.*
 import javax.inject.Inject
 
@@ -43,14 +46,14 @@ class ArtistsFragment : BaseFragment(), ArtistsContract.View {
             if( it.containsKey( SEARCH_TERM )){
                 val searchTerm = it.getString(SEARCH_TERM)
                 presenter.searchArtist( searchTerm )
-                  setTitle( searchTerm)
+                setFragmentTitle( searchTerm)
 
-            } else setTitle()
-        } ?: run { setTitle() }
+            } else setFragmentTitle()
+        } ?: run { setFragmentTitle() }
 
     }
 
-    private fun setTitle( title : String = "" ){
+    private fun setFragmentTitle(title : String = "" ){
         if( title == "" ){
             ( activity as BaseActivity).apply{
                 supportActionBar?.title = resources.getString(R.string.title_search_artist)
@@ -63,8 +66,8 @@ class ArtistsFragment : BaseFragment(), ArtistsContract.View {
     }
 
     override fun onResume() {
-        super.onResume()
         presenter.onViewAttached(this)
+        super.onResume()
     }
 
     override fun onPause() {
@@ -82,6 +85,16 @@ class ArtistsFragment : BaseFragment(), ArtistsContract.View {
         ( activity as BaseActivity).apply {
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
             supportActionBar?.setDisplayShowHomeEnabled(false)
+
+            arguments?.let {
+                if( it.containsKey( SEARCH_TERM )){
+                    val searchTerm = it.getString(SEARCH_TERM)
+                    presenter.searchArtist( searchTerm )
+                    setFragmentTitle( searchTerm )
+
+                } else setFragmentTitle()
+            } ?: run { setFragmentTitle() }
+
         }
 
         super.onPrepareOptionsMenu(menu)
@@ -89,7 +102,10 @@ class ArtistsFragment : BaseFragment(), ArtistsContract.View {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when( item?.itemId ){
-            android.R.id.home -> if( presenter.goBack() ) activity?.finish()
+            android.R.id.home -> if( presenter.goBack() ) {
+                activity?.setResult( RESULT_OK )
+                activity?.finish()
+            }
         }
         return super.onOptionsItemSelected(item)
     }
@@ -114,20 +130,38 @@ class ArtistsFragment : BaseFragment(), ArtistsContract.View {
 
     }
 
-    override fun showFoundNothing() {
+    override fun showList() {
+        rvArtists.visibility = View.VISIBLE
+    }
 
+    override fun hideList() {
+        rvArtists.visibility = View.GONE
+    }
+
+    override fun showPlaceholder() {
+        placeholder.visibility = View.VISIBLE
+    }
+
+    override fun hidePlaceholder() {
+        placeholder.visibility = View.GONE
     }
 
     override fun showLoading() {
-
+        progress.visibility = View.VISIBLE
     }
 
     override fun hideLoading() {
-
+        progress.visibility = View.GONE
     }
 
-    override fun showError(error: Throwable) {
+    override fun showError( error: Throwable ) {
+        snack( error.localizedMessage )
+    }
 
+    private fun snack( message : String ){
+        clRoot?.let {
+            Snackbar.make( it, message, Snackbar.LENGTH_LONG).show()
+        }
     }
 
 }

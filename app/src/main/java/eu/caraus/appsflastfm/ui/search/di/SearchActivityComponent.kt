@@ -4,12 +4,12 @@ import dagger.Subcomponent
 import dagger.android.AndroidInjector
 
 import eu.caraus.appsflastfm.ui.search.SearchActivity
-import eu.caraus.appsflastfm.ui.search.albums.di.AlbumDetailsBuilder
+import eu.caraus.appsflastfm.ui.search.albumdetails.di.AlbumDetailsBuilder
 import eu.caraus.appsflastfm.ui.search.albums.di.AlbumsBuilder
-import eu.caraus.appsflastfm.ui.search.albums.di.ArtistsBuilder
+import eu.caraus.appsflastfm.ui.search.artists.di.ArtistsBuilder
 
 @SearchActivityScope
-@Subcomponent(modules = [
+@Subcomponent( modules = [
 
         SearchActivityModule::class,
 

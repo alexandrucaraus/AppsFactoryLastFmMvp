@@ -71,7 +71,6 @@ class NotificationsUtil(private val context: Context ) {
             setSmallIcon(R.drawable.ic_play)
             setStyle( NotificationCompat.DecoratedCustomViewStyle() )
             setCustomContentView(remoteViews)
-            setCustomBigContentView(remoteViews)
 
             setDeleteIntent( servicePendingStop )
             setAutoCancel(false)
@@ -89,7 +88,7 @@ class NotificationsUtil(private val context: Context ) {
     }
 
     fun cancel(){
-        getNotificationManagerCompat().cancel(NOTIFICATION_ID)
+        getNotificationManagerCompat().cancel( NOTIFICATION_ID )
     }
 
     private fun formatTrackLength( length : Int ) : String {

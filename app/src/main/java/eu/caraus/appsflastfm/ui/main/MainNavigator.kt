@@ -1,5 +1,7 @@
 package eu.caraus.appsflastfm.ui.main
 
+import eu.caraus.appsflastfm.ui.base.BaseActivity
+
 
 /**
  *  MainNavigator - a class to hold all possible flow directions of the MainActivity,
@@ -10,6 +12,10 @@ class MainNavigator( private val navigation : MainActivityScreenLoader) : MainCo
 
     override fun showSavedAlbumsScreen() {
         navigation.navigateToSavedAlbums()
+    }
+
+    override fun showSearchResultScreenWithResult( activity: BaseActivity, searchTerm: String) {
+        navigation.navigateToSearchWithResult( activity , searchTerm )
     }
 
     /**

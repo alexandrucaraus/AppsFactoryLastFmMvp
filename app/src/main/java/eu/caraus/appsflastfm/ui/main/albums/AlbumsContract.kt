@@ -4,6 +4,7 @@ import android.arch.lifecycle.LifecycleObserver
 import android.widget.ImageView
 import eu.caraus.appsflastfm.common.retrofit.Outcome
 import eu.caraus.appsflastfm.data.domain.lastFm.albuminfo.Album
+import eu.caraus.appsflastfm.ui.base.BaseActivity
 import eu.caraus.appsflastfm.ui.base.BaseContract
 import io.reactivex.subjects.PublishSubject
 
@@ -14,6 +15,7 @@ interface AlbumsContract : BaseContract {
         fun showAlbumDetails( mbid : String )
         fun showAlbumDetails( mbid : String, imageUrl : String, view : ImageView )
 
+        fun getAlbums()
         fun deleteAlbum( album : Album )
 
         fun showSearchResultScreen( searchTerm : String )
@@ -57,6 +59,7 @@ interface AlbumsContract : BaseContract {
         fun showAlbumDetails( mbid : String , imageUrl : String,  view : ImageView )
 
         fun showSearchResultScreen( searchTerm : String )
+        fun showSearchResultScreen( activity : BaseActivity, searchTerm: String )
 
         fun goBack() : Boolean
     }

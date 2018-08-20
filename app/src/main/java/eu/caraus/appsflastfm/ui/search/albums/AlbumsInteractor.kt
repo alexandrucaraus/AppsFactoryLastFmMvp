@@ -17,6 +17,7 @@ import io.reactivex.Flowable.zip
 import io.reactivex.functions.BiFunction
 
 import io.reactivex.subjects.PublishSubject
+import java.util.*
 
 
 class AlbumsInteractor(private val service   : LastFmApi,
@@ -84,8 +85,17 @@ class AlbumsInteractor(private val service   : LastFmApi,
                 .subscribe ({
                     albums ->
                         albums.album?.let {
-                            database.albumsDao().insertWhole(it)
-                            albumSaveResult.success(it)
+
+
+                            if( it.mbid.isEmpty() || it.mbid.isBlank() ){
+                                it.mbid = UUID.randomUUID().toString()
+                            }
+
+                            if( database.albumsDao().insertWhole(it) >= 0 )
+                                albumSaveResult.success(it)
+                            else
+                                albumSaveResult.failed( Throwable("Failed saving album"))
+
                         }
                 },{
                        albumSaveResult.failed(it)

@@ -16,8 +16,8 @@ class AlbumsPresenter( private val interactor : AlbumsContract.Interactor  ,
                        private val scheduler  : SchedulerProvider,
                        private val disposable : CompositeDisposable ) : AlbumsContract.Presenter {
 
-    private var view : AlbumsContract.View? = null
 
+    private var view : AlbumsContract.View? = null
 
     private var data = listOf<Album?>()
 
@@ -55,13 +55,22 @@ class AlbumsPresenter( private val interactor : AlbumsContract.Interactor  ,
         }
     }
 
+    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
+    fun onPause(){
+        disposable.clear()
+    }
+
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     fun onDestroy(){
-        disposable.dispose()
+        disposable.clear()
+    }
+
+    override fun getAlbums() {
+        onCreate()
     }
 
     override fun showSearchResultScreen( searchTerm: String ) {
-        navigator.showSearchResultScreen( searchTerm )
+        //navigator.showSearchResultScreen( searchTerm )
     }
 
     override fun deleteAlbum( album : Album) {

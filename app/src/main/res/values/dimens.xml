@@ -35,7 +35,7 @@
 
     <dimen name="item_spacing">2dp</dimen>
 
-    <dimen name="notification_height">70dp</dimen>
+    <dimen name="notification_height">52dp</dimen>
 
     <!-- TOOLBAR -->
     <dimen name="shrine_toolbar_image_offset_top">100dp</dimen>

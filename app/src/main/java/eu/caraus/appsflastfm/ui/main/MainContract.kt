@@ -1,6 +1,7 @@
 package eu.caraus.appsflastfm.ui.main
 
 import android.arch.lifecycle.LifecycleObserver
+import eu.caraus.appsflastfm.ui.base.BaseActivity
 import eu.caraus.appsflastfm.ui.base.BaseContract
 
 
@@ -23,7 +24,8 @@ interface MainContract : BaseContract {
 
         fun showSavedAlbumsScreen()
 
-        fun showSearchResultScreen( string: String )
+        fun showSearchResultScreen( searchTerm : String )
+        fun showSearchResultScreenWithResult( activity: BaseActivity , searchTerm : String )
 
         fun goBack() : Boolean
 

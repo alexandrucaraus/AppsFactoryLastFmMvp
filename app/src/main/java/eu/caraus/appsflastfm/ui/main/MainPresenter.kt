@@ -22,6 +22,7 @@ class MainPresenter( val navigator  : MainContract.Navigator   ) : MainContract.
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun onResume() {
+
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)

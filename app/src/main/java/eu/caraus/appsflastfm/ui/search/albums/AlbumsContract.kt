@@ -42,7 +42,7 @@ interface AlbumsContract : BaseContract {
 
     interface Interactor {
 
-        fun getAlbums ( albums : String )
+        fun getAlbums ( artistName: String )
         fun getAlbumsOutcome () : PublishSubject<Outcome<List<AlbumItem?>>>
 
         fun saveAlbum( artistName: String, albumName: String)

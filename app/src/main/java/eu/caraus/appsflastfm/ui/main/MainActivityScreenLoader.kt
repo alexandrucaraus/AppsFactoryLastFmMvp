@@ -28,6 +28,10 @@ import java.lang.ref.WeakReference
 
 class MainActivityScreenLoader(activity: BaseActivity, @param:IdRes @field:IdRes private val containerId: Int) {
 
+    companion object {
+        const val SEARCH_REQUEST = 69
+    }
+
     private val refContext: WeakReference<Context> = WeakReference( activity )
 
     private val fragmentManager: FragmentManager
@@ -46,9 +50,15 @@ class MainActivityScreenLoader(activity: BaseActivity, @param:IdRes @field:IdRes
     }
 
     fun navigateToSearchResult( searchTerm : String ){
+//        val intent = Intent( context(), SearchActivity::class.java)
+//        intent.putExtra( SEARCH_TERM, searchTerm )
+//        context()?.startActivity(intent)
+    }
+
+    fun navigateToSearchWithResult( activity : BaseActivity , searchTerm: String){
         val intent = Intent( context(), SearchActivity::class.java)
         intent.putExtra( SEARCH_TERM, searchTerm )
-        context()?.startActivity(intent)
+        activity.startActivityForResult( intent, SEARCH_REQUEST )
     }
 
     fun navigateToSavedAlbums(){

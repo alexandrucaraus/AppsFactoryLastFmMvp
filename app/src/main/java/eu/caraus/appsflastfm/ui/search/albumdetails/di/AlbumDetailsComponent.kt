@@ -1,4 +1,4 @@
-package eu.caraus.appsflastfm.ui.search.albums.di
+package eu.caraus.appsflastfm.ui.search.albumdetails.di
 
 import dagger.Subcomponent
 import dagger.android.AndroidInjector

@@ -1,6 +1,5 @@
 package eu.caraus.appsflastfm.ui.search.albumdetails
 
-import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.widget.LinearLayoutManager
@@ -72,7 +71,7 @@ class AlbumDetailsFragment : BaseFragment(), AlbumDetailsContract.View {
         arguments?.let {
             if( it.containsKey( ALBUM_NAME ) && it.containsKey(ARTIST_NAME)){
                 presenter.getAlbumInfo(  it.getString(ARTIST_NAME), it.getString(ALBUM_NAME))
-                setTitle( it.getString(ALBUM_NAME), it.getString(ARTIST_NAME) )
+                setFragentTitle( it.getString(ALBUM_NAME), it.getString(ARTIST_NAME) )
             }
         }
 
@@ -80,7 +79,7 @@ class AlbumDetailsFragment : BaseFragment(), AlbumDetailsContract.View {
 
     }
 
-    private fun setTitle( album : String = "" , artist : String = ""){
+    private fun setFragentTitle(album : String = "", artist : String = ""){
         ( activity as BaseActivity).apply{
             supportActionBar?.title = resources.getString(R.string.title_for_album_param, album, artist)
         }
@@ -106,6 +105,14 @@ class AlbumDetailsFragment : BaseFragment(), AlbumDetailsContract.View {
         ( activity as BaseActivity).apply {
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
             supportActionBar?.setDisplayShowHomeEnabled(false)
+
+            arguments?.let {
+                if( it.containsKey( ALBUM_NAME ) && it.containsKey(ARTIST_NAME)){
+                    presenter.getAlbumInfo(  it.getString(ARTIST_NAME), it.getString(ALBUM_NAME))
+                    setFragentTitle( it.getString(ALBUM_NAME), it.getString(ARTIST_NAME) )
+                }
+            }
+
         }
 
         super.onPrepareOptionsMenu(menu)
@@ -133,9 +140,10 @@ class AlbumDetailsFragment : BaseFragment(), AlbumDetailsContract.View {
                 view.ivAlbumImage.transitionName = it.getString( TRANSITION_NAME )
             }
 
-            if( it.containsKey( TRANSITION_PIC_URL) ){
+            if( it.containsKey( TRANSITION_PIC_URL) && !it.getString( TRANSITION_PIC_URL).isNullOrEmpty()){
                 Picasso.with(context)
                         .load( it.getString( TRANSITION_PIC_URL))
+                        .error(R.drawable.icon)
                         .fit()
                         .centerCrop()
                         .into( ivAlbumImage, object : Callback {

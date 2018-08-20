@@ -1,5 +1,6 @@
 package eu.caraus.appsflastfm.ui.main.albums
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.widget.LinearLayoutManager
@@ -12,6 +13,8 @@ import eu.caraus.appsflastfm.ui.base.BaseActivity
 import eu.caraus.appsflastfm.ui.base.BaseFragment
 import eu.caraus.appsflastfm.ui.common.metrics.dpToPx
 import eu.caraus.appsflastfm.ui.common.recyclerview.VerticalSpaceItemDecoration
+import eu.caraus.appsflastfm.ui.main.MainActivityScreenLoader
+import eu.caraus.appsflastfm.ui.search.SearchActivity
 import kotlinx.android.synthetic.main.fragment_albums.*
 import kotlinx.android.synthetic.main.fragment_albums.view.*
 import javax.inject.Inject
@@ -31,7 +34,10 @@ class AlbumsFragment : BaseFragment(), SearchView.OnQueryTextListener, AlbumsCon
     @Inject
     lateinit var presenter : AlbumsContract.Presenter
 
-    private var adapter : AlbumsAdapter? = null
+    @Inject
+    lateinit var navigator : AlbumsContract.Navigator
+
+    private  var adapter   : AlbumsAdapter? = null
 
     // Android
 
@@ -59,6 +65,11 @@ class AlbumsFragment : BaseFragment(), SearchView.OnQueryTextListener, AlbumsCon
         super.onDestroy()
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        presenter.getAlbums()
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
 
         inflater?.inflate( R.menu.main_menu, menu )
@@ -66,7 +77,6 @@ class AlbumsFragment : BaseFragment(), SearchView.OnQueryTextListener, AlbumsCon
         (menu?.findItem(R.id.search)?.actionView as SearchView).apply {
             setOnQueryTextListener(this@AlbumsFragment)
             maxWidth = Int.MAX_VALUE
-
         }
 
         super.onCreateOptionsMenu(menu, inflater)
@@ -112,12 +122,19 @@ class AlbumsFragment : BaseFragment(), SearchView.OnQueryTextListener, AlbumsCon
     }
 
     override fun onQueryTextSubmit( query: String?): Boolean {
-        query?.let { presenter.showSearchResultScreen( it ) }
+        query?.let {
+            startActivityForResult(
+                    Intent( context , SearchActivity::class.java).apply {
+                        putExtra( SearchActivity.SEARCH_TERM , query )
+                    },
+                    MainActivityScreenLoader.SEARCH_REQUEST
+            )
+        }
         activity?.invalidateOptionsMenu()
         return true
     }
 
-    override fun onQueryTextChange(newText: String?) = true
+    override fun onQueryTextChange( newText: String? ) = true
 
     // Contract
 
@@ -191,7 +208,5 @@ class AlbumsFragment : BaseFragment(), SearchView.OnQueryTextListener, AlbumsCon
             Snackbar.make( it, message, Snackbar.LENGTH_LONG).show()
         }
     }
-
-
 
 }
